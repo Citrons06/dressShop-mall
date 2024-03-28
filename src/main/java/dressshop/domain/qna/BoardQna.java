@@ -1,0 +1,34 @@
+package dressshop.domain.qna;
+
+import dressshop.domain.item.Item;
+import dressshop.domain.member.Member;
+import jakarta.persistence.*;
+import lombok.Getter;
+
+import java.time.LocalDateTime;
+
+import static jakarta.persistence.FetchType.LAZY;
+
+@Entity
+@Getter
+public class BoardQna {
+
+    @Id @GeneratedValue
+    @Column(name = "qna_id")
+    private Long id;
+
+    @OneToOne(fetch = LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @OneToOne(fetch = LAZY)
+    @JoinColumn(name = "item_id")
+    private Item item;
+
+    private String qnaTitle;
+    private String qnaPwd;
+    private String qnaContent;
+    private String qnaCategory;
+    private LocalDateTime qnaDate;
+    private Integer qnaReadcount;
+}
