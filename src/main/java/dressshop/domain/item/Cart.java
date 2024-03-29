@@ -2,7 +2,10 @@ package dressshop.domain.item;
 
 import dressshop.domain.member.Member;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +14,7 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Cart {
 
     @Id @GeneratedValue
@@ -24,5 +28,6 @@ public class Cart {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @NotNull
     private Integer cart_quantity;
 }

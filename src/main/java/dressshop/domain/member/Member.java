@@ -1,16 +1,16 @@
 package dressshop.domain.member;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import dressshop.domain.item.Cart;
-import dressshop.domain.qna.CmntQna;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
     @Id @GeneratedValue
@@ -21,19 +21,14 @@ public class Member {
     @JoinColumn(name = "auth_id")
     private MemberAuth memberAuth;
 
-    @NotEmpty
     private String name;
 
-    @NotEmpty
     private String password;
 
-    @NotEmpty
     private String nickname;
 
-    @NotEmpty
     private String email;
 
-    @NotEmpty
     private String tel;
 
     @Embedded

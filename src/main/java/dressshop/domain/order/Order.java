@@ -3,7 +3,9 @@ package dressshop.domain.order;
 import dressshop.domain.delivery.Delivery;
 import dressshop.domain.member.Member;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Getter
 @Table(name = "orders")
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order {
 
     @Id @GeneratedValue
