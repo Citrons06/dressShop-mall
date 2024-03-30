@@ -1,5 +1,6 @@
 package dressshop.domain.qna;
 
+import dressshop.domain.BaseEntity;
 import dressshop.domain.member.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
-public class CmntQna {
+public class CmntQna extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "q_cmnt_id")

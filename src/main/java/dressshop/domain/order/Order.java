@@ -1,5 +1,6 @@
 package dressshop.domain.order;
 
+import dressshop.domain.BaseEntity;
 import dressshop.domain.delivery.Delivery;
 import dressshop.domain.member.Member;
 import jakarta.persistence.*;
@@ -17,7 +18,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Table(name = "orders")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Order {
+public class Order extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "order_id")

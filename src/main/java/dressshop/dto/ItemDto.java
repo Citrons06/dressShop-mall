@@ -1,11 +1,14 @@
 package dressshop.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
+import dressshop.domain.item.Item;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-@Getter @Setter
+@Getter
 @ToString
 @NoArgsConstructor
 public class ItemDto {
@@ -24,5 +27,11 @@ public class ItemDto {
         this.itemName = itemName;
         this.price = price;
         this.quantity = quantity;
+    }
+
+    public ItemDto(Item item) {
+        this.itemName = item.getItemName();
+        this.price = item.getPrice();
+        this.quantity = item.getQuantity();
     }
 }

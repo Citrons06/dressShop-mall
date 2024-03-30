@@ -1,5 +1,6 @@
 package dressshop.domain.item;
 
+import dressshop.domain.BaseTimeEntity;
 import dressshop.domain.member.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -15,7 +16,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Cart {
+public class Cart extends BaseTimeEntity {
 
     @Id @GeneratedValue
     @Column(name = "cart_id")

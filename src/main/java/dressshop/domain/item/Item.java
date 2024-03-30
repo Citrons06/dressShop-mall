@@ -1,12 +1,9 @@
 package dressshop.domain.item;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dressshop.domain.BaseEntity;
 import dressshop.domain.order.OrderItem;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +16,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Item {
+public class Item extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "item_id")
@@ -50,5 +47,14 @@ public class Item {
         this.itemName = itemName;
         this.price = price;
         this.quantity = quantity;
+    }
+
+    //수정 로직
+    public void updateItemName(String newItemName) {
+        this.itemName = newItemName;
+    }
+
+    public void updatePrice(Integer newPrice) {
+        this.price = newPrice;
     }
 }

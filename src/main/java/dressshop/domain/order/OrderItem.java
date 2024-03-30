@@ -1,6 +1,7 @@
 package dressshop.domain.order;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dressshop.domain.BaseEntity;
 import dressshop.domain.item.Item;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -13,7 +14,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class OrderItem {
+public class OrderItem extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "order_item_id")

@@ -1,5 +1,6 @@
 package dressshop.domain.qna;
 
+import dressshop.domain.BaseEntity;
 import dressshop.domain.item.Item;
 import dressshop.domain.member.Member;
 import jakarta.persistence.*;
@@ -11,7 +12,7 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
-public class BoardQna {
+public class BoardQna extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "qna_id")
