@@ -37,7 +37,6 @@ out/
 .vscode/
 
 ### config ###
-src/main/resources/application.yml
 /logs/
 /src/logback.xml
 
