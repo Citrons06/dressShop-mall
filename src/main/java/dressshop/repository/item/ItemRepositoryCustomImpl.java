@@ -9,7 +9,7 @@ import java.util.List;
 import static dressshop.domain.item.QItem.item;
 
 @RequiredArgsConstructor
-public class ItemRepositoryImpl implements ItemRepositoryCuscom {
+public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
 
     private final JPAQueryFactory query;
 

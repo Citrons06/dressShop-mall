@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class ItemService {
 
@@ -32,6 +32,7 @@ public class ItemService {
     }
 
     //상품 단건 조회
+    @Transactional(readOnly = true)
     public ItemDto findById(Long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(NotFoundException::new);
@@ -44,6 +45,7 @@ public class ItemService {
     }
 
     //상품 리스트 조회
+    @Transactional(readOnly = true)
     public List<ItemDto> findList() {
         return itemRepository.findList().stream()
                 .map(ItemDto::new)
@@ -51,7 +53,6 @@ public class ItemService {
     }
 
     //상품 수정
-    @Transactional
     public void editItem(Long itemId, ItemDto itemDto) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(NotFoundException::new);

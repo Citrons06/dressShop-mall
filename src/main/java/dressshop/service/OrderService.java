@@ -32,6 +32,7 @@ import static dressshop.domain.delivery.DeliveryStatus.READY;
 import static dressshop.domain.order.OrderStatus.ORDER;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class OrderService {
 
@@ -41,7 +42,6 @@ public class OrderService {
     private final MemberRepository memberRepository;
 
     //상품 주문
-    @Transactional
     public void toOrder(OrderDto orderDto, Long itemId, int count) {
         Member member = memberRepository.findById(orderDto.getMember().getId())
                 .orElseThrow(NotFoundException::new);
@@ -59,12 +59,14 @@ public class OrderService {
     }
 
     //조회: 주문 내역 조회
+    @Transactional(readOnly = true)
     public List<OrderDto> findOrder(OrderDto orderDto) {
         return orderRepository.findAll()
                 .stream().map(OrderDto::new)
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public OrderDto findOneOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(NotFoundException::new);

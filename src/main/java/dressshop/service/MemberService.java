@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class MemberService {
 
@@ -37,7 +38,6 @@ public class MemberService {
 
 
     //회원 수정
-    @Transactional
     public void editMember(Long memberId, MemberDto memberDto) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(NotFoundException::new);
@@ -55,6 +55,7 @@ public class MemberService {
     }
 
     //회원 단건 조회
+    @Transactional(readOnly = true)
     public MemberDto findMember(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(NotFoundException::new);
@@ -70,6 +71,7 @@ public class MemberService {
     }
 
     //회원 리스트 조회
+    @Transactional(readOnly = true)
     public List<MemberDto> findList() {
         return memberRepository.findList().stream()
                 .map(MemberDto::new)

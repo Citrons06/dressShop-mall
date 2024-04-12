@@ -10,7 +10,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @ToString
-@NoArgsConstructor(access = PROTECTED)
+@NoArgsConstructor
 public class ItemDto {
 
     @NotBlank(message = "상품 이름을 입력하세요.")

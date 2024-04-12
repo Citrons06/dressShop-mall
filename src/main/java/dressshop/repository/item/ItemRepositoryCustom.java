@@ -4,7 +4,7 @@ import dressshop.domain.item.Item;
 
 import java.util.List;
 
-public interface ItemRepositoryCuscom {
+public interface ItemRepositoryCustom {
 
     List<Item> findList();
 }
