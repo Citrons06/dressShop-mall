@@ -3,12 +3,11 @@ package dressshop.domain.order.dto;
 import com.querydsl.core.annotations.QueryProjection;
 import dressshop.domain.item.Item;
 import dressshop.domain.order.Order;
-import dressshop.domain.order.OrderItem;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Range;
 
 @Getter
 @NoArgsConstructor
@@ -18,10 +17,10 @@ public class OrderItemDto {
 
     private Order order;
 
-    @NotEmpty
     private Integer orderPrice;
 
-    @NotEmpty @Max(999)
+    @NotBlank(message = "주문 수량을 입력하세요.")
+    @Range(min = 1, max = 999)
     private Integer count;
 
     @Builder
@@ -31,8 +30,5 @@ public class OrderItemDto {
         this.order = order;
         this.orderPrice = orderPrice;
         this.count = count;
-    }
-
-    public OrderItemDto(OrderItem orderItem) {
     }
 }

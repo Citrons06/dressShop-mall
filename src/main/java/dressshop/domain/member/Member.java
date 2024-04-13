@@ -9,10 +9,12 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static dressshop.domain.member.MemberAuth.USER;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -56,7 +58,13 @@ public class Member extends BaseEntity {
     private List<CmntQna> cmntQnaList = new ArrayList<>();
 
     @Builder
-    public Member(MemberAuth memberAuth, String name, String password, String nickname, String email, String tel, Address address) {
+    public Member(MemberAuth memberAuth,
+                  String name,
+                  String password,
+                  String nickname,
+                  String email,
+                  String tel,
+                  Address address) {
         this.memberAuth = memberAuth;
         this.name = name;
         this.password = password;
@@ -64,6 +72,17 @@ public class Member extends BaseEntity {
         this.email = email;
         this.tel = tel;
         this.address = address;
+    }
+
+    public static Member createMember(MemberDto memberDto, PasswordEncoder pwdEncoder) {
+        return Member.builder()
+                .name(memberDto.getName())
+                .nickname(memberDto.getNickname())
+                .password(pwdEncoder.encode(memberDto.getPassword()))
+                .address(new Address(memberDto.getCity(), memberDto.getStreet(), memberDto.getZipcode()))
+                .tel(memberDto.getTel())
+                .memberAuth(USER)
+                .build();
     }
 
     public MemberDto.MemberDtoBuilder toEditor() {
@@ -84,6 +103,6 @@ public class Member extends BaseEntity {
         this.nickname = memberDto.getNickname();
         this.email = memberDto.getEmail();
         this.tel = memberDto.getTel();
-        this.address = memberDto.getAddress();
+        this.address = new Address(memberDto.getCity(), memberDto.getStreet(), memberDto.getZipcode());
     }
 }

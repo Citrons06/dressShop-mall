@@ -6,13 +6,12 @@ import dressshop.domain.member.Address;
 import dressshop.domain.member.Member;
 import dressshop.domain.order.Order;
 import dressshop.domain.order.OrderStatus;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -21,6 +20,8 @@ public class OrderDto {
     private Member member;
     private LocalDateTime orderDate;
     private OrderStatus orderStatus;
+
+    @NotBlank(message = "주소를 입력하세요.")
     private Address address;
     private Delivery delivery;
 

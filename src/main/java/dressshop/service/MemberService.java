@@ -2,10 +2,12 @@ package dressshop.service;
 
 import dressshop.domain.member.Member;
 import dressshop.domain.member.dto.MemberDto;
+import dressshop.exception.customException.MemberJoinException;
 import dressshop.exception.customException.NotFoundException;
 import dressshop.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,17 +25,22 @@ public class MemberService {
     public final MemberRepository memberRepository;
 
     //회원 가입
-    public void join(MemberDto memberDto) {
-        Member member = Member.builder()
-                .name(memberDto.getName())
-                .password(memberDto.getPassword())
-                .nickname(memberDto.getNickname())
-                .email(memberDto.getEmail())
-                .address(memberDto.getAddress())
-                .tel(memberDto.getTel())
-                .build();
+    public void join(MemberDto memberDto, PasswordEncoder pwdEncoder) {
+        Member member = Member.createMember(memberDto, pwdEncoder);
+        validateDuplicateMember(member);  //이메일, 닉네임 중복 체크
 
         memberRepository.save(member);
+    }
+
+    private void validateDuplicateMember(Member member) {
+        Member emailMember = memberRepository.findByEmail(member.getEmail());
+        Member nicknameMember = memberRepository.findByNickname(member.getNickname());
+        if (emailMember != null) {
+            throw new MemberJoinException("이미 가입된 이메일입니다.");
+        }
+        if (nicknameMember != null) {
+            throw new MemberJoinException("중복된 닉네임입니다.");
+        }
     }
 
 
@@ -48,7 +55,9 @@ public class MemberService {
                 .nickname(memberDto.getNickname())
                 .email(memberDto.getEmail())
                 .tel(memberDto.getTel())
-                .address(memberDto.getAddress())
+                .city(memberDto.getCity())
+                .street(memberDto.getStreet())
+                .zipcode(memberDto.getZipcode())
                 .build();
 
         member.editMember(memberEdit);
@@ -66,7 +75,9 @@ public class MemberService {
                 .nickname(member.getNickname())
                 .email(member.getEmail())
                 .tel(member.getTel())
-                .address(member.getAddress())
+                .city(member.getAddress().getCity())
+                .street(member.getAddress().getStreet())
+                .zipcode(member.getAddress().getZipcode())
                 .build();
     }
 

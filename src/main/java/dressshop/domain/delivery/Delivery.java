@@ -2,7 +2,6 @@ package dressshop.domain.delivery;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dressshop.domain.BaseTimeEntity;
-import dressshop.domain.delivery.dto.DeliveryDto;
 import dressshop.domain.member.Address;
 import dressshop.domain.member.Member;
 import dressshop.domain.order.Order;

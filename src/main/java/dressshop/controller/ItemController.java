@@ -6,7 +6,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -19,15 +22,19 @@ public class ItemController {
     private final ItemService itemService;
 
     //상품 등록 폼 불러오기
-    @GetMapping("/items/save")
+    @GetMapping("/admin/items/save")
     public String saveItem(Model model) {
         model.addAttribute("item", new ItemDto());
-        return "items/saveForm";
+        return "admin/items/saveForm";
     }
 
     //상품 등록
-    @PostMapping("/items/save")
-    public String save(@Valid ItemDto itemDto) {
+    @PostMapping("/admin/items/save")
+    public String save(@Valid ItemDto itemDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "admin/items/saveForm";
+        }
+
         itemService.save(itemDto);
         return "redirect:/";
     }
@@ -41,7 +48,7 @@ public class ItemController {
     }
 
     //상품 전체 조회
-    @GetMapping("/items")
+    @GetMapping("/items/itemList")
     public String findList(Model model) {
         List<ItemDto> items = itemService.findList();
         model.addAttribute("items", items);
@@ -49,33 +56,32 @@ public class ItemController {
     }
 
     //상품 수정 폼 불러오기
-    @GetMapping("/items/{itemId}/edit")
+    @GetMapping("/admin/items/{itemId}/edit")
     public String editItem(@PathVariable Long itemId, Model model) {
         ItemDto item = itemService.findById(itemId);
         model.addAttribute("item", item);
-        return "/items/editItemForm";
+        return "admin/items/editForm";
     }
 
     //상품 수정
-    @PostMapping("/items/{itemId}/edit")
-    public String edit(@PathVariable Long itemId, ItemDto itemDto) {
+    @PostMapping("/admin/items/{itemId}/edit")
+    public String edit(@PathVariable Long itemId, @ModelAttribute("item") @Valid ItemDto itemDto) {
         itemService.editItem(itemId, itemDto);
         return "redirect:/items/{itemId}";
     }
 
-
     //상품 삭제 폼 불러오기
-    @GetMapping("/items/{itemId}/delete")
+    @GetMapping("/admin/items/{itemId}/delete")
     public String deleteItem(@PathVariable Long itemId, Model model) {
         ItemDto itemDto = itemService.findById(itemId);
         model.addAttribute("itemDto", itemDto);
-        return "/items/deleteForm";
+        return "admin/items/deleteForm";
     }
 
     //상품 삭제
-    @PostMapping("/items/{itemId}/delete")
+    @PostMapping("/admin/items/{itemId}/delete")
     public String delete(@PathVariable Long itemId) {
         itemService.delete(itemId);
-        return "redirect:/items";
+        return "redirect:/itemList";
     }
 }

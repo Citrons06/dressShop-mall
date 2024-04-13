@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static dressshop.domain.delivery.DeliveryStatus.COMP;
-import static dressshop.domain.order.OrderStatus.CANCLE;
+import static dressshop.domain.order.OrderStatus.CANCEL;
 import static dressshop.domain.order.OrderStatus.ORDER;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -91,7 +91,7 @@ public class Order extends BaseEntity {
             throw new DeliveryIrrevocableException();
         }
 
-        this.setOrderStatus(CANCLE);
+        this.setOrderStatus(CANCEL);
         for (OrderItem orderItem : orderItems) {
             orderItem.cancel();
         }
