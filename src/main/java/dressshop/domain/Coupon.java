@@ -22,7 +22,7 @@ public class Coupon {
     @Column(name = "cpn_id")
     private Long id;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_Id")
     private Member member;
 

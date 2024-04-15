@@ -17,16 +17,17 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(authorize -> {
             authorize
+                    .requestMatchers("/orders/**").authenticated()
                     .requestMatchers("/admin/**").hasAnyRole("ADMIN")
-                    .requestMatchers("/orders/**").hasAnyRole("USER")
                     .anyRequest().permitAll();
         });
 
-        /*http.formLogin(f -> {
+        http.formLogin(f -> {
             f.loginPage("/login");
             f.loginProcessingUrl("/loginProc");
             f.defaultSuccessUrl("/");
-        });*/
+            f.usernameParameter("\"email");
+        });
 
         return http.build();
     }

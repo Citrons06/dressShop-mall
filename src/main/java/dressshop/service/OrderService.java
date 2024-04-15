@@ -57,13 +57,7 @@ public class OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(NotFoundException::new);
 
-        return OrderDto.builder()
-                .member(order.getMember())
-                .orderDate(order.getOrderDate())
-                .orderStatus(order.getOrderStatus())
-                .address(order.getMember().getAddress())
-                .delivery(order.getDelivery())
-                .build();
+        return order.toOrderDto();
     }
 
     //주문 취소

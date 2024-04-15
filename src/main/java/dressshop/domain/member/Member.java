@@ -9,12 +9,11 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static dressshop.domain.member.MemberAuth.USER;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -22,6 +21,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = PROTECTED)
 public class Member extends BaseEntity {
 
@@ -51,11 +51,11 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", fetch = LAZY)
     public List<Order> orderList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", fetch = LAZY)
-    private List<BoardQna> boardQnaList = new ArrayList<>();
+    @OneToMany(mappedBy = "member", fetch = LAZY, cascade = CascadeType.ALL)
+    private final List<BoardQna> boardQnaList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "qCWriterId", fetch = LAZY)
-    private List<CmntQna> cmntQnaList = new ArrayList<>();
+    @OneToMany(mappedBy = "qCWriterId", fetch = LAZY, cascade = CascadeType.ALL)
+    private final List<CmntQna> cmntQnaList = new ArrayList<>();
 
     @Builder
     public Member(MemberAuth memberAuth,
@@ -72,17 +72,6 @@ public class Member extends BaseEntity {
         this.email = email;
         this.tel = tel;
         this.address = address;
-    }
-
-    public static Member createMember(MemberDto memberDto, PasswordEncoder pwdEncoder) {
-        return Member.builder()
-                .name(memberDto.getName())
-                .nickname(memberDto.getNickname())
-                .password(pwdEncoder.encode(memberDto.getPassword()))
-                .address(new Address(memberDto.getCity(), memberDto.getStreet(), memberDto.getZipcode()))
-                .tel(memberDto.getTel())
-                .memberAuth(USER)
-                .build();
     }
 
     public MemberDto.MemberDtoBuilder toEditor() {
@@ -104,5 +93,9 @@ public class Member extends BaseEntity {
         this.email = memberDto.getEmail();
         this.tel = memberDto.getTel();
         this.address = new Address(memberDto.getCity(), memberDto.getStreet(), memberDto.getZipcode());
+    }
+
+    public void passwordEncode(String encodedPassword) {
+        this.password = encodedPassword;
     }
 }

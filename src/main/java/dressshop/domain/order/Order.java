@@ -2,10 +2,13 @@ package dressshop.domain.order;
 
 import dressshop.domain.BaseEntity;
 import dressshop.domain.delivery.Delivery;
+import dressshop.domain.member.Address;
 import dressshop.domain.member.Member;
+import dressshop.domain.order.dto.OrderDto;
 import dressshop.exception.customException.DeliveryIrrevocableException;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,6 +23,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @Table(name = "orders")
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order extends BaseEntity {
 
@@ -28,11 +32,11 @@ public class Order extends BaseEntity {
     @Column(name = "order_id")
     private Long id;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "order", fetch = LAZY)
+    @OneToMany(mappedBy = "order", fetch = LAZY, cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
     private LocalDateTime orderDate;
@@ -45,18 +49,22 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
+    @Embedded
+    private Address address;
+
     @Builder
     public Order(Member member,
                  List<OrderItem> orderItems,
-                 OrderItem orderItem,
                  LocalDateTime orderDate,
                  OrderStatus orderStatus,
-                 Delivery delivery) {
+                 Delivery delivery,
+                 Address address) {
         this.member = member;
         this.orderItems = orderItems;
         this.orderDate = orderDate;
         this.orderStatus = orderStatus;
         this.delivery = delivery;
+        this.address = address;
     }
 
     public void setMember(Member member) {
@@ -95,5 +103,17 @@ public class Order extends BaseEntity {
         for (OrderItem orderItem : orderItems) {
             orderItem.cancel();
         }
+    }
+
+    public OrderDto toOrderDto() {
+        return OrderDto.builder()
+                .member(member)
+                .orderDate(orderDate)
+                .orderStatus(orderStatus)
+                .city(address.getCity())
+                .street(address.getStreet())
+                .zipcode(address.getZipcode())
+                .delivery(delivery)
+                .build();
     }
 }

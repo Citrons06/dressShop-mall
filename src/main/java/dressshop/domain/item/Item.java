@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = PROTECTED)
 public class Item extends BaseEntity {
 
@@ -33,14 +35,14 @@ public class Item extends BaseEntity {
 
     private Integer itemSell;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "item", fetch = LAZY)
+    @OneToMany(mappedBy = "item", fetch = LAZY, cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
@@ -55,6 +57,14 @@ public class Item extends BaseEntity {
         this.quantity = quantity;
         this.itemSell = itemSell;
         this.category = category;
+    }
+
+    public ItemDto toDto() {
+        return ItemDto.builder()
+                .itemName(itemName)
+                .price(price)
+                .quantity(quantity)
+                .build();
     }
 
     public ItemDto.ItemDtoBuilder toEditor() {

@@ -21,6 +21,6 @@ public class Category {
 
     private String categoryName;
 
-    @OneToMany(mappedBy = "category", fetch = LAZY)
+    @OneToMany(mappedBy = "category", fetch = LAZY, cascade = CascadeType.ALL)
     private List<Item> items = new ArrayList<>();
 }

@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -67,7 +66,7 @@ public class ItemController {
     @PostMapping("/admin/items/{itemId}/edit")
     public String edit(@PathVariable Long itemId, @ModelAttribute("item") @Valid ItemDto itemDto) {
         itemService.editItem(itemId, itemDto);
-        return "redirect:/items/{itemId}";
+        return "redirect:/items/itemList";
     }
 
     //상품 삭제 폼 불러오기

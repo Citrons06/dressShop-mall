@@ -7,14 +7,12 @@ import dressshop.exception.customException.NotFoundException;
 import dressshop.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -22,12 +20,14 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class MemberService {
 
-    public final MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder pwdEncoder;
 
     //회원 가입
-    public void join(MemberDto memberDto, PasswordEncoder pwdEncoder) {
-        Member member = Member.createMember(memberDto, pwdEncoder);
-        validateDuplicateMember(member);  //이메일, 닉네임 중복 체크
+    public void join(MemberDto memberDto) {
+        Member member = memberDto.toEntity();
+        member.passwordEncode(pwdEncoder.encode(member.getPassword()));
+        validateDuplicateMember(member);
 
         memberRepository.save(member);
     }
@@ -42,7 +42,6 @@ public class MemberService {
             throw new MemberJoinException("중복된 닉네임입니다.");
         }
     }
-
 
     //회원 수정
     public void editMember(Long memberId, MemberDto memberDto) {

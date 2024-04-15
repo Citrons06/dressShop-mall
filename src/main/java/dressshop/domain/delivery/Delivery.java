@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import static dressshop.domain.delivery.DeliveryStatus.READY;
 import static jakarta.persistence.FetchType.LAZY;
@@ -18,6 +19,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @Entity
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Delivery extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = IDENTITY)
@@ -29,7 +31,7 @@ public class Delivery extends BaseTimeEntity {
     private Member member;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "delivery", fetch = LAZY)
+    @OneToOne(mappedBy = "delivery", fetch = LAZY, cascade = CascadeType.ALL)
     private Order order;
 
     @Embedded

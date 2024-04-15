@@ -27,6 +27,14 @@ public class ItemDto {
         this.quantity = quantity;
     }
 
+    public Item toEntity() {
+        return Item.builder()
+                .itemName(itemName)
+                .price(price)
+                .quantity(quantity)
+                .build();
+    }
+
     public ItemDto(Item item) {
         this.itemName = item.getItemName();
         this.price = item.getPrice();

@@ -22,11 +22,7 @@ public class ItemService {
 
     //상품 등록
     public void save(ItemDto itemDto) {
-        Item item = Item.builder()
-                .itemName(itemDto.getItemName())
-                .price(itemDto.getPrice())
-                .quantity(itemDto.getQuantity())
-                .build();
+        Item item = itemDto.toEntity();
 
         itemRepository.save(item);
     }
@@ -37,11 +33,7 @@ public class ItemService {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(NotFoundException::new);
 
-        return ItemDto.builder()
-                .itemName(item.getItemName())
-                .price(item.getPrice())
-                .quantity(item.getQuantity())
-                .build();
+        return item.toDto();
     }
 
     //상품 리스트 조회

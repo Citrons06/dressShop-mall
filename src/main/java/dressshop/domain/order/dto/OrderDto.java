@@ -21,8 +21,15 @@ public class OrderDto {
     private LocalDateTime orderDate;
     private OrderStatus orderStatus;
 
-    @NotBlank(message = "주소를 입력하세요.")
-    private Address address;
+    @NotBlank(message = "도시를 입력하세요.")
+    private String city;
+
+    @NotBlank(message = "거리를 입력하세요.")
+    private String street;
+
+    @NotBlank(message = "우편번호를 입력하세요.")
+    private String zipcode;
+
     private Delivery delivery;
 
     @Builder
@@ -30,12 +37,16 @@ public class OrderDto {
     public OrderDto(Member member,
                     LocalDateTime orderDate,
                     OrderStatus orderStatus,
-                    Address address,
+                    String city,
+                    String street,
+                    String zipcode,
                     Delivery delivery) {
         this.member = member;
         this.orderDate = orderDate;
         this.orderStatus = orderStatus;
-        this.address = address;
+        this.city = city;
+        this.street = street;
+        this.zipcode = zipcode;
         this.delivery = delivery;
     }
 
@@ -43,7 +54,19 @@ public class OrderDto {
         member = order.getMember();
         orderDate = order.getOrderDate();
         orderStatus = order.getOrderStatus();
-        address = order.getMember().getAddress();
+        city = order.getAddress().getCity();
+        street = order.getAddress().getStreet();
+        zipcode = order.getAddress().getZipcode();
         delivery = order.getDelivery();
+    }
+
+    public Order toEntity() {
+        return Order.builder()
+                .member(member)
+                .orderDate(orderDate)
+                .orderStatus(orderStatus)
+                .address(new Address(city, street, zipcode))
+                .delivery(delivery)
+                .build();
     }
 }

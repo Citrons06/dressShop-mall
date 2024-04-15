@@ -1,27 +1,26 @@
 package dressshop.controller;
 
+import dressshop.domain.member.Member;
 import dressshop.domain.member.dto.MemberDto;
 import dressshop.exception.customException.MemberJoinException;
 import dressshop.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
-    private final PasswordEncoder pwdEncoder;
 
     //회원 가입 폼 불러오기
     @GetMapping("/join")
@@ -35,16 +34,16 @@ public class MemberController {
     public String join(@Valid @ModelAttribute("memberForm") MemberDto memberDto,
                        BindingResult bindingResult,
                        Model model) {
+
         if (bindingResult.hasErrors()) {
             return "members/joinForm";
         }
 
         try {
-            memberService.join(memberDto, pwdEncoder);
+            memberService.join(memberDto);
         } catch (MemberJoinException e) {
             model.addAttribute("errorMessage", e.getMessage());
         }
-
         return "redirect:/";
     }
 
@@ -57,7 +56,7 @@ public class MemberController {
     }
 
     //회원 전체 조회
-    @GetMapping("/members/list")
+    @GetMapping("/admin/members/list")
     public String findList(Model model) {
         List<MemberDto> members = memberService.findList();
         model.addAttribute("members", members);

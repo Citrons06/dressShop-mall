@@ -72,7 +72,9 @@ class OrderServiceTest {
                 .member(member)
                 .orderDate(LocalDateTime.now())
                 .orderStatus(ORDER)
-                .address(member.getAddress())
+                .city("서울")
+                .street("도로명")
+                .zipcode("12345")
                 .delivery(Delivery.createDelivery(member))
                 .build();
 
