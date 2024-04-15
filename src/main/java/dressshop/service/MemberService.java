@@ -68,16 +68,7 @@ public class MemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(NotFoundException::new);
 
-        return MemberDto.builder()
-                .name(member.getName())
-                .password(member.getPassword())
-                .nickname(member.getNickname())
-                .email(member.getEmail())
-                .tel(member.getTel())
-                .city(member.getAddress().getCity())
-                .street(member.getAddress().getStreet())
-                .zipcode(member.getAddress().getZipcode())
-                .build();
+        return member.toDto();
     }
 
     //회원 리스트 조회

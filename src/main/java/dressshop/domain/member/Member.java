@@ -57,6 +57,9 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "qCWriterId", fetch = LAZY, cascade = CascadeType.ALL)
     private final List<CmntQna> cmntQnaList = new ArrayList<>();
 
+    private String provider;
+    private String providerId;
+
     @Builder
     public Member(MemberAuth memberAuth,
                   String name,
@@ -64,7 +67,9 @@ public class Member extends BaseEntity {
                   String nickname,
                   String email,
                   String tel,
-                  Address address) {
+                  Address address,
+                  String provider,
+                  String providerId) {
         this.memberAuth = memberAuth;
         this.name = name;
         this.password = password;
@@ -72,6 +77,21 @@ public class Member extends BaseEntity {
         this.email = email;
         this.tel = tel;
         this.address = address;
+        this.provider = provider;
+        this.providerId = providerId;
+    }
+
+    public MemberDto toDto() {
+        return MemberDto.builder()
+                .name(name)
+                .password(password)
+                .nickname(nickname)
+                .email(email)
+                .tel(tel)
+                .city(address.getCity())
+                .street(address.getStreet())
+                .zipcode(address.getZipcode())
+                .build();
     }
 
     public MemberDto.MemberDtoBuilder toEditor() {

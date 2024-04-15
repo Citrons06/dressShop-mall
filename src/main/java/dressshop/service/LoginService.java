@@ -4,7 +4,6 @@ import dressshop.config.auth.PrincipalDetails;
 import dressshop.domain.member.Member;
 import dressshop.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,15 +21,10 @@ public class LoginService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Member member = memberRepository.findByEmail(email);
 
-        if (member != null) {
-            return User.builder()
-                    .username(member.getEmail())
-                    .password(member.getPassword())
-                    .authorities(member.getMemberAuth().toString())
-                    .build();
-
+        if (member == null) {
+            throw new UsernameNotFoundException("해당 사용자를 찾을 수 없습니다.");
         } else {
-            throw new UsernameNotFoundException("해당 유저를 찾을 수 없습니다.");
+            return new PrincipalDetails(member);
         }
     }
 }

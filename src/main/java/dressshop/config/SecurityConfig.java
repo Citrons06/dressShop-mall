@@ -1,5 +1,7 @@
 package dressshop.config;
 
+import dressshop.config.auth.PrincipalOauth2UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,7 +11,10 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final PrincipalOauth2UserService principalOauth2UserService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -23,12 +28,21 @@ public class SecurityConfig {
         });
 
         http.formLogin(f -> {
-            f.loginPage("/login");
-            f.loginProcessingUrl("/loginProc");
+            f.loginPage("/loginForm");
+            f.loginProcessingUrl("/login");
             f.defaultSuccessUrl("/");
-            f.usernameParameter("\"email");
+            f.usernameParameter("email");
+        });
+
+        http.oauth2Login(o -> {
+            o.loginPage("/loginForm");
+            o.defaultSuccessUrl("/");
+            o.userInfoEndpoint(userInfoEndpointConfig ->
+                    userInfoEndpointConfig.userService(principalOauth2UserService));
         });
 
         return http.build();
     }
+
+
 }

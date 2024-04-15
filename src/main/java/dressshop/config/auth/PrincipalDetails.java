@@ -1,21 +1,26 @@
 package dressshop.config.auth;
 
 import dressshop.domain.member.Member;
-import dressshop.domain.member.MemberAuth;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
-public class PrincipalDetails implements UserDetails {
+public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private Member member;
-    private MemberAuth auth;
+    private Map<String, Object> attributes;
 
     public PrincipalDetails(Member member) {
         this.member = member;
-        this.auth = member.getMemberAuth();
+    }
+
+    public PrincipalDetails(Member member, Map<String, Object> attributes) {
+        this.member = member;
+        this.attributes = attributes;
     }
 
     @Override
@@ -24,10 +29,15 @@ public class PrincipalDetails implements UserDetails {
         collection.add(new GrantedAuthority() {
             @Override
             public String getAuthority() {
-                return String.valueOf(auth);
+                return member.getMemberAuth().toString();
             }
         });
         return collection;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
     }
 
     @Override
@@ -37,7 +47,7 @@ public class PrincipalDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return member.getName();
+        return member.getEmail();
     }
 
     @Override
@@ -58,5 +68,11 @@ public class PrincipalDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String getName() {
+        String sub = attributes.get("sub").toString();
+        return sub;
     }
 }
