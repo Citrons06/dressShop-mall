@@ -1,7 +1,9 @@
 package dressshop.domain.item;
 
+import dressshop.domain.item.dto.CategoryDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,4 +25,25 @@ public class Category {
 
     @OneToMany(mappedBy = "category", fetch = LAZY, cascade = CascadeType.ALL)
     private List<Item> items = new ArrayList<>();
+
+    @Builder
+    public Category(String categoryName, List<Item> items) {
+        this.categoryName = categoryName;
+        this.items = items;
+    }
+
+    public CategoryDto.CategoryDtoBuilder toEditor() {
+        return CategoryDto.builder()
+                .categoryName(categoryName);
+    }
+
+    public void categoryEdit(CategoryDto categoryEdit) {
+        this.categoryName = categoryEdit.getCategoryName();
+    }
+
+    public CategoryDto toDto() {
+        return CategoryDto.builder()
+                .categoryName(categoryName)
+                .build();
+    }
 }

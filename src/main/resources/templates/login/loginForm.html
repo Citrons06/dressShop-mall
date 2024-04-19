@@ -1,14 +1,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<style>
-    .fieldError {
-        border-color: crimson;
-    }
-</style>
-    <head>
-        <meta charset="UTF-8">
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .fieldError {
+            border-color: crimson;
+        }
+    </style>
+</head>
+    <body>
         <h3>로그인 화면</h3>
-    </head>
-        <body>
             <form role="form" action="/login" th:object="${memberForm}" method="post">
                 <div class="form-group">
                     <label th:for="email">이메일</label>
@@ -24,9 +25,9 @@
                     <p th:if="${#fields.hasErrors('password')}"
                        th:errors="*{password}"></p>
                 </div>
-                <button type="submit">로그인</button>
+                <button type="submit" class="btn btn-primary">로그인</button>
             </form>
-        <a href="/oauth2/authorization/google">구글 로그인</a>
-        <a href="/join">회원가입</a>
+        <a href="/join" class="btn btn-secondary">회원 가입</a>
+        <a href="/oauth2/authorization/google" class="btn btn-danger">구글 로그인</a>
         </body>
 </html>

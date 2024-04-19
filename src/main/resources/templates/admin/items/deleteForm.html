@@ -1,0 +1,32 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Item Delete Form</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+
+    <h3>상품 삭제</h3>
+    <form action="/admin/items/delete" method="post">
+        <input type="hidden" name="id" th:value="${item.id}">
+        <div class="form-group">
+            <label for="name">상품 이름</label>
+            <input type="text" class="form-control" id="name" name="name" th:value="${item.itemName}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="price">상품 가격</label>
+            <input type="text" class="form-control" id="price" name="price" th:value="${item.price}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="quantity">상품 수량</label>
+            <input type="text" class="form-control" id="quantity" name="quantity" th:value="${item.quantity}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="category">상품 카테고리</label>
+            <input type="text" class="form-control" id="category" name="category" th:value="${item.category.categoryName}" readonly>
+        </div>
+        <button type="submit" class="btn btn-danger">삭제</button>
+    </form>
+</div>
+</body>
+</html>

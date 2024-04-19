@@ -1,32 +1,30 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Member List</title>
+    <title>Category List</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container">
 
-    <h3>회원 목록</h3>
+    <h3>카테고리 목록</h3>
     <table class="table table-bordered">
         <thead>
         <tr>
             <th>번호</th>
-            <th>이름</th>
-            <th>연락처</th>
-            <th>이메일</th>
+            <th>카테고리 이름</th>
+            <th>수정</th>
             <th>삭제</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="member : ${members}">
-            <td th:text="${member.id}"></td>
-            <td th:text="${member.name}"></td>
-            <td th:text="${member.phone}"></td>
-            <td th:text="${member.email}"></td>
+        <tr th:each="category : ${categories}">
+            <td th:text="${category.id}"></td>
+            <td th:text="${category.categoryName}"></td>
             <td>
+                <a th:href="@{/admin/category/{id}/edit(id=${category.id})}">수정</a>
             </td>
             <td>
-                <a th:href="@{/admin/members/{id}/delete(id=${member.id})}">삭제</a>
+                <a th:href="@{/admin/category/{id}/delete(id=${category.id})}">삭제</a>
             </td>
         </tr>
         </tbody>

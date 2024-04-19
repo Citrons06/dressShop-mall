@@ -1,22 +1,23 @@
-<html>
-    <title>Home</title>
-<body>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>DRESS SHOP</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .home {
+            text-align: center;
+            margin-top: 100px;
+        }
+    </style>
+</head>
     <div class="container">
         <div class="home">
             <h1>DRESS SHOP</h1>
-            <p>
-                <a href="/join">회원 가입</a>
-                <a href="/loginForm">로그인</a>
-            </p>
-            <p class="lead">상품 둘러보기</p>
-            <p>
-                <a href="/items/itemList">상품 목록</a>
-            </p>
-            <p class="lead">주문은 여기!</p>
-            <p>
-                <a href="/order">상품 주문</a>
-                <a href="/orderList">주문 내역</a>
-            </p>
+            <p>옷을 사고 팔 수 있는 쇼핑몰입니다.</p>
+            <a href="/join" class="btn btn-primary">회원 가입</a>
+            <a href="/loginForm" class="btn btn-secondary">로그인</a>
+            <br />
+            <br />
+            <a href="/items/itemList" class="btn btn-info">상품 목록</a>
         </div>
     </div>
 </body>

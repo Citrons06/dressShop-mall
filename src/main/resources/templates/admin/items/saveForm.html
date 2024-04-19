@@ -1,0 +1,46 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<title>Item</title>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .fieldError {
+            border-color: crimson;
+        }
+    </style>
+<body>
+<div class="container">
+    <h3>상품 등록</h3>
+    <form role="form" action="/items/new" th:object="${itemForm}" method="post">
+        <div class="form-group
+            ">
+            <label th:for="itemName">상품명</label>
+            <input type="text" th:field="*{itemName}" class="form-control" placeholder="상품명을 입력하세요."
+                   th:class="${#fields.hasErrors('itemName')}? 'form-control fieldError' : 'form-control'">
+            <p th:if="${#fields.hasErrors('itemName')}"
+               th:errors="*{itemName}"></p>
+        </div>
+        <div class="form-group">
+            <label th:for="price">가격</label>
+            <input type="number" th:field="*{price}" class="form-control" placeholder="가격을 입력하세요."
+                   th:class="${#fields.hasErrors('price')}? 'form-control fieldError' : 'form-control'">
+            <p th:if="${#fields.hasErrors('price')}"
+               th:errors="*{price}"></p>
+        </div>
+        <div class="form-group">
+            <label th:for="quantity">재고수량</label>
+            <input type="number" th:field="*{quantity}" class="form-control" placeholder="재고수량을 입력하세요."
+                   th:class="${#fields.hasErrors('quantity')}? 'form-control fieldError' : 'form-control'">
+            <p th:if="${#fields.hasErrors('quantity')}"
+               th:errors="*{quantity}"></p>
+        </div>
+        <div class="form-group">
+            <label th:for="category">카테고리</label>
+            <select th:field="*{category}" class="form-control" multiple>
+                <option th:each="category : ${categories}" th:value="${category}" th:text="${categoryName}"></option>
+            </select>
+        </div>
+        <button type="submit">등록</button>
+</div>
+</body>
+</head>
+</html>

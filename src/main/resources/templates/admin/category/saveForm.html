@@ -1,0 +1,26 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Category Save Form</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .fieldError {
+            border-color: crimson;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h3>카테고리 등록</h3>
+    <form role="form" action="/admin/category/save" th:object="${categoryForm}" method="post">
+        <div class="form-group">
+            <label for="name">카테고리 이름</label>
+            <input type="text" class="form-control" id="name" name="name" th:value="*{categoryName}"
+                   th:class="${#fields.hasErrors()}? 'form-control fieldError' : 'form-control'">
+            <p th:if="${#fields.hasErrors()}" th:errors="*{categoryName}"></p>
+        </div>
+        <button type="submit" class="btn btn-primary">등록</button>
+    </form>
+</div>
+</body>
+</html>

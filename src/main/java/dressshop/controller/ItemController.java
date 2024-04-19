@@ -1,6 +1,7 @@
 package dressshop.controller;
 
 import dressshop.domain.item.dto.ItemDto;
+import dressshop.exception.customException.SaveException;
 import dressshop.service.ItemService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,19 +24,24 @@ public class ItemController {
     //상품 등록 폼 불러오기
     @GetMapping("/admin/items/save")
     public String saveItem(Model model) {
-        model.addAttribute("item", new ItemDto());
+        model.addAttribute("itemForm", new ItemDto());
         return "admin/items/saveForm";
     }
 
     //상품 등록
     @PostMapping("/admin/items/save")
-    public String save(@Valid ItemDto itemDto, BindingResult bindingResult) {
+    public String save(@Valid @ModelAttribute("itemForm") ItemDto itemDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "admin/items/saveForm";
         }
 
-        itemService.save(itemDto);
-        return "redirect:/";
+        try {
+            itemService.save(itemDto);
+        } catch (SaveException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+
+        return "redirect:/items/itemList";
     }
 
     //상품 단건 조회

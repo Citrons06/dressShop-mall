@@ -1,6 +1,7 @@
 package dressshop.domain.item.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
+import dressshop.domain.item.Category;
 import dressshop.domain.item.Item;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -19,12 +20,15 @@ public class ItemDto {
     @NotBlank(message = "재고 수량을 입력하세요.")
     private Integer quantity;
 
+    private Category category;
+
     @Builder
     @QueryProjection
-    public ItemDto(String itemName, Integer price, Integer quantity) {
+    public ItemDto(String itemName, Integer price, Integer quantity, Category category) {
         this.itemName = itemName;
         this.price = price;
         this.quantity = quantity;
+        this.category = category;
     }
 
     public Item toEntity() {
@@ -32,6 +36,7 @@ public class ItemDto {
                 .itemName(itemName)
                 .price(price)
                 .quantity(quantity)
+                .category(category)
                 .build();
     }
 
@@ -39,5 +44,6 @@ public class ItemDto {
         this.itemName = item.getItemName();
         this.price = item.getPrice();
         this.quantity = item.getQuantity();
+        this.category = item.getCategory();
     }
 }

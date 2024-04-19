@@ -1,11 +1,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<style>
-    .fieldError {
-        border-color: crimson;
-    }
-</style>
+<head>
+    <title>Join</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .fieldError {
+            border-color: crimson;
+        }
+    </style>
+</head>
 <body>
 <div class="container">
+    <h3>회원 가입</h3>
 
     <form role="form" action="/join" th:object="${memberForm}" method="post">
         <div class="form-group">
@@ -64,7 +69,7 @@
             <p th:if="${#fields.hasErrors('zipcode')}"
                th:errors="*{zipcode}"></p>
         </div>
-        <button type="submit">가입하기</button>
+        <button type="submit" class="btn btn-primary">가입</button>
     </form>
 </div>
 </body>

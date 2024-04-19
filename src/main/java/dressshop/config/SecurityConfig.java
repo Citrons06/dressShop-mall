@@ -1,5 +1,6 @@
 package dressshop.config;
 
+import dressshop.config.auth.CustomAuthenticationEntryPoint;
 import dressshop.config.auth.PrincipalOauth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -41,8 +42,9 @@ public class SecurityConfig {
                     userInfoEndpointConfig.userService(principalOauth2UserService));
         });
 
+        http.exceptionHandling(e ->
+                e.authenticationEntryPoint(new CustomAuthenticationEntryPoint()));
+
         return http.build();
     }
-
-
 }
