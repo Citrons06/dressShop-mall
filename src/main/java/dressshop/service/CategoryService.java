@@ -34,7 +34,7 @@ public class CategoryService {
 
     public List<CategoryDto> findList() {
         return categoryRepository.findAll().stream()
-                .map(CategoryDto::new)
+                .map(Category::toDto)
                 .collect(Collectors.toList());
     }
 

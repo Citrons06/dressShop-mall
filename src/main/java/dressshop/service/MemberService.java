@@ -54,9 +54,6 @@ public class MemberService {
                 .nickname(memberDto.getNickname())
                 .email(memberDto.getEmail())
                 .tel(memberDto.getTel())
-                .city(memberDto.getCity())
-                .street(memberDto.getStreet())
-                .zipcode(memberDto.getZipcode())
                 .build();
 
         member.editMember(memberEdit);
@@ -74,8 +71,8 @@ public class MemberService {
     //회원 리스트 조회
     @Transactional(readOnly = true)
     public List<MemberDto> findList() {
-        return memberRepository.findList().stream()
-                .map(MemberDto::new)
+        return memberRepository.findAll().stream()
+                .map(Member::toDto)
                 .collect(Collectors.toList());
     }
 

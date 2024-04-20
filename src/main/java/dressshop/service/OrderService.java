@@ -47,8 +47,8 @@ public class OrderService {
     //조회: 주문 내역 조회
     @Transactional(readOnly = true)
     public List<OrderDto> findOrders() {
-        return orderRepository.findAll()
-                .stream().map(OrderDto::new)
+        return orderRepository.findAll().stream()
+                .map(Order::toOrderDto)
                 .collect(Collectors.toList());
     }
 

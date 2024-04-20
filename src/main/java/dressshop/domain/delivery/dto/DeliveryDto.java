@@ -8,11 +8,13 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Getter
+@Getter @Setter
 @NoArgsConstructor
 public class DeliveryDto {
 
+    private Long id;
     private Member member;
     private Order order;
 
@@ -25,11 +27,13 @@ public class DeliveryDto {
     private String tel;
 
     @Builder
-    public DeliveryDto(Member member,
+    public DeliveryDto(Long id,
+                       Member member,
                        Order order,
                        Address address,
                        DeliveryStatus deliveryStatus,
                        String tel) {
+        this.id = id;
         this.member = member;
         this.order = order;
         this.address = address;

@@ -39,8 +39,8 @@ public class ItemService {
     //상품 리스트 조회
     @Transactional(readOnly = true)
     public List<ItemDto> findList() {
-        return itemRepository.findList().stream()
-                .map(ItemDto::new)
+        return itemRepository.findAll().stream()
+                .map(Item::toDto)
                 .collect(Collectors.toList());
     }
 

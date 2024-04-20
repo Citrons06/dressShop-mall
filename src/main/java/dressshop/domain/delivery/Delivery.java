@@ -44,11 +44,13 @@ public class Delivery extends BaseTimeEntity {
     private String tel;
 
     @Builder
-    public Delivery(Member member,
+    public Delivery(Long id,
+                    Member member,
                     Order order,
                     Address address,
                     DeliveryStatus deliveryStatus,
                     String tel) {
+        this.id = id;
         this.member = member;
         this.order = order;
         this.address = address;

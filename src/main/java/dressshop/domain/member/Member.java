@@ -91,9 +91,6 @@ public class Member extends BaseEntity {
                 .nickname(nickname)
                 .email(email)
                 .tel(tel)
-                .city(address.getCity())
-                .street(address.getStreet())
-                .zipcode(address.getZipcode())
                 .build();
     }
 
@@ -104,7 +101,6 @@ public class Member extends BaseEntity {
                 .nickname(nickname)
                 .email(email)
                 .tel(tel)
-                .address(address)
                 .build().toEditor();
     }
 
@@ -115,7 +111,6 @@ public class Member extends BaseEntity {
         this.nickname = memberDto.getNickname();
         this.email = memberDto.getEmail();
         this.tel = memberDto.getTel();
-        this.address = new Address(memberDto.getCity(), memberDto.getStreet(), memberDto.getZipcode());
     }
 
     public void passwordEncode(String encodedPassword) {
