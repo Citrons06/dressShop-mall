@@ -13,6 +13,8 @@ import org.hibernate.validator.constraints.Range;
 @NoArgsConstructor
 public class OrderItemDto {
 
+    private Long id;
+
     private Item item;
 
     private Order order;
@@ -25,7 +27,12 @@ public class OrderItemDto {
 
     @Builder
     @QueryProjection
-    public OrderItemDto(Item item, Order order, Integer orderPrice, Integer count) {
+    public OrderItemDto(Long id,
+                        Item item,
+                        Order order,
+                        Integer orderPrice,
+                        Integer count) {
+        this.id = id;
         this.item = item;
         this.order = order;
         this.orderPrice = orderPrice;

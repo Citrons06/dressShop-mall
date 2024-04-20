@@ -61,7 +61,8 @@ public class Member extends BaseEntity {
     private String providerId;
 
     @Builder
-    public Member(MemberAuth memberAuth,
+    public Member(Long id,
+                  MemberAuth memberAuth,
                   String name,
                   String password,
                   String nickname,
@@ -70,6 +71,7 @@ public class Member extends BaseEntity {
                   Address address,
                   String provider,
                   String providerId) {
+        this.id = id;
         this.memberAuth = memberAuth;
         this.name = name;
         this.password = password;
@@ -83,6 +85,7 @@ public class Member extends BaseEntity {
 
     public MemberDto toDto() {
         return MemberDto.builder()
+                .id(id)
                 .name(name)
                 .password(password)
                 .nickname(nickname)
@@ -117,5 +120,10 @@ public class Member extends BaseEntity {
 
     public void passwordEncode(String encodedPassword) {
         this.password = encodedPassword;
+    }
+
+    //회원(USER 권한)의 권한 제한: 로그인 불가능
+    public void disableMember() {
+        this.memberAuth = MemberAuth.DISABLE;
     }
 }

@@ -1,6 +1,7 @@
 package dressshop.config.auth;
 
 import dressshop.domain.member.Member;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;

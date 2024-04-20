@@ -5,7 +5,8 @@
 </head>
 <body>
 <div class="container">
-
+    <a href="/" class="btn btn-primary"><h2>Home</h2></a>
+    <br />
     <h3>카테고리 목록</h3>
     <table class="table table-bordered">
         <thead>
@@ -21,14 +22,15 @@
             <td th:text="${category.id}"></td>
             <td th:text="${category.categoryName}"></td>
             <td>
-                <a th:href="@{/admin/category/{id}/edit(id=${category.id})}">수정</a>
+                <a th:href="@{/admin/category/edit/{categoryId} (id=${category.id})}">수정</a>
             </td>
             <td>
-                <a th:href="@{/admin/category/{id}/delete(id=${category.id})}">삭제</a>
+                <a th:href="@{/admin/category/{categoryId}/delete (id=${category.id})}">삭제</a>
             </td>
         </tr>
         </tbody>
     </table>
+    <a href="/admin/category/save" class="btn btn-primary">카테고리 추가</a>
 </div>
 </body>
 </html>

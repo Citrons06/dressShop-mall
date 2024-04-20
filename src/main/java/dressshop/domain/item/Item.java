@@ -37,7 +37,9 @@ public class Item extends BaseEntity {
 
     @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
-    private Category category;
+    private Category categories;
+
+    private String categoryName;
 
     @OneToMany(mappedBy = "item", fetch = LAZY, cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
@@ -47,23 +49,27 @@ public class Item extends BaseEntity {
     private Cart cart;
 
     @Builder
-    public Item(String itemName,
+    public Item(Long id,
+                String itemName,
                 Integer price,
                 Integer quantity,
                 Integer itemSell,
-                Category category) {
+                String categoryName) {
+        this.id = id;
         this.itemName = itemName;
         this.price = price;
         this.quantity = quantity;
         this.itemSell = itemSell;
-        this.category = category;
+        this.categoryName = categoryName;
     }
 
     public ItemDto toDto() {
         return ItemDto.builder()
+                .id(id)
                 .itemName(itemName)
                 .price(price)
                 .quantity(quantity)
+                .categoryName(categoryName)
                 .build();
     }
 
@@ -71,13 +77,15 @@ public class Item extends BaseEntity {
         return ItemDto.builder()
                 .itemName(itemName)
                 .price(price)
-                .quantity(quantity);
+                .quantity(quantity)
+                .categoryName(categoryName);
     }
 
     public void itemEdit(ItemDto itemDto) {
         itemName = itemDto.getItemName();
         price = itemDto.getPrice();
         quantity = itemDto.getPrice();
+        categoryName = itemDto.getCategoryName();
     }
 
     public void decreaseStock(int orderCount) {

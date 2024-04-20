@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,15 +26,21 @@ public class LoginController {
     private final LoginService loginService;
 
     @GetMapping("/loginForm")
-    public String loginForm(Model model) {
-        model.addAttribute("memberForm", new MemberDto());
+    public String loginForm(@ModelAttribute("memberForm") MemberDto memberDto) {
         return "login/loginForm";
     }
 
+    //만약 회원의 권한이 DISABLED라면 로그인이 불가능하다.
     @PostMapping("/loginForm")
     public String login(@Valid @ModelAttribute("memberForm") MemberDto memberDto,
                         BindingResult bindingResult,
+                        Authentication authentication,
                         Model model) {
+
+        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("DISABLE"))) {
+            throw new IllegalStateException("비활성화된 계정입니다.");
+        }
+
         if (bindingResult.hasErrors()) {
             return "login/loginForm";
         }

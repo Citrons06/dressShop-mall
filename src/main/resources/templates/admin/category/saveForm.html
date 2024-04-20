@@ -10,12 +10,14 @@
 </head>
 <body>
 <div class="container">
+    <a href="/" class="btn btn-primary"><h2>Home</h2></a>
+    <br />
 
     <h3>카테고리 등록</h3>
     <form role="form" action="/admin/category/save" th:object="${categoryForm}" method="post">
         <div class="form-group">
-            <label for="name">카테고리 이름</label>
-            <input type="text" class="form-control" id="name" name="name" th:value="*{categoryName}"
+            <label for="categoryName">카테고리 이름</label>
+            <input type="text" class="form-control" id="categoryName" name="categoryName" th:value="*{categoryName}"
                    th:class="${#fields.hasErrors()}? 'form-control fieldError' : 'form-control'">
             <p th:if="${#fields.hasErrors()}" th:errors="*{categoryName}"></p>
         </div>

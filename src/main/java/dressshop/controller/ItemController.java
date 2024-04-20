@@ -1,5 +1,6 @@
 package dressshop.controller;
 
+import dressshop.domain.item.dto.CategoryDto;
 import dressshop.domain.item.dto.ItemDto;
 import dressshop.exception.customException.SaveException;
 import dressshop.service.ItemService;
@@ -23,14 +24,17 @@ public class ItemController {
 
     //상품 등록 폼 불러오기
     @GetMapping("/admin/items/save")
-    public String saveItem(Model model) {
-        model.addAttribute("itemForm", new ItemDto());
+    public String saveForm(@ModelAttribute("itemForm") ItemDto itemDto,
+                           @ModelAttribute("category") CategoryDto categoryDto) {
         return "admin/items/saveForm";
     }
 
     //상품 등록
     @PostMapping("/admin/items/save")
-    public String save(@Valid @ModelAttribute("itemForm") ItemDto itemDto, BindingResult bindingResult, Model model) {
+    public String save(@Valid @ModelAttribute("itemForm") ItemDto itemDto,
+                       @ModelAttribute("categories") CategoryDto categoryDto,
+                       BindingResult bindingResult,
+                       Model model) {
         if (bindingResult.hasErrors()) {
             return "admin/items/saveForm";
         }
@@ -49,7 +53,7 @@ public class ItemController {
     public String findById(@PathVariable Long itemId, Model model) {
         ItemDto item = itemService.findById(itemId);
         model.addAttribute("item", item);
-        return "items/{itemId}";
+        return "items/item/{itemId}";
     }
 
     //상품 전체 조회
@@ -60,31 +64,39 @@ public class ItemController {
         return "items/itemList";
     }
 
+    //상품 관리 페이지 불러오기
+    @GetMapping("/admin/items")
+    public String findItemList(Model model) {
+        List<ItemDto> items = itemService.findList();
+        model.addAttribute("items", items);
+        return "admin/items/itemList";
+    }
+
     //상품 수정 폼 불러오기
-    @GetMapping("/admin/items/{itemId}/edit")
-    public String editItem(@PathVariable Long itemId, Model model) {
+    @GetMapping("/admin/items/edit/{itemId}")
+    public String editForm(@PathVariable Long itemId, Model model) {
         ItemDto item = itemService.findById(itemId);
         model.addAttribute("item", item);
         return "admin/items/editForm";
     }
 
     //상품 수정
-    @PostMapping("/admin/items/{itemId}/edit")
+    @PostMapping("/admin/items/edit/{itemId}")
     public String edit(@PathVariable Long itemId, @ModelAttribute("item") @Valid ItemDto itemDto) {
         itemService.editItem(itemId, itemDto);
         return "redirect:/items/itemList";
     }
 
     //상품 삭제 폼 불러오기
-    @GetMapping("/admin/items/{itemId}/delete")
-    public String deleteItem(@PathVariable Long itemId, Model model) {
+    @GetMapping("/admin/items/delete/{itemId}")
+    public String deleteForm(@PathVariable Long itemId, Model model) {
         ItemDto itemDto = itemService.findById(itemId);
         model.addAttribute("itemDto", itemDto);
         return "admin/items/deleteForm";
     }
 
     //상품 삭제
-    @PostMapping("/admin/items/{itemId}/delete")
+    @PostMapping("/admin/items/delete/{itemId}")
     public String delete(@PathVariable Long itemId) {
         itemService.delete(itemId);
         return "redirect:/itemList";

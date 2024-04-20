@@ -1,13 +1,11 @@
 package dressshop.controller;
 
-import dressshop.domain.member.Member;
 import dressshop.domain.member.dto.MemberDto;
 import dressshop.exception.customException.MemberJoinException;
 import dressshop.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,8 +22,7 @@ public class MemberController {
 
     //회원 가입 폼 불러오기
     @GetMapping("/join")
-    public String joinForm(Model model) {
-        model.addAttribute("memberForm", new MemberDto());
+    public String joinForm(@ModelAttribute("memberForm") MemberDto memberDto) {
         return "members/joinForm";
     }
 
@@ -81,6 +78,20 @@ public class MemberController {
 
     //회원 탈퇴
     @PostMapping("/members/{memberId}/delete")
+    public String resign(@PathVariable Long memberId) {
+        memberService.delete(memberId);
+        return "redirect:/";
+    }
+
+    //USER 권한 정지
+    @PostMapping("/admin/members/{memberId}/disable")
+    public String disableMember(@PathVariable Long memberId) {
+        memberService.disableMember(memberId);
+        return "redirect:/";
+    }
+
+    //회원 삭제
+    @PostMapping("/admin/members/{memberId}/delete")
     public String deleteMember(@PathVariable Long memberId) {
         memberService.delete(memberId);
         return "redirect:/";

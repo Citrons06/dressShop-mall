@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -19,8 +20,7 @@ public class OrderController {
 
     //상품 주문 폼 불러오기
     @GetMapping("/order")
-    public String orderForm(Model model) {
-        model.addAttribute("order", new OrderDto());
+    public String orderForm(@ModelAttribute("orderForm") OrderDto orderDto) {
         return "orders/order";
     }
 

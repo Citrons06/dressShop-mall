@@ -19,6 +19,7 @@ public class CategoryService {
     //카테고리 등록
     public void save(CategoryDto categoryDto) {
         Category category = categoryDto.toEntity();
+        category.setCategoryName(categoryDto.getCategoryName());
 
         categoryRepository.save(category);
     }

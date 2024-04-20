@@ -9,14 +9,13 @@ import dressshop.domain.order.OrderStatus;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Getter
-@NoArgsConstructor
+@Getter @Setter
 public class OrderDto {
-
+    private Long id;
     private Member member;
     private LocalDateTime orderDate;
     private OrderStatus orderStatus;
@@ -34,13 +33,15 @@ public class OrderDto {
 
     @Builder
     @QueryProjection
-    public OrderDto(Member member,
+    public OrderDto(Long id,
+                    Member member,
                     LocalDateTime orderDate,
                     OrderStatus orderStatus,
                     String city,
                     String street,
                     String zipcode,
                     Delivery delivery) {
+        this.id = id;
         this.member = member;
         this.orderDate = orderDate;
         this.orderStatus = orderStatus;
@@ -51,6 +52,7 @@ public class OrderDto {
     }
 
     public OrderDto(Order order) {
+        id = order.getId();
         member = order.getMember();
         orderDate = order.getOrderDate();
         orderStatus = order.getOrderStatus();
@@ -62,6 +64,7 @@ public class OrderDto {
 
     public Order toEntity() {
         return Order.builder()
+                .id(id)
                 .member(member)
                 .orderDate(orderDate)
                 .orderStatus(orderStatus)

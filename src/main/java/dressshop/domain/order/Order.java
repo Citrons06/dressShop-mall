@@ -27,8 +27,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "order_id")
     private Long id;
 
@@ -53,12 +52,14 @@ public class Order extends BaseEntity {
     private Address address;
 
     @Builder
-    public Order(Member member,
+    public Order(Long id,
+                 Member member,
                  List<OrderItem> orderItems,
                  LocalDateTime orderDate,
                  OrderStatus orderStatus,
                  Delivery delivery,
                  Address address) {
+        this.id = id;
         this.member = member;
         this.orderItems = orderItems;
         this.orderDate = orderDate;
@@ -78,20 +79,26 @@ public class Order extends BaseEntity {
         orderItem.setOrder(this);
     }
 
-    public static Order createOrder(Member member, Delivery delivery, List<OrderItem> orderItems) {
-        final Order order = Order.builder()
+    public static Order createOrder(Member member, Delivery delivery, List<OrderItem> orderItems, OrderDto orderDto) {
+        Order order = Order.builder()
                 .member(member)
                 .orderDate(LocalDateTime.now())
                 .orderStatus(ORDER)
+                .address(member.getAddress())
                 .delivery(delivery)
                 .build();
 
         order.setMember(member);
+        order.setId(orderDto.getId());
         for (OrderItem orderItem : orderItems) {
             order.addOrderItem(orderItem);
         }
 
         return order;
+    }
+
+    private void setId(Long id) {
+        this.id = id;
     }
 
     public void cancel() {
@@ -107,6 +114,7 @@ public class Order extends BaseEntity {
 
     public OrderDto toOrderDto() {
         return OrderDto.builder()
+                .id(id)
                 .member(member)
                 .orderDate(orderDate)
                 .orderStatus(orderStatus)

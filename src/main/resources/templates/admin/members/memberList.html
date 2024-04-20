@@ -5,6 +5,8 @@
 </head>
 <body>
 <div class="container">
+    <a href="/" class="btn btn-primary"><h2>Home</h2></a>
+    <br />
 
     <h3>회원 목록</h3>
     <table class="table table-bordered">
@@ -15,6 +17,7 @@
             <th>연락처</th>
             <th>이메일</th>
             <th>삭제</th>
+            <th>정지</th>
         </tr>
         </thead>
         <tbody>
@@ -26,7 +29,10 @@
             <td>
             </td>
             <td>
-                <a th:href="@{/admin/members/{id}/delete(id=${member.id})}">삭제</a>
+                <a th:href="@{/admin/members/{id}/delete (id=${member.id})}">삭제</a>
+            </td>
+            <td>
+                <a th:href="@{/admin/members/{memberId}/disable (id=${member.id})}">정지</a>
             </td>
         </tr>
         </tbody>

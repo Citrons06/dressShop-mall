@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,30 +21,23 @@ public class CategoryController {
 
     //카테고리 등록 폼 불러오기
     @GetMapping("/save")
-    public String saveCategory(Model model) {
-        model.addAttribute("categoryForm", new CategoryDto());
+    public String saveForm(@ModelAttribute("categoryForm") CategoryDto categoryDto) {
         return "admin/category/saveForm";
     }
 
     //카테고리 등록
     @PostMapping("/save")
-    public String save(@Valid @ModelAttribute("categoryForm") CategoryDto categoryDto, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            return "admin/category/saveForm";
-        }
+    public String save(@Valid @ModelAttribute("categoryForm") CategoryDto categoryDto,
+                       BindingResult bindingResult,
+                       Model model) {
 
-        try {
-            categoryService.save(categoryDto);
-        } catch (SaveException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-        }
-
-        return "redirect:/admin/category/categoryList";
+        categoryService.save(categoryDto);
+        return "redirect:/";
     }
 
     //카테고리 수정 폼 불러오기
-    @GetMapping("/{categoryId}/update")
-    public String updateCategory(Long categoryId, Model model) {
+    @GetMapping("/edit/{categoryId}")
+    public String editForm(@PathVariable Long categoryId, Model model) {
         CategoryDto categoryDto = categoryService.findById(categoryId);
         model.addAttribute("categoryForm", categoryDto);
 
@@ -56,7 +46,7 @@ public class CategoryController {
 
     //카테고리 수정
     @PostMapping("/{categoryId}/update")
-    public String update(Long categoryId, @Valid CategoryDto categoryDto, BindingResult bindingResult, Model model) {
+    public String edit(@PathVariable Long categoryId, @Valid CategoryDto categoryDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "admin/category/updateForm";
         }
@@ -73,7 +63,7 @@ public class CategoryController {
 
     //카테고리 삭제
     @PostMapping("/{categoryId}/delete")
-    public String delete(Long categoryId) {
+    public String delete(@PathVariable Long categoryId) {
         categoryService.deleteCategory(categoryId);
 
         return "redirect:/";

@@ -86,4 +86,13 @@ public class MemberService {
 
         memberRepository.delete(findMember);
     }
+
+    //회원의 권한 제한: 로그인 불가능
+    public void disableMember(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(NotFoundException::new);
+
+        member.disableMember();
+    }
+
 }

@@ -39,7 +39,7 @@ public class OrderService {
         OrderItem orderItem = OrderItem.createOrderItem(item, count);
         orderItems.add(orderItem);
 
-        Order order = Order.createOrder(member, delivery, orderItems);
+        Order order = Order.createOrder(member, delivery, orderItems, orderDto);
 
         orderRepository.save(order);
     }

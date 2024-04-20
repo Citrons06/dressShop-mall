@@ -23,7 +23,7 @@ public class Category {
 
     private String categoryName;
 
-    @OneToMany(mappedBy = "category", fetch = LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "categories", fetch = LAZY, cascade = CascadeType.ALL)
     private List<Item> items = new ArrayList<>();
 
     @Builder
@@ -45,5 +45,9 @@ public class Category {
         return CategoryDto.builder()
                 .categoryName(categoryName)
                 .build();
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 }

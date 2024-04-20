@@ -10,6 +10,9 @@
 </head>
 <body>
 <div class="container">
+    <a href="/" class="btn btn-primary"><h2>Home</h2></a>
+    <br />
+
     <h3>상품 목록</h3>
     <table class="table">
         <thead>
@@ -27,11 +30,7 @@
             <td th:text="${item.itemName}"></td>
             <td th:text="${item.price}"></td>
             <td th:text="${item.quantity}"></td>
-            <td>
-                <ul>
-                    <li th:each="category : ${item.categories}" th:text="${category.name}"></li>
-                </ul>
-            </td>
+            <td th:text="${item.categoryName}"></td>
         </tr>
         </tbody>
     </table>

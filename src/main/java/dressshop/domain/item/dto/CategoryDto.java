@@ -4,9 +4,14 @@ import dressshop.domain.item.Category;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Getter
+@Getter @Setter
+@NoArgsConstructor
 public class CategoryDto {
+
+    private Long id;
 
     @NotBlank(message = "카테고리명을 입력해주세요.")
     private String categoryName;
@@ -29,8 +34,5 @@ public class CategoryDto {
         return Category.builder()
                 .categoryName(categoryName)
                 .build();
-    }
-
-    public CategoryDto() {
     }
 }

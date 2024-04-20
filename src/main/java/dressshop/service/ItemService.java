@@ -53,7 +53,6 @@ public class ItemService {
                 .itemName(itemDto.getItemName())
                 .price(itemDto.getPrice())
                 .quantity(item.getQuantity())
-                .category(item.getCategory())
                 .build();
 
         item.itemEdit(itemEdit);

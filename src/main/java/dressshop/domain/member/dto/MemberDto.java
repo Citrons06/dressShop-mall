@@ -16,6 +16,8 @@ import static dressshop.domain.member.MemberAuth.USER;
 @NoArgsConstructor
 public class MemberDto {
 
+    private Long id;
+
     @NotBlank(message = "이름을 입력하세요.")
     private String name;
 
@@ -45,7 +47,8 @@ public class MemberDto {
 
     @Builder
     @QueryProjection
-    public MemberDto(String name,
+    public MemberDto(Long id,
+                     String name,
                      String password,
                      String nickname,
                      String email,
@@ -53,6 +56,7 @@ public class MemberDto {
                      String city,
                      String street,
                      String zipcode) {
+        this.id = id;
         this.name = name;
         this.password = password;
         this.nickname = nickname;
@@ -68,6 +72,7 @@ public class MemberDto {
 
     public Member toEntity() {
         return Member.builder()
+                .id(id)
                 .name(name)
                 .password(password)
                 .nickname(nickname)
