@@ -5,14 +5,11 @@ import dressshop.domain.item.Item;
 import dressshop.domain.member.Address;
 import dressshop.domain.member.Member;
 import dressshop.domain.order.Order;
-import dressshop.domain.order.OrderStatus;
 import dressshop.domain.order.dto.OrderDto;
-import dressshop.exception.customException.ItemNotStockException;
 import dressshop.exception.customException.NotFoundException;
 import dressshop.repository.item.ItemRepository;
 import dressshop.repository.member.MemberRepository;
 import dressshop.repository.order.OrderRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-import static dressshop.domain.member.MemberAuth.USER;
+import static dressshop.domain.member.MemberAuth.ROLE_USER;
 import static dressshop.domain.order.OrderStatus.ORDER;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,11 +36,11 @@ class OrderServiceTest {
     void test() {
         Member member = Member.builder()
                 .nickname("주문자A")
-                .name("아요니")
+                .username("아요니")
                 .address(new Address("서울", "도로명", "22222"))
                 .email("이거슨 이메일")
                 .tel("010-0000-0000")
-                .memberAuth(USER)
+                .memberAuth(ROLE_USER)
                 .build();
 
         memberRepository.save(member);
@@ -81,7 +78,7 @@ class OrderServiceTest {
         orderService.toOrder(orderDto, itemA.getId(), 10);
         Order order = orderRepository.findById(itemA.getId())
                 .orElseThrow(NotFoundException::new);
-        assertThat(order.getMember().getName()).isEqualTo("아요니");
+        assertThat(order.getMember().getUsername()).isEqualTo("아요니");
         assertThat(itemA.getQuantity()).isEqualTo(990);
     }
 }

@@ -11,7 +11,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import static dressshop.domain.member.MemberAuth.USER;
+import static dressshop.domain.member.MemberAuth.ROLE_USER;
 
 @Slf4j
 @Service
@@ -28,21 +28,21 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
         String provider = userRequest.getClientRegistration().getRegistrationId();
         String providerId = oAuth2User.getAttribute("sub");
-        String name = provider + "_" + providerId;
+        String username = oAuth2User.getAttribute("email");
 
         String password = pwdEncoder.encode("패스워드");
 
         String email = oAuth2User.getAttribute("email");
 
-        Member member = memberRepository.findByEmail(email);
+        Member member = memberRepository.findByEmail(username);
         if (member == null) {
             member = Member.builder()
                     .email(email)
                     .password(password)
-                    .name(name)
+                    .username(username)
                     .provider(provider)
                     .providerId(providerId)
-                    .memberAuth(USER)
+                    .memberAuth(ROLE_USER)
                     .build();
 
             memberRepository.save(member);

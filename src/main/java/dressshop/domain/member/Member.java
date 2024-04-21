@@ -32,7 +32,7 @@ public class Member extends BaseEntity {
     @Enumerated(value = STRING)
     private MemberAuth memberAuth;
 
-    private String name;
+    private String username;
 
     private String password;
 
@@ -63,7 +63,7 @@ public class Member extends BaseEntity {
     @Builder
     public Member(Long id,
                   MemberAuth memberAuth,
-                  String name,
+                  String username,
                   String password,
                   String nickname,
                   String email,
@@ -73,7 +73,7 @@ public class Member extends BaseEntity {
                   String providerId) {
         this.id = id;
         this.memberAuth = memberAuth;
-        this.name = name;
+        this.username = username;
         this.password = password;
         this.nickname = nickname;
         this.email = email;
@@ -86,9 +86,8 @@ public class Member extends BaseEntity {
     public MemberDto toDto() {
         return MemberDto.builder()
                 .id(id)
-                .name(name)
+                .name(username)
                 .password(password)
-                .nickname(nickname)
                 .email(email)
                 .tel(tel)
                 .build();
@@ -96,7 +95,7 @@ public class Member extends BaseEntity {
 
     public MemberDto.MemberDtoBuilder toEditor() {
         return Member.builder()
-                .name(name)
+                .username(username)
                 .password(password)
                 .nickname(nickname)
                 .email(email)
@@ -106,9 +105,8 @@ public class Member extends BaseEntity {
 
     //수정 로직
     public void editMember(MemberDto memberDto) {
-        this.name = memberDto.getName();
+        this.username = memberDto.getUsername();
         this.password = memberDto.getPassword();
-        this.nickname = memberDto.getNickname();
         this.email = memberDto.getEmail();
         this.tel = memberDto.getTel();
     }
@@ -119,6 +117,6 @@ public class Member extends BaseEntity {
 
     //회원(USER 권한)의 권한 제한: 로그인 불가능
     public void disableMember() {
-        this.memberAuth = MemberAuth.DISABLE;
+        this.memberAuth = MemberAuth.ROLE_DISABLE;
     }
 }

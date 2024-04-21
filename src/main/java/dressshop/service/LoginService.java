@@ -34,7 +34,7 @@ public class LoginService implements UserDetailsService {
             return User.builder()
                     .username(member.getEmail())
                     .password(member.getPassword())
-                    .roles(member.getMemberAuth().toString())
+                    .authorities(new SimpleGrantedAuthority(member.getMemberAuth().toString()))
                     .build();
         }
     }

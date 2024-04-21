@@ -10,35 +10,35 @@
 </head>
 <body>
 <div class="container">
-    <a href="/" class="btn btn-primary"><h2>Home</h2></a>
+    <a href="/"><h2>Home</h2></a>
     <br />
 
     <h3>회원 가입</h3>
 
     <form role="form" action="/join" th:object="${memberForm}" method="post">
         <div class="form-group">
-            <label th:for="name">이름</label>
-            <input type="text" th:field="*{name}" class="form-control" placeholder="이름을 입력하세요."
-                   th:class="${#fields.hasErrors('name')}? 'form-control fieldError' : 'form-control'">
-            <p th:if="${#fields.hasErrors('name')}"
-               th:errors="*{name}"></p>
+            <label th:for="username"><b>이름</b></label>
+            <input type="text" th:field="*{username}" class="form-control" placeholder="이름을 입력하세요."
+                   th:class="${#fields.hasErrors('username')}? 'form-control fieldError' : 'form-control'">
+            <p th:if="${#fields.hasErrors('username')}"
+               th:errors="*{username}"></p>
         </div>
         <div class="form-group">
-            <label th:for="password">비밀번호</label>
+            <label th:for="password"><b>비밀번호</b></label>
             <input type="password" th:field="*{password}" class="form-control" placeholder="비밀번호를 입력하세요."
                    th:class="${#fields.hasErrors('password')}? 'form-control fieldError' : 'form-control'">
             <p th:if="${#fields.hasErrors('password')}"
                th:errors="*{password}"></p>
         </div>
         <div class="form-group">
-            <label th:for="email">이메일</label>
+            <label th:for="email"><b>이메일</b></label>
             <input type="email" th:field="*{email}" class="form-control" placeholder="이메일을 입력하세요."
                    th:class="${#fields.hasErrors('email')}? 'form-control fieldError' : 'form-control'">
             <p th:if="${#fields.hasErrors('email')}"
                th:errors="*{email}"></p>
         </div>
         <div class="form-group">
-            <label th:for="tel">전화번호</label>
+            <label th:for="tel"><b>전화번호</b></label>
             <input type="text" th:field="*{tel}" class="form-control" placeholder="전화번호를 입력하세요."
                    th:class="${#fields.hasErrors('tel')}? 'form-control fieldError' : 'form-control'">
             <p th:if="${#fields.hasErrors('tel')}"

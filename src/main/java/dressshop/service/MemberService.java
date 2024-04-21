@@ -26,20 +26,16 @@ public class MemberService {
     //회원 가입
     public void join(MemberDto memberDto) {
         Member member = memberDto.toEntity();
-        member.passwordEncode(pwdEncoder.encode(member.getPassword()));
-        validateDuplicateMember(member);
+        member.passwordEncode(pwdEncoder.encode(memberDto.getPassword()));
 
+        validateDuplicateMember(member);
         memberRepository.save(member);
     }
 
     private void validateDuplicateMember(Member member) {
         Member emailMember = memberRepository.findByEmail(member.getEmail());
-        Member nicknameMember = memberRepository.findByNickname(member.getNickname());
         if (emailMember != null) {
             throw new MemberJoinException("이미 가입된 이메일입니다.");
-        }
-        if (nicknameMember != null) {
-            throw new MemberJoinException("중복된 닉네임입니다.");
         }
     }
 
@@ -49,9 +45,8 @@ public class MemberService {
                 .orElseThrow(NotFoundException::new);
 
         MemberDto memberEdit = member.toEditor()
-                .name(memberDto.getName())
+                .name(memberDto.getUsername())
                 .password(memberDto.getPassword())
-                .nickname(memberDto.getNickname())
                 .email(memberDto.getEmail())
                 .tel(memberDto.getTel())
                 .build();

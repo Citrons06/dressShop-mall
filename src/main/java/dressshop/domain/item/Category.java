@@ -27,13 +27,15 @@ public class Category {
     private List<Item> items = new ArrayList<>();
 
     @Builder
-    public Category(String categoryName, List<Item> items) {
+    public Category(Long id, String categoryName, List<Item> items) {
+        this.id = id;
         this.categoryName = categoryName;
         this.items = items;
     }
 
     public CategoryDto.CategoryDtoBuilder toEditor() {
         return CategoryDto.builder()
+                .id(id)
                 .categoryName(categoryName);
     }
 
@@ -43,6 +45,7 @@ public class Category {
 
     public CategoryDto toDto() {
         return CategoryDto.builder()
+                .id(id)
                 .categoryName(categoryName)
                 .build();
     }

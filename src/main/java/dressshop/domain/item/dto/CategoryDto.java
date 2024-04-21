@@ -17,21 +17,14 @@ public class CategoryDto {
     private String categoryName;
 
     @Builder
-    public CategoryDto(String categoryName) {
+    public CategoryDto(String categoryName, Long id) {
+        this.id = id;
         this.categoryName = categoryName;
     }
 
-    public CategoryDto(Category category) {
-    }
-
-    public CategoryDto.CategoryDtoBuilder toEditor() {
-        return CategoryDto.builder()
-                .categoryName(categoryName);
-    }
-
-
     public Category toEntity() {
         return Category.builder()
+                .id(id)
                 .categoryName(categoryName)
                 .build();
     }

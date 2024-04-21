@@ -15,10 +15,6 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
     private Member member;
     private Map<String, Object> attributes;
 
-    public PrincipalDetails(Member member) {
-        this.member = member;
-    }
-
     public PrincipalDetails(Member member, Map<String, Object> attributes) {
         this.member = member;
         this.attributes = attributes;
@@ -73,7 +69,6 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getName() {
-        String sub = attributes.get("sub").toString();
-        return sub;
+        return attributes.get("sub").toString();
     }
 }

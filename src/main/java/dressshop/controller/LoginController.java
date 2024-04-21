@@ -30,16 +30,10 @@ public class LoginController {
         return "login/loginForm";
     }
 
-    //만약 회원의 권한이 DISABLED라면 로그인이 불가능하다.
     @PostMapping("/loginForm")
     public String login(@Valid @ModelAttribute("memberForm") MemberDto memberDto,
                         BindingResult bindingResult,
-                        Authentication authentication,
                         Model model) {
-
-        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("DISABLE"))) {
-            throw new IllegalStateException("비활성화된 계정입니다.");
-        }
 
         if (bindingResult.hasErrors()) {
             return "login/loginForm";

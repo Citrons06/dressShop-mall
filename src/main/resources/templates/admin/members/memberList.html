@@ -5,7 +5,7 @@
 </head>
 <body>
 <div class="container">
-    <a href="/" class="btn btn-primary"><h2>Home</h2></a>
+    <a href="/"><h2>Home</h2></a>
     <br />
 
     <h3>회원 목록</h3>
@@ -23,7 +23,7 @@
         <tbody>
         <tr th:each="member : ${members}">
             <td th:text="${member.id}"></td>
-            <td th:text="${member.name}"></td>
+            <td th:text="${member.username}"></td>
             <td th:text="${member.tel}"></td>
             <td th:text="${member.email}"></td>
             <td>

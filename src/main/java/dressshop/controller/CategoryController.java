@@ -31,7 +31,16 @@ public class CategoryController {
                        BindingResult bindingResult,
                        Model model) {
 
-        categoryService.save(categoryDto);
+        if (bindingResult.hasErrors()) {
+            return "admin/category/saveForm";
+        }
+
+        try {
+            categoryService.save(categoryDto);
+        } catch (SaveException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+
         return "redirect:/";
     }
 

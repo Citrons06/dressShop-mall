@@ -15,7 +15,7 @@
 
             <div th:if="${#authorization.expression('isAuthenticated()')}"
                  th:object="${member}">
-                <h3 th:text="*{name} + '님, 환영합니다!'"></h3>
+                <h3 th:text="|안녕하세요, *{username}님!|"></h3>
                 <a href="/logout" class="btn btn-danger">로그아웃</a>
             </div>
 

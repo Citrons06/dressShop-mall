@@ -28,7 +28,7 @@ public class MemberController {
 
     //회원 가입
     @PostMapping("/join")
-    public String join(@Valid @ModelAttribute("memberForm") MemberDto memberDto,
+    public String join(@Valid @RequestBody @ModelAttribute("memberForm") MemberDto memberDto,
                        BindingResult bindingResult,
                        Model model) {
 
@@ -40,7 +40,9 @@ public class MemberController {
             memberService.join(memberDto);
         } catch (MemberJoinException e) {
             model.addAttribute("errorMessage", e.getMessage());
+            return "members/joinForm";
         }
+
         return "redirect:/";
     }
 
