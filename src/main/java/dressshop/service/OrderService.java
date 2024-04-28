@@ -48,7 +48,7 @@ public class OrderService {
     @Transactional(readOnly = true)
     public List<OrderDto> findOrders() {
         return orderRepository.findAll().stream()
-                .map(Order::toOrderDto)
+                .map(Order::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -57,7 +57,7 @@ public class OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(NotFoundException::new);
 
-        return order.toOrderDto();
+        return order.toDto();
     }
 
     //주문 취소
@@ -65,5 +65,6 @@ public class OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(NotFoundException::new);
         order.cancel();
+        orderRepository.save(order);
     }
 }

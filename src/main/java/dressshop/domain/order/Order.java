@@ -112,7 +112,7 @@ public class Order extends BaseEntity {
         }
     }
 
-    public OrderDto toOrderDto() {
+    public OrderDto toDto() {
         return OrderDto.builder()
                 .id(id)
                 .member(member)

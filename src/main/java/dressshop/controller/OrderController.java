@@ -5,10 +5,7 @@ import dressshop.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -51,15 +48,14 @@ public class OrderController {
     @GetMapping("/orderList/{orderId}/cancel")
     public String orderCancelForm(@PathVariable Long orderId, Model model) {
         OrderDto order = orderService.findOneOrder(orderId);
-        model.addAttribute("order", order);
+        model.addAttribute("cancelForm", order);
         return "orders/cancelForm";
     }
 
     //주문 취소
-    @PostMapping("/orderList/{orderId}/cancel")
+    @PutMapping("/orderList/{orderId}/cancel")
     public String orderCancel(@PathVariable("orderId") Long orderId) {
         orderService.orderCancel(orderId);
         return "redirect:/orderList";
     }
-
 }

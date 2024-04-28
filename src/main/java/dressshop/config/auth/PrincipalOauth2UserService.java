@@ -48,7 +48,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             memberRepository.save(member);
             log.info("최초로 로그인하여 회원가입을 완료하였습니다.");
         } else {
-            log.info("이미 가입된 회원입니다.");
+            log.info("가입된 회원입니다. name={}", member.getUsername());
         }
 
         return new PrincipalDetails(member, oAuth2User.getAttributes());

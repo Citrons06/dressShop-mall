@@ -27,10 +27,10 @@
             <td th:text="${member.tel}"></td>
             <td th:text="${member.email}"></td>
             <td>
-                <a th:href="@{/admin/members/{id}/delete (id=${member.id})}">삭제</a>
+                <a th:href="@{/admin/members/{memberId}/delete (memberId=${member.id})}">삭제</a>
             </td>
             <td>
-                <a th:href="@{/admin/members/{memberId}/disable (id=${member.id})}">정지</a>
+                <a th:href="@{/admin/members/{memberId}/disable (memberId=${member.id})}">정지</a>
             </td>
         </tr>
         </tbody>

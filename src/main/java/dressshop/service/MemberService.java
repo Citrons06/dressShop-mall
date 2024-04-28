@@ -52,6 +52,7 @@ public class MemberService {
                 .build();
 
         member.editMember(memberEdit);
+        memberRepository.save(member);
     }
 
     //회원 단건 조회

@@ -115,7 +115,6 @@ public class Member extends BaseEntity {
         this.password = encodedPassword;
     }
 
-    //회원(USER 권한)의 권한 제한: 로그인 불가능
     public void disableMember() {
         this.memberAuth = MemberAuth.ROLE_DISABLE;
     }

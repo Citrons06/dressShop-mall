@@ -1,11 +1,10 @@
 package dressshop.domain.item;
 
+import dressshop.domain.BaseEntity;
 import dressshop.domain.item.dto.CategoryDto;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +13,9 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Category {
+@EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor
+public class Category extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "category_id")
@@ -23,7 +23,7 @@ public class Category {
 
     private String categoryName;
 
-    @OneToMany(mappedBy = "categories", fetch = LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category", fetch = LAZY, cascade = CascadeType.ALL)
     private List<Item> items = new ArrayList<>();
 
     @Builder
@@ -31,6 +31,11 @@ public class Category {
         this.id = id;
         this.categoryName = categoryName;
         this.items = items;
+    }
+
+    public Category(Long id, String categoryName) {
+        this.id = id;
+        this.categoryName = categoryName;
     }
 
     public CategoryDto.CategoryDtoBuilder toEditor() {
@@ -48,9 +53,5 @@ public class Category {
                 .id(id)
                 .categoryName(categoryName)
                 .build();
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
     }
 }

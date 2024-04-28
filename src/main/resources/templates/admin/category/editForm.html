@@ -1,6 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Category Save Form</title>
+    <title>Category Edit Form</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .fieldError {
@@ -13,8 +13,9 @@
     <a href="/"><h2>Home</h2></a>
     <br />
 
-    <h3>카테고리 등록</h3>
-    <form role="form" action="/admin/category/save" th:object="${categoryForm}" method="post">
+    <h3>카테고리 수정</h3>
+    <form role="form" th:action="@{/admin/category/edit/{categoryId} (categoryId=${editForm.id})}"
+          th:object="${editForm}" th:method="put">
 
         <div class="form-group">
             <label for="categoryName">카테고리 이름</label>
@@ -23,7 +24,7 @@
             <p th:if="${#fields.hasErrors()}" th:errors="*{categoryName}"></p>
         </div>
 
-        <button type="submit" class="btn btn-primary">등록</button>
+        <button type="submit" class="btn btn-primary">수정</button>
     </form>
 </div>
 </body>

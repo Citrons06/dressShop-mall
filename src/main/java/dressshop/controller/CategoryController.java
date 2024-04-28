@@ -41,39 +41,51 @@ public class CategoryController {
             model.addAttribute("errorMessage", e.getMessage());
         }
 
-        return "redirect:/";
+        return "redirect:/admin/category/categoryList";
     }
 
     //카테고리 수정 폼 불러오기
     @GetMapping("/edit/{categoryId}")
     public String editForm(@PathVariable Long categoryId, Model model) {
         CategoryDto categoryDto = categoryService.findById(categoryId);
-        model.addAttribute("categoryForm", categoryDto);
+        model.addAttribute("editForm", categoryDto);
 
-        return "admin/category/updateForm";
+        return "admin/category/editForm";
     }
 
     //카테고리 수정
-    @PostMapping("/{categoryId}/update")
-    public String edit(@PathVariable Long categoryId, @Valid CategoryDto categoryDto, BindingResult bindingResult, Model model) {
+    @PutMapping("/edit/{categoryId}")
+    public String edit(@PathVariable Long categoryId,
+                       @Valid @ModelAttribute("editForm") CategoryDto categoryDto,
+                       BindingResult bindingResult,
+                       Model model) {
         if (bindingResult.hasErrors()) {
-            return "admin/category/updateForm";
+            return "admin/category/editForm";
         }
 
         try {
-            categoryService.editCategory(categoryId, categoryDto);
+            categoryService.edit(categoryId, categoryDto);
         } catch (SaveException e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "admin/category/updateForm";
+            return "admin/category/editForm";
         }
 
         return "redirect:/";
     }
 
+    //카테고리 삭제 폼 불러오기
+    @GetMapping("/delete/{categoryId}")
+    public String deleteForm(@PathVariable Long categoryId, Model model) {
+        CategoryDto categoryDto = categoryService.findById(categoryId);
+        model.addAttribute("deleteForm", categoryDto);
+
+        return "admin/category/deleteForm";
+    }
+
     //카테고리 삭제
-    @PostMapping("/{categoryId}/delete")
+    @PostMapping("/delete/{categoryId}")
     public String delete(@PathVariable Long categoryId) {
-        categoryService.deleteCategory(categoryId);
+        categoryService.delete(categoryId);
 
         return "redirect:/";
     }

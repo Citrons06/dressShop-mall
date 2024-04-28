@@ -27,7 +27,9 @@
         <tbody>
         <tr th:each="item : ${items}">
             <td th:text="${item.id}"></td>
-            <td th:text="${item.itemName}"></td>
+            <td th:text="${item.itemName}">
+                <a th:href="@{/items/item/{itemId} (itemId=${item.id})}">상세보기</a>
+            </td>
             <td th:text="${item.price}"></td>
             <td th:text="${item.quantity}"></td>
             <td th:text="${item.categoryName}"></td>

@@ -1,6 +1,7 @@
 package dressshop.domain.item;
 
 import dressshop.domain.BaseEntity;
+import dressshop.domain.item.dto.CategoryDto;
 import dressshop.domain.item.dto.ItemDto;
 import dressshop.domain.order.OrderItem;
 import dressshop.exception.customException.ItemNotStockException;
@@ -8,6 +9,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.ArrayList;
@@ -33,33 +35,23 @@ public class Item extends BaseEntity {
 
     private Integer quantity;
 
-    private Integer itemSell;
-
     @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
-    private Category categories;
+    @Setter
+    private Category category;
 
     private String categoryName;
 
     @OneToMany(mappedBy = "item", fetch = LAZY, cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
-
     @Builder
-    public Item(Long id,
-                String itemName,
-                Integer price,
-                Integer quantity,
-                Integer itemSell,
-                String categoryName) {
+    public Item(Long id, String itemName, Integer price, Integer quantity, Category category, String categoryName) {
         this.id = id;
         this.itemName = itemName;
         this.price = price;
         this.quantity = quantity;
-        this.itemSell = itemSell;
+        this.category = category;
         this.categoryName = categoryName;
     }
 
@@ -69,22 +61,25 @@ public class Item extends BaseEntity {
                 .itemName(itemName)
                 .price(price)
                 .quantity(quantity)
+                .categoryDto(category.toDto())
                 .categoryName(categoryName)
                 .build();
     }
 
     public ItemDto.ItemDtoBuilder toEditor() {
         return ItemDto.builder()
+                .id(id)
                 .itemName(itemName)
                 .price(price)
                 .quantity(quantity)
+                .categoryDto(category.toDto())
                 .categoryName(categoryName);
     }
 
     public void itemEdit(ItemDto itemDto) {
         itemName = itemDto.getItemName();
         price = itemDto.getPrice();
-        quantity = itemDto.getPrice();
+        quantity = itemDto.getQuantity();
         categoryName = itemDto.getCategoryName();
     }
 

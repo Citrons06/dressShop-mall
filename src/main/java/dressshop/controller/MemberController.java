@@ -66,14 +66,14 @@ public class MemberController {
     @GetMapping("/members/edit/{memberId}")
     public String editForm(Long memberId, Model model) {
         MemberDto member = memberService.findMember(memberId);
-        model.addAttribute("member", member);
+        model.addAttribute("editForm", member);
         return "members/editForm";
     }
 
     //회원 수정
-    @PostMapping("/members/edit/{memberId}")
+    @PutMapping("/members/edit/{memberId}")
     public String editMember(@PathVariable Long memberId,
-                             @ModelAttribute("member") @Valid MemberDto memberDto) {
+                             @ModelAttribute("editForm") @Valid MemberDto memberDto) {
         memberService.editMember(memberId, memberDto);
         return "redirect:/";
     }
@@ -92,10 +92,18 @@ public class MemberController {
         return "redirect:/";
     }
 
+    //회원 삭제 폼 불러오기
+    @GetMapping("/admin/members/{memberId}/delete")
+    public String deleteForm(@PathVariable Long memberId, Model model) {
+        MemberDto member = memberService.findMember(memberId);
+        model.addAttribute("deleteForm", member);
+        return "admin/members/deleteForm";
+    }
+
     //회원 삭제
     @PostMapping("/admin/members/{memberId}/delete")
     public String deleteMember(@PathVariable Long memberId) {
         memberService.delete(memberId);
-        return "redirect:/";
+        return "redirect:/admin/members/list";
     }
 }

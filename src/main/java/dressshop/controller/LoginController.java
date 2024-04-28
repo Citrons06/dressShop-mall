@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -41,23 +42,11 @@ public class LoginController {
 
         try {
             loginService.loadUserByUsername(memberDto.getEmail());
-        } catch (Exception e) {
+        } catch (UsernameNotFoundException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "login/loginForm";
         }
+
         return "redirect:/";
-    }
-
-    @GetMapping("/loginInfo")
-    @ResponseBody
-    public String loginInfo(Authentication authentication) {
-        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
-
-        if (principal.getName() == null) {
-            log.info("form 로그인={}", principal);
-        } else {
-            log.info("oauth 로그인={}", principal);
-        }
-        return "로그인 완료";
     }
 }

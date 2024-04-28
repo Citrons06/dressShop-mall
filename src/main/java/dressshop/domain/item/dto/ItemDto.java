@@ -23,21 +23,17 @@ public class ItemDto {
     @NotNull(message = "재고 수량을 입력하세요.")
     private Integer quantity;
 
-    private Category categories;
-
+    private CategoryDto categoryDto;
     private String categoryName;
 
     @Builder
     @QueryProjection
-    public ItemDto(Long id,
-                   String itemName,
-                   Integer price,
-                   Integer quantity,
-                   String categoryName) {
+    public ItemDto(Long id, String itemName, Integer price, Integer quantity, CategoryDto categoryDto, String categoryName) {
         this.id = id;
         this.itemName = itemName;
         this.price = price;
         this.quantity = quantity;
+        this.categoryDto = categoryDto;
         this.categoryName = categoryName;
     }
 
@@ -49,13 +45,5 @@ public class ItemDto {
                 .quantity(quantity)
                 .categoryName(categoryName)
                 .build();
-    }
-
-    public ItemDto(Item item) {
-        this.id = item.getId();
-        this.itemName = item.getItemName();
-        this.price = item.getPrice();
-        this.quantity = item.getQuantity();
-        this.categoryName = item.getCategoryName();
     }
 }

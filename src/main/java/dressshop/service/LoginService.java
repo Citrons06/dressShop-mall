@@ -1,6 +1,5 @@
 package dressshop.service;
 
-import dressshop.config.auth.PrincipalDetails;
 import dressshop.domain.member.Member;
 import dressshop.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.FieldError;
 
 @Slf4j
 @Service
@@ -27,7 +25,8 @@ public class LoginService implements UserDetailsService {
         Member member = memberRepository.findByEmail(email);
 
         if (member == null) {
-            throw new UsernameNotFoundException("해당 사용자를 찾을 수 없습니다.");
+            log.info("로그인을 실패하였습니다.");
+            throw new UsernameNotFoundException("해당 이메일을 찾을 수 없습니다.");
         } else {
             log.info("로그인을 성공하였습니다.={}", member.getEmail());
 

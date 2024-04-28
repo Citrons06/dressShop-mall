@@ -15,7 +15,7 @@
             <th>상품 이름</th>
             <th>상품 가격</th>
             <th>상품 수량</th>
-            <th>상품 카테고리</th>
+            <th>카테고리</th>
             <th>수정</th>
             <th>삭제</th>
         </tr>
@@ -23,7 +23,7 @@
         <tbody>
         <tr th:each="item : ${items}">
             <td th:text="${item.id}"></td>
-            <td th:text="*{item.itemName}"></td>
+            <td th:text="${item.itemName}"></td>
             <td th:text="${item.price}"></td>
             <td th:text="${item.quantity}"></td>
             <td th:text="${item.categoryName}"></td>

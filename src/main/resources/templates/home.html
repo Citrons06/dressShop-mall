@@ -13,9 +13,8 @@
         <div class="home">
             <h1>DRESS SHOP</h1>
 
-            <div th:if="${#authorization.expression('isAuthenticated()')}"
-                 th:object="${member}">
-                <h3 th:text="|안녕하세요, *{username}님!|"></h3>
+            <div th:if="${#authorization.expression('isAuthenticated()')}">
+                <h3 th:text="'환영합니다. ' + ${#authentication.getName()} + '님'"></h3>
                 <a href="/logout" class="btn btn-danger">로그아웃</a>
             </div>
 
@@ -40,5 +39,5 @@
                 </div>
         </div>
     </div>
-</body>
+</div>
 </html>
