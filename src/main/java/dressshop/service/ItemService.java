@@ -2,6 +2,7 @@ package dressshop.service;
 
 import dressshop.domain.item.Category;
 import dressshop.domain.item.Item;
+import dressshop.domain.item.ItemImg;
 import dressshop.domain.item.dto.CategoryDto;
 import dressshop.domain.item.dto.ItemDto;
 import dressshop.exception.customException.NotFoundException;
@@ -11,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -24,9 +27,11 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
     private final CategoryRepository categoryRepository;
+    private final ItemImgService itemImgService;
 
-    //상품 등록
-    public void save(ItemDto itemDto, CategoryDto categoryDto) {
+    public void save(ItemDto itemDto, CategoryDto categoryDto,
+                     List<MultipartFile> itemImgList) throws IOException {
+        //상품 등록
         Item item = itemDto.toEntity();
         Category category = categoryRepository.findById(categoryDto.getId())
                 .orElseThrow(NotFoundException::new);
@@ -36,6 +41,21 @@ public class ItemService {
         itemRepository.save(item);
         log.info("상품이 등록되었습니다. 등록된 상품={} 가격={} 재고수량={} 카테고리={}",
                 item.getItemName(), item.getPrice(), item.getQuantity(), item.getCategoryName());
+
+        //이미지 등록
+        for (int i=0; i<itemImgList.size(); i++) {
+            ItemImg itemImg = new ItemImg();
+            itemImg.setItem(item);
+
+            //첫 번째 이미지를 대표 상품 이미지로 설정
+            if (i == 0) {
+                itemImg.setRepImgYn("Y");
+            } else {
+                itemImg.setRepImgYn("N");
+            }
+
+            itemImgService.save(itemImg.toDto(), itemImgList.get(i));  //이미지 정보 저장
+        }
     }
 
     //상품 단건 조회

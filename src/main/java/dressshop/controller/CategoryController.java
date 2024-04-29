@@ -70,7 +70,7 @@ public class CategoryController {
             return "admin/category/editForm";
         }
 
-        return "redirect:/";
+        return "redirect:/admin/category/categoryList";
     }
 
     //카테고리 삭제 폼 불러오기
@@ -87,7 +87,7 @@ public class CategoryController {
     public String delete(@PathVariable Long categoryId) {
         categoryService.delete(categoryId);
 
-        return "redirect:/";
+        return "redirect:/admin/category/categoryList";
     }
 
     //카테고리 전체 조회

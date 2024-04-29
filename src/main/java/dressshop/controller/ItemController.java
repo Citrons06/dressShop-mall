@@ -3,8 +3,10 @@ package dressshop.controller;
 import dressshop.domain.item.Category;
 import dressshop.domain.item.dto.CategoryDto;
 import dressshop.domain.item.dto.ItemDto;
+import dressshop.domain.item.dto.ItemImgDto;
 import dressshop.exception.customException.SaveException;
 import dressshop.repository.category.CategoryRepository;
+import dressshop.service.ItemImgService;
 import dressshop.service.ItemService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +27,7 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
+    private final ItemImgService itemImgService;
     private final CategoryRepository categoryRepository;
 
     @ModelAttribute
@@ -49,14 +54,20 @@ public class ItemController {
     public String save(@Valid @ModelAttribute("itemForm") ItemDto itemDto,
                        BindingResult bindingResult,
                        CategoryDto categoryDto,
-                       Model model) {
+                       @ModelAttribute("itemImg") List<MultipartFile> itemImgList,
+                       Model model) throws IOException {
         /*if (bindingResult.hasErrors()) {
             return "admin/items/saveForm";
         }*/
 
+        if (itemImgList.get(0).isEmpty() && itemDto.getId() == null) {
+            model.addAttribute("errors", "상품 이미지를 올려 주세요.");
+            return "admin/items/saveForm";
+        }
+
         try {
-            itemService.save(itemDto, categoryDto);
-        } catch (SaveException e) {
+            itemService.save(itemDto, categoryDto, itemImgList);
+        } catch (Exception e) {
             model.addAttribute("errors", e.getMessage());
         }
 

@@ -65,6 +65,5 @@ public class OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(NotFoundException::new);
         order.cancel();
-        orderRepository.save(order);
     }
 }
