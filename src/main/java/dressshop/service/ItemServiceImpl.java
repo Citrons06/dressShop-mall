@@ -67,8 +67,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void editItem(Long itemId, ItemDto itemDto, Long categoryId) {
         Item item = itemRepository.findOne(itemId);
-        log.info("상품이 수정됩니다. 수정 전 상품={} 가격={} 재고수량={} 카테고리={}",
-                item.getItemName(), item.getPrice(), item.getQuantity(), item.getCategoryName());
+        log.info("상품이 수정됩니다. 수정 전 상품={} 가격={} 재고수량={} 카테고리={} 판매여부={}",
+                item.getItemName(), item.getPrice(), item.getQuantity(), item.getCategoryName(), item.getItemSellStatus());
 
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(NotFoundException::new);
@@ -79,8 +79,8 @@ public class ItemServiceImpl implements ItemService {
         item.itemEdit(itemDto);
 
         itemRepository.save(item);
-        log.info("상품이 수정되었습니다. 수정 후 상품={} 가격={} 재고수량={} 카테고리={}",
-                item.getItemName(), item.getPrice(), item.getQuantity(), item.getCategoryName());
+        log.info("상품이 수정되었습니다. 수정 후 상품={} 가격={} 재고수량={} 카테고리={} 판매여부={}",
+                item.getItemName(), item.getPrice(), item.getQuantity(), item.getCategoryName(), item.getItemSellStatus());
     }
 
     //상품 삭제
@@ -89,7 +89,7 @@ public class ItemServiceImpl implements ItemService {
         Item item = itemRepository.findOne(itemId);
 
         itemRepository.delete(item);
-        log.info("상품 정보가 삭제되었습니다. 삭제된 상품={} 가격={} 재고수량={} 카테고리={}",
-                item.getItemName(), item.getPrice(), item.getQuantity(), item.getCategoryName());
+        log.info("상품 정보가 삭제되었습니다. 삭제된 상품={} 가격={} 재고수량={} 카테고리={} 판매여부={}",
+                item.getItemName(), item.getPrice(), item.getQuantity(), item.getCategoryName(), item.getItemSellStatus());
     }
 }

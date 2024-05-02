@@ -14,6 +14,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static dressshop.domain.item.ItemSellStatus.SOLD_OUT;
 import static jakarta.persistence.CascadeType.MERGE;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -81,14 +82,20 @@ public class Item extends BaseEntity {
         this.itemName = itemDto.getItemName();
         this.price = itemDto.getPrice();
         this.quantity = itemDto.getQuantity();
+        this.itemSellStatus = itemDto.getItemSellStatus();
     }
 
     public void decreaseStock(int orderCount) {
         int restStock = this.quantity - orderCount;
+
         if (restStock < 0) {
             throw new ItemNotStockException();
         }
+
         this.quantity = restStock;
+        if (restStock == 0) {
+            this.itemSellStatus = SOLD_OUT;
+        }
     }
 
     public void increaseStock(int orderCount) {

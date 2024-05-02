@@ -7,37 +7,45 @@
             text-align: center;
             margin-top: 100px;
         }
+        .header {
+            justify-content: flex-end;
+            text-align: right;
+            margin-top: 5px;
+            margin-right: 5px;
+        }
+        .menu {
+            text-align: left;
+        }
+        a {
+            color: black;
+            text-decoration: none;
+        }
+        a:hover,
+        a:focus {
+            color: black;
+            text-decoration: none;
+        }
     </style>
 </head>
-    <div class="container">
-        <div class="home">
-            <h1>DRESS SHOP</h1>
 
-            <div th:if="${#authorization.expression('isAuthenticated()')}">
-                <h3 th:text="'환영합니다. ' + ${#authentication.getName()} + '님'"></h3>
-                <a href="/logout" class="btn btn-danger">로그아웃</a>
+<body>
+<div class="header" th:replace="~{fragments/header :: header}"></div>
+
+<div class="container">
+
+    <div class="home">
+
+        <a href="/"><h1>DRESS SHOP</h1></a>
+
+        <div class="container">
+            <div class="menu">
+                <div th:replace="~{fragments/menu :: menu}"></div>
             </div>
 
-            <div th:unless="${#authorization.expression('isAuthenticated()')}">
-                <a href="/join" class="btn btn-secondary">회원 가입</a>
-                <a href="/loginForm" class="btn btn-primary">로그인</a>
-            </div>
-            <br />
-            <div>
-                <a href="/items/itemList" class="btn btn-info">상품 목록</a>
-                <br /> <br />
-            </div>
-            <div>
-                <div th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
-                <a href="/cart" class="btn btn-warning">장바구니</a>
-                <a href="/orders" class="btn btn-success">주문 목록</a>
-            </div>
-                <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-                    <a href="/admin/category/categoryList" class="btn btn-primary">카테고리 관리</a>
-                    <a href="/admin/items" class="btn btn-info">상품 관리</a>
-                    <a href="/admin/members/list" class="btn btn-warning">회원 관리</a>
-                </div>
         </div>
+
+        <div th:replace="~{fragments/footer :: footer}"></div>
     </div>
 </div>
+</body>
 </html>

@@ -1,36 +1,87 @@
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Login</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            width: 50%;
+        }
+
         .fieldError {
             border-color: crimson;
         }
+        h2 {
+            text-align: center;
+        }
+        h3 {
+            text-align: center;
+        }
+        form {
+            text-align: center;
+            width: 100%;
+        }
+        .form-group input {
+            text-align: center;
+        }
+        button {
+            text-align: center;
+            display: block;
+            margin: 0 auto;
+        }
+        .btn btn-secondary {
+            text-align: center;
+            display: block;
+            margin: 0 auto;
+        }
+        .btn btn-danger {
+            text-align: center;
+            display: block;
+            margin: 0 auto;
+        }
+
     </style>
 </head>
-    <body>
-    <a href="/"><h2>Home</h2></a>
+<body>
+<div class="login-container">
+    <a href="/"><h2>DRESS SHOP</h2></a>
     <br />
 
-        <h3>로그인 화면</h3>
-            <form role="form" action="/login" th:object="${memberForm}" method="post">
-                <div class="form-group">
-                    <label th:for="email"><b>이메일</b></label>
-                    <input type="email" th:field="*{email}" class="form-control" placeholder="이메일을 입력하세요."
-                           th:class="${#fields.hasErrors('email')} ? 'form-control fieldError' : 'form-control'">
-                    <p th:if="${#fields.hasErrors('email')}"
-                       th:errors="*{email}"></p>
-                </div>
-                <div class="form-group">
-                    <label th:for="password"><b>비밀번호</b></label>
-                    <input type="password" th:field="*{password}" class="form-control" placeholder="비밀번호를 입력하세요."
-                           th:class="${#fields.hasErrors('password')} ? 'form-control fieldError' : 'form-control'">
-                    <p th:if="${#fields.hasErrors('password')}"
-                       th:errors="*{password}"></p>
-                </div>
-                <button type="submit" class="btn btn-primary">로그인</button>
-            </form>
-        <a href="/join" class="btn btn-secondary">회원 가입</a>
-        <a href="/oauth2/authorization/google" class="btn btn-danger">구글 로그인</a>
-        </body>
+    <h3>로그인</h3>
+    <hr />
+
+    <form role="form" action="/login" th:object="${memberForm}" method="post">
+
+        <div class="form-group">
+            <label th:for="email">
+                <input type="email" th:field="*{email}" class="form-control" placeholder="아이디 (이메일) 를 입력하세요."
+                       th:class="${#fields.hasErrors('email')} ? 'form-control fieldError' : 'form-control'">
+                <p th:if="${#fields.hasErrors('email')}"
+                   th:errors="*{email}"></p>
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label th:for="password">
+                <input type="password" th:field="*{password}" class="form-control" placeholder="비밀번호를 입력하세요."
+                       th:class="${#fields.hasErrors('password')} ? 'form-control fieldError' : 'form-control'">
+                <p th:if="${#fields.hasErrors('password')}"
+                   th:errors="*{password}"></p>
+            </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">로그인</button>
+        <br />
+    </form>
+    <a href="/join" class="btn btn-secondary">회원 가입</a>
+    <a href="/oauth2/authorization/google" class="btn btn-danger">Google</a>
+</div>
+</body>
 </html>

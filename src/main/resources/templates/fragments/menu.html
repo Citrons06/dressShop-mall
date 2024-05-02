@@ -1,0 +1,52 @@
+<!-- menu.html -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap" rel="stylesheet">
+
+    <style>
+        .menu {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .menu ul {
+            list-style: none;
+            padding: 0;
+        }
+        .menu li {
+            margin-bottom: 10px;
+        }
+        .menu a {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            border-radius: 5px;
+            font-family: "Noto Serif KR", serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+        .menu a:hover {
+            background-color: #f8f9fa;
+        }
+        .menu a i {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+<div th:fragment="menu" class="menu">
+    <ul>
+        <li><a href="/items/itemList"><i class="fas fa-list"></i> 상품 목록</a></li>
+        <li th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"><a href="/admin/category/categoryList"><i class="fas fa-cog"></i> 카테고리 관리</a></li>
+        <li th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"><a href="/admin/items"><i class="fas fa-box"></i> 상품 관리</a></li>
+        <li th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"><a href="/admin/members/list"><i class="fas fa-users"></i> 회원 관리</a></li>
+    </ul>
+</div>
+</body>
+</html>
