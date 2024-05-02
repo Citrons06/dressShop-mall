@@ -23,7 +23,7 @@ public class Category extends BaseEntity {
 
     private String categoryName;
 
-    @OneToMany(mappedBy = "category", fetch = LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = LAZY, cascade = CascadeType.ALL)
     private List<Item> items = new ArrayList<>();
 
     @Builder
@@ -31,11 +31,6 @@ public class Category extends BaseEntity {
         this.id = id;
         this.categoryName = categoryName;
         this.items = items;
-    }
-
-    public Category(Long id, String categoryName) {
-        this.id = id;
-        this.categoryName = categoryName;
     }
 
     public CategoryDto.CategoryDtoBuilder toEditor() {

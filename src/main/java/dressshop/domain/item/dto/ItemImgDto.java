@@ -2,10 +2,9 @@ package dressshop.domain.item.dto;
 
 import dressshop.domain.item.ItemImg;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter @Setter
+@Data
 public class ItemImgDto {
 
     private Long id;

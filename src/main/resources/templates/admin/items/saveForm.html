@@ -7,6 +7,7 @@
         }
     </style>
     <title>Item</title>
+</head>
 <body>
 <div class="container">
     <a href="/"><h2>Home</h2></a>
@@ -14,55 +15,44 @@
 
     <h3>상품 등록</h3>
 
-    <form enctype="multipart/form-data" role="form" action="/admin/items/save" autocomplete="off"
-          th:object="${itemForm}" method="post">
+    <form role="form" action="/admin/items/save" th:object="${itemForm}" method="post">
 
-        <div class="form-group ">
+        <div class="form-group" th:classappend="${#fields.hasErrors('itemName')} ? 'has-error' : ''">
             <label th:for="itemName">상품명</label>
-            <input type="text" th:field="*{itemName}" class="form-control" placeholder="상품명을 입력하세요."
-                   th:class="${#fields.hasErrors('itemName')}? 'form-control fieldError' : 'form-control'">
-            <p th:if="${#fields.hasErrors('itemName')}"
-               th:errors="*{itemName}"></p>
+            <input type="text" th:field="*{itemName}" class="form-control" placeholder="상품명을 입력하세요." />
+            <p class="help-block" th:if="${#fields.hasErrors('itemName')}" th:errors="*{itemName}"></p>
         </div>
-        <div class="form-group">
+
+        <div class="form-group" th:classappend="${#fields.hasErrors('price')} ? 'has-error' : ''">
             <label th:for="price">가격</label>
-            <input type="number" th:field="*{price}" class="form-control" placeholder="가격을 입력하세요."
-                   th:class="${#fields.hasErrors('price')}? 'form-control fieldError' : 'form-control'">
-            <p th:if="${#fields.hasErrors('price')}"
-               th:errors="*{price}"></p>
+            <input type="number" th:field="*{price}" class="form-control" placeholder="가격을 입력하세요." />
+            <p class="help-block" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
         </div>
-        <div class="form-group">
+
+        <div class="form-group" th:classappend="${#fields.hasErrors('quantity')} ? 'has-error' : ''">
             <label th:for="quantity">상품 수량</label>
-            <input type="number" th:field="*{quantity}" class="form-control" placeholder="상품 수량을 입력하세요."
-                   th:class="${#fields.hasErrors('quantity')}? 'form-control fieldError' : 'form-control'">
-            <p th:if="${#fields.hasErrors('quantity')}"
-               th:errors="*{quantity}"></p>
+            <input type="number" th:field="*{quantity}" class="form-control" placeholder="상품 수량을 입력하세요." />
+            <p class="help-block" th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}"></p>
         </div>
-        <div class="form-group">
-            <label th:for="categoryDto">카테고리</label>
-            <select th:field="*{categoryDto}" class="form-control">
+
+        <div class="form-group" th:classappend="${#fields.hasErrors('categoryId')} ? 'has-error' : ''">
+            <label th:for="categoryId">카테고리</label>
+            <select th:field="*{categoryId}" class="form-control">
                 <option value="">카테고리를 선택하세요.</option>
                 <option th:each="category : ${categories}"
                         th:value="${category.id}"
                         th:text="${category.categoryName}"></option>
             </select>
-            <br />
+            <p class="help-block" th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}"></p>
         </div>
 
-        <div class="form-group">
-            <div class="file_list">
-                <input type="file" th:field="*{itemImgDto}" name="files" class="form-control" multiple>
-                <input type="file" th:field="*{itemImgDto}" name="files" class="form-control" multiple>
-                <input type="file" th:field="*{itemImgDto}" name="files" class="form-control" multiple>
-                <input type="file" th:field="*{itemImgDto}" name="files" class="form-control" multiple>
-                <input type="file" th:field="*{itemImgDto}" name="files" class="form-control" multiple>
-            </div>
+        <!-- 각 필드의 오류 메시지 출력 -->
+        <div th:if="${errors != null}">
+            <p class="text-danger" th:each="error : ${errors}" th:text="${error.defaultMessage}"></p>
+        </div>
 
-
-        <br />
         <button type="submit" class="btn btn-primary">등록</button>
     </form>
 </div>
 </body>
-</head>
 </html>

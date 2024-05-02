@@ -4,7 +4,7 @@ import dressshop.domain.item.Category;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-@Getter @Setter
+@Data
 @NoArgsConstructor
 public class CategoryDto {
 

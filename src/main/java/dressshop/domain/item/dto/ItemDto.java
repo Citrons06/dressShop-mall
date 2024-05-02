@@ -1,8 +1,8 @@
 package dressshop.domain.item.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-import dressshop.domain.item.Category;
 import dressshop.domain.item.Item;
+import dressshop.domain.item.ItemSellStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -11,12 +11,15 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter @Setter
+@Data
 @ToString
 @NoArgsConstructor
 public class ItemDto {
 
     private Long id;
+
+    @NotNull(message = "카테고리를 선택해 주세요.")
+    private Long categoryId;
 
     @NotBlank(message = "상품 이름을 입력하세요.")
     private String itemName;
@@ -30,6 +33,9 @@ public class ItemDto {
     private CategoryDto categoryDto;
     private String categoryName;
 
+    //기본값 = 판매 중으로 설정
+    private ItemSellStatus itemSellStatus = ItemSellStatus.SELL;
+
     private MultipartFile itemImgDto;
     private List<MultipartFile> itemImgDtoList = new ArrayList<>();
 
@@ -38,20 +44,24 @@ public class ItemDto {
     @Builder
     @QueryProjection
     public ItemDto(Long id,
+                   Long categoryId,
                    String itemName,
                    Integer price,
                    Integer quantity,
                    CategoryDto categoryDto,
                    String categoryName,
+                   ItemSellStatus itemSellStatus,
                    MultipartFile itemImgDto,
                    List<MultipartFile> itemImgDtoList,
                    List<Long> itemImgIds) {
         this.id = id;
+        this.categoryId = categoryId;
         this.itemName = itemName;
         this.price = price;
         this.quantity = quantity;
         this.categoryDto = categoryDto;
         this.categoryName = categoryName;
+        this.itemSellStatus = itemSellStatus;
         this.itemImgDto = itemImgDto;
         this.itemImgDtoList = itemImgDtoList;
         this.itemImgIds = itemImgIds;
@@ -63,7 +73,7 @@ public class ItemDto {
                 .itemName(itemName)
                 .price(price)
                 .quantity(quantity)
-                .categoryName(categoryName)
+                .itemSellStatus(itemSellStatus)
                 .build();
     }
 }

@@ -1,7 +1,6 @@
 package dressshop.domain.item;
 
 import dressshop.domain.BaseEntity;
-import dressshop.domain.item.dto.CategoryDto;
 import dressshop.domain.item.dto.ItemDto;
 import dressshop.domain.order.OrderItem;
 import dressshop.exception.customException.ItemNotStockException;
@@ -15,6 +14,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.MERGE;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
@@ -25,7 +25,8 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 public class Item extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = IDENTITY)
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "item_id")
     private Long id;
 
@@ -35,12 +36,17 @@ public class Item extends BaseEntity {
 
     private Integer quantity;
 
-    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = LAZY, cascade = MERGE)
     @JoinColumn(name = "category_id")
     @Setter
     private Category category;
 
+    @Setter
     private String categoryName;
+
+    @Enumerated(EnumType.STRING)
+    @Setter
+    private ItemSellStatus itemSellStatus;
 
     @OneToMany(mappedBy = "item", fetch = LAZY, cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
@@ -51,13 +57,13 @@ public class Item extends BaseEntity {
                 Integer price,
                 Integer quantity,
                 Category category,
-                String categoryName) {
+                ItemSellStatus itemSellStatus) {
         this.id = id;
         this.itemName = itemName;
         this.price = price;
         this.quantity = quantity;
         this.category = category;
-        this.categoryName = categoryName;
+        this.itemSellStatus = itemSellStatus;
     }
 
     public ItemDto toDto() {
@@ -66,26 +72,15 @@ public class Item extends BaseEntity {
                 .itemName(itemName)
                 .price(price)
                 .quantity(quantity)
-                .categoryDto(category.toDto())
-                .categoryName(categoryName)
+                .categoryId(category.getId())
+                .categoryName(category.getCategoryName())
                 .build();
     }
 
-    public ItemDto.ItemDtoBuilder toEditor() {
-        return ItemDto.builder()
-                .id(id)
-                .itemName(itemName)
-                .price(price)
-                .quantity(quantity)
-                .categoryDto(category.toDto())
-                .categoryName(categoryName);
-    }
-
     public void itemEdit(ItemDto itemDto) {
-        itemName = itemDto.getItemName();
-        price = itemDto.getPrice();
-        quantity = itemDto.getQuantity();
-        categoryName = itemDto.getCategoryName();
+        this.itemName = itemDto.getItemName();
+        this.price = itemDto.getPrice();
+        this.quantity = itemDto.getQuantity();
     }
 
     public void decreaseStock(int orderCount) {

@@ -1,12 +1,12 @@
 package dressshop.controller;
 
 import dressshop.domain.item.Category;
+import dressshop.domain.item.ItemSellStatus;
 import dressshop.domain.item.dto.CategoryDto;
 import dressshop.domain.item.dto.ItemDto;
-import dressshop.domain.item.dto.ItemImgDto;
 import dressshop.exception.customException.SaveException;
 import dressshop.repository.category.CategoryRepository;
-import dressshop.service.ItemImgService;
+import dressshop.service.CategoryService;
 import dressshop.service.ItemService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +25,10 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
-    private final ItemImgService itemImgService;
+    private final CategoryService categoryService;
     private final CategoryRepository categoryRepository;
 
+    //카테고리
     @ModelAttribute
     public List<CategoryDto> categories(Model model) {
         List<CategoryDto> categories = new ArrayList<>();
@@ -37,37 +36,40 @@ public class ItemController {
 
         for (Category category : categoryList) {
             categories.add(category.toDto());
-            model.addAttribute("categories", categories);
         }
+        model.addAttribute("categories", categories);
 
         return categories;
     }
 
+    //판매 여부
+    @ModelAttribute
+    public ItemSellStatus[] itemSellStatuses() {
+        return ItemSellStatus.values();
+    }
+
     //상품 등록 폼 불러오기
     @GetMapping("/admin/items/save")
-    public String saveForm(@ModelAttribute("itemForm") ItemDto itemDto) {
+    public String saveForm(Model model) {
+        model.addAttribute("itemForm", new ItemDto());
         return "admin/items/saveForm";
     }
 
     //상품 등록
     @PostMapping("/admin/items/save")
-    public String save(@Valid @ModelAttribute("itemForm") ItemDto itemDto,
+    public String save(@Valid ItemDto itemDto,
                        BindingResult bindingResult,
-                       CategoryDto categoryDto,
-                       @ModelAttribute("itemImg") List<MultipartFile> itemImgList,
-                       Model model) throws IOException {
-        /*if (bindingResult.hasErrors()) {
-            return "admin/items/saveForm";
-        }*/
+                       Model model) {
 
-        if (itemImgList.get(0).isEmpty() && itemDto.getId() == null) {
-            model.addAttribute("errors", "상품 이미지를 올려 주세요.");
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errors", bindingResult.getAllErrors());
             return "admin/items/saveForm";
         }
 
         try {
-            itemService.save(itemDto, categoryDto, itemImgList);
-        } catch (Exception e) {
+            CategoryDto categoryDto = categoryService.findById(itemDto.getCategoryId());
+            itemService.save(itemDto, categoryDto);
+        } catch (SaveException e) {
             model.addAttribute("errors", e.getMessage());
         }
 
@@ -113,16 +115,16 @@ public class ItemController {
     //상품 수정
     @PutMapping("/admin/items/edit/{itemId}")
     public String edit(@PathVariable Long itemId,
-                       @Valid @ModelAttribute("editForm") ItemDto itemDto,
+                       @Valid ItemDto itemDto,
+                       @RequestParam("categoryId") Long categoryId,
                        BindingResult bindingResult,
-                       @ModelAttribute("category") CategoryDto categoryDto,
                        Model model) {
-        /*if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return "redirect:/admin/items/edit/{itemId}";
-        }*/
+        }
 
         try {
-            itemService.editItem(itemId, itemDto, categoryDto);
+            itemService.editItem(itemId, itemDto, categoryId);
         } catch (SaveException e) {
             model.addAttribute("errors", e.getMessage());
         }

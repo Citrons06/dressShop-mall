@@ -9,7 +9,7 @@ import lombok.*;
 
 import static dressshop.domain.member.MemberAuth.ROLE_USER;
 
-@Getter @Setter
+@Data
 @ToString
 public class MemberDto {
 

@@ -5,11 +5,11 @@ import dressshop.domain.item.Item;
 import dressshop.domain.order.Order;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
 
-@Getter
+@Data
 @NoArgsConstructor
 public class OrderItemDto {
 
