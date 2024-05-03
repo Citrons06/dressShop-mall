@@ -1,4 +1,4 @@
-package dressshop.service;
+package dressshop.service.item;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -10,8 +10,9 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-public class FileService {
+public class FileServiceImpl implements FileService {
 
+    @Override
     public String upload(String uploadPath, String oriImgName, byte[] fileData) throws IOException {
         UUID uuid = UUID.randomUUID();
         String ext = oriImgName.substring(oriImgName.lastIndexOf("."));
@@ -25,6 +26,7 @@ public class FileService {
         return saveFileName;
     }
 
+    @Override
     public void delete(String filePath) {
         File deleteFile = new File(filePath);
 

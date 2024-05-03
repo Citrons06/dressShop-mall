@@ -3,6 +3,7 @@ package dressshop.domain.item.dto;
 import com.querydsl.core.annotations.QueryProjection;
 import dressshop.domain.item.Item;
 import dressshop.domain.item.ItemSellStatus;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -25,10 +26,12 @@ public class ItemDto {
     private String itemName;
 
     @NotNull(message = "가격을 입력하세요.")
-    private Integer price;
+    @Min(value = 3000, message = "최소 가격은 3000원 입니다.")
+    private int price;
 
     @NotNull(message = "재고 수량을 입력하세요.")
-    private Integer quantity;
+    @Min(value = 1, message = "최소 수량은 1개 입니다.")
+    private int quantity;
 
     private CategoryDto categoryDto;
     private String categoryName;
@@ -36,8 +39,10 @@ public class ItemDto {
     //기본값 = 판매 중으로 설정
     private ItemSellStatus itemSellStatus = ItemSellStatus.SELL;
 
-    private MultipartFile itemImgDto;
     private List<MultipartFile> itemImgDtoList = new ArrayList<>();
+
+    @NotNull(message = "이미지 파일을 선택해 주세요.")
+    private MultipartFile itemImg;
 
     private List<Long> itemImgIds = new ArrayList<>();
 
@@ -46,8 +51,8 @@ public class ItemDto {
     public ItemDto(Long id,
                    Long categoryId,
                    String itemName,
-                   Integer price,
-                   Integer quantity,
+                   int price,
+                   int quantity,
                    CategoryDto categoryDto,
                    String categoryName,
                    ItemSellStatus itemSellStatus,
@@ -62,7 +67,7 @@ public class ItemDto {
         this.categoryDto = categoryDto;
         this.categoryName = categoryName;
         this.itemSellStatus = itemSellStatus;
-        this.itemImgDto = itemImgDto;
+        this.itemImg = itemImgDto;
         this.itemImgDtoList = itemImgDtoList;
         this.itemImgIds = itemImgIds;
     }

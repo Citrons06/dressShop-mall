@@ -34,5 +34,5 @@ public class BoardQna extends BaseEntity {
     private String qnaContent;
     private String qnaCategory;
     private LocalDateTime qnaDate;
-    private Integer qnaReadcount;
+    private int qnaReadcount;
 }

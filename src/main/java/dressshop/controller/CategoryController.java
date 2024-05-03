@@ -2,7 +2,7 @@ package dressshop.controller;
 
 import dressshop.domain.item.dto.CategoryDto;
 import dressshop.exception.customException.SaveException;
-import dressshop.service.CategoryService;
+import dressshop.service.category.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

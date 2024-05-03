@@ -1,4 +1,4 @@
-package dressshop.service;
+package dressshop.service.member;
 
 import dressshop.domain.member.Member;
 import dressshop.repository.member.MemberRepository;
@@ -28,7 +28,7 @@ public class LoginService implements UserDetailsService {
             log.info("로그인을 실패하였습니다.");
             throw new UsernameNotFoundException("해당 이메일을 찾을 수 없습니다.");
         } else {
-            log.info("로그인을 성공하였습니다.={}", member.getEmail());
+            log.info("로그인을 성공하였습니다. 아이디(이메일)={}", member.getEmail());
 
             return User.builder()
                     .username(member.getEmail())

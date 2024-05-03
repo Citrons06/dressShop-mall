@@ -53,6 +53,7 @@ public class ItemImg {
                 .oriImgName(oriImgName)
                 .imgUrl(imgUrl)
                 .repImgYn(repImgYn)
+                .item(item)
                 .build();
     }
 

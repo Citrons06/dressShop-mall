@@ -2,7 +2,7 @@ package dressshop.controller;
 
 import dressshop.domain.member.dto.MemberDto;
 import dressshop.exception.customException.MemberJoinException;
-import dressshop.service.MemberService;
+import dressshop.service.member.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package dressshop.service;
+package dressshop.service.category;
 
 import dressshop.domain.item.Category;
 import dressshop.domain.item.dto.CategoryDto;

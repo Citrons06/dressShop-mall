@@ -6,8 +6,8 @@ import dressshop.domain.item.dto.CategoryDto;
 import dressshop.domain.item.dto.ItemDto;
 import dressshop.exception.customException.SaveException;
 import dressshop.repository.category.CategoryRepository;
-import dressshop.service.CategoryService;
-import dressshop.service.ItemService;
+import dressshop.service.category.CategoryService;
+import dressshop.service.item.ItemService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,23 +58,31 @@ public class ItemController {
 
     //상품 등록
     @PostMapping("/admin/items/save")
-    public String save(@Valid ItemDto itemDto,
+    public String save(@Valid @ModelAttribute("itemForm") ItemDto itemDto,
                        BindingResult bindingResult,
+                       @RequestParam("itemImg") List<MultipartFile> itemImgList,
                        Model model) {
 
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("errors", bindingResult.getAllErrors());
+        try {
+            if (bindingResult.hasErrors()) {
+                model.addAttribute("fieldError", bindingResult.getAllErrors());
+                return "admin/items/saveForm";
+            }
+
+            if (itemImgList.isEmpty()) {
+                model.addAttribute("errors", "이미지를 등록해 주세요.");
+                return "admin/items/saveForm";
+            }
+
+            CategoryDto categoryDto = categoryService.findById(itemDto.getCategoryId());
+            itemService.save(itemDto, categoryDto, itemImgList);
+
+            return "redirect:/";
+        } catch (Exception e) {
+            log.error("상품 등록 중 오류가 발생하였습니다: {}", e.getMessage());
+            model.addAttribute("errors", e.getMessage());
             return "admin/items/saveForm";
         }
-
-        try {
-            CategoryDto categoryDto = categoryService.findById(itemDto.getCategoryId());
-            itemService.save(itemDto, categoryDto);
-        } catch (SaveException e) {
-            model.addAttribute("errors", e.getMessage());
-        }
-
-        return "redirect:/";
     }
 
     //상품 단건 조회

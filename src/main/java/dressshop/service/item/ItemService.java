@@ -1,13 +1,15 @@
-package dressshop.service;
+package dressshop.service.item;
 
 import dressshop.domain.item.dto.CategoryDto;
 import dressshop.domain.item.dto.ItemDto;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface ItemService {
 
-    void save(ItemDto itemDto, CategoryDto categoryDto);
+    Long save(ItemDto itemDto, CategoryDto categoryDto, List<MultipartFile> itemImg) throws IOException;
 
     ItemDto findOne(Long itemId);
 

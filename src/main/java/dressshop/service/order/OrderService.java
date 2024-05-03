@@ -1,4 +1,4 @@
-package dressshop.service;
+package dressshop.service.order;
 
 import dressshop.domain.delivery.Delivery;
 import dressshop.domain.item.Item;
@@ -28,7 +28,7 @@ public class OrderService {
     private final MemberRepository memberRepository;
 
     //상품 주문
-    public void toOrder(OrderDto orderDto, Long itemId, Integer count) {
+    public void toOrder(OrderDto orderDto, Long itemId, int count) {
         Member member = memberRepository.findById(orderDto.getMember().getId())
                 .orElseThrow(NotFoundException::new);
         Item item = itemRepository.findById(itemId)

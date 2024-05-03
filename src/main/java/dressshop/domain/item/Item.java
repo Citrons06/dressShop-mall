@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +34,11 @@ public class Item extends BaseEntity {
 
     private String itemName;
 
-    private Integer price;
+    private int price;
 
-    private Integer quantity;
+    private int quantity;
+
+    private int itemSellCount;
 
     @ManyToOne(fetch = LAZY, cascade = MERGE)
     @JoinColumn(name = "category_id")
@@ -55,8 +58,8 @@ public class Item extends BaseEntity {
     @Builder
     public Item(Long id,
                 String itemName,
-                Integer price,
-                Integer quantity,
+                int price,
+                int quantity,
                 Category category,
                 ItemSellStatus itemSellStatus) {
         this.id = id;
@@ -93,6 +96,8 @@ public class Item extends BaseEntity {
         }
 
         this.quantity = restStock;
+        this.itemSellCount += orderCount;
+
         if (restStock == 0) {
             this.itemSellStatus = SOLD_OUT;
         }

@@ -28,22 +28,22 @@ public class OrderItem extends BaseEntity {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    private Integer orderPrice;
+    private int orderPrice;
 
-    private Integer count;
+    private int count;
 
     @Builder
     public OrderItem(Item item,
                      Order order,
-                     Integer orderPrice,
-                     Integer count) {
+                     int orderPrice,
+                     int count) {
         this.item = item;
         this.order = order;
         this.orderPrice = orderPrice;
         this.count = count;
     }
 
-    public static OrderItem createOrderItem(Item item, Integer count) {
+    public static OrderItem createOrderItem(Item item, int count) {
         OrderItem orderItem = OrderItem.builder()
                 .item(item)
                 .orderPrice(item.getPrice())

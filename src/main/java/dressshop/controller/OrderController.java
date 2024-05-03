@@ -1,7 +1,7 @@
 package dressshop.controller;
 
 import dressshop.domain.order.dto.OrderDto;
-import dressshop.service.OrderService;
+import dressshop.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -1,4 +1,4 @@
-package dressshop.service;
+package dressshop.service.member;
 
 import dressshop.domain.member.Member;
 import dressshop.domain.member.dto.MemberDto;

@@ -1,9 +1,10 @@
-package dressshop.service;
+package dressshop.service.item;
 
 import dressshop.domain.item.Category;
 import dressshop.domain.item.Item;
 import dressshop.domain.item.dto.CategoryDto;
 import dressshop.domain.item.dto.ItemDto;
+import dressshop.domain.item.dto.ItemImgDto;
 import dressshop.exception.customException.NotFoundException;
 import dressshop.repository.category.CategoryRepository;
 import dressshop.repository.item.ItemRepository;
@@ -11,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -23,16 +26,14 @@ import static java.util.stream.Collectors.toList;
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
-    private final CategoryService categoryService;
     private final CategoryRepository categoryRepository;
     private final ItemImgService itemImgService;
 
     //상품 등록
     @Override
-    public void save(ItemDto itemDto, CategoryDto categoryDto) {
+    public Long save(ItemDto itemDto, CategoryDto categoryDto, List<MultipartFile> itemImgList) throws IOException {
         Item item = itemDto.toEntity();
 
-        //카테고리 엔티티를 찾아 와서 카테고리 이름 설정
         Category category = categoryRepository.findById(categoryDto.getId())
                 .orElseThrow(NotFoundException::new);
 
@@ -42,6 +43,23 @@ public class ItemServiceImpl implements ItemService {
         itemRepository.save(item);
         log.info("상품이 등록되었습니다. 등록된 상품={} 가격={} 재고수량={} 카테고리={} 판매여부={}",
                 item.getItemName(), item.getPrice(), item.getQuantity(), item.getCategoryName(), item.getItemSellStatus());
+
+        //이미지 등록
+        for (int i = 0; i < itemImgList.size(); i++) {
+            ItemImgDto itemImgDto = new ItemImgDto();
+            itemImgDto.setOriImgName(itemImgList.get(i).getOriginalFilename());
+            itemImgDto.setItem(item);
+
+            if (i == 0) {
+                itemImgDto.setRepImgYn("Y");
+            } else {
+                itemImgDto.setRepImgYn("N");
+            }
+
+            itemImgService.save(itemImgDto, itemImgList.get(i));
+        }
+
+        return item.getId();
     }
 
     //상품 단건 조회
