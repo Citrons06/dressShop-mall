@@ -1,27 +1,18 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>DRESS SHOP</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fragments.css}" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .home {
             text-align: center;
             margin-top: 100px;
         }
-        .header {
-            justify-content: flex-end;
-            text-align: right;
-            margin-top: 5px;
-            margin-right: 5px;
-        }
-        .menu {
-            text-align: left;
-        }
-        a {
+        .home a {
             color: black;
             text-decoration: none;
         }
-        a:hover,
-        a:focus {
+        .home a:hover {
             color: black;
             text-decoration: none;
         }
@@ -29,23 +20,25 @@
 </head>
 
 <body>
-<div class="header" th:replace="~{fragments/header :: header}"></div>
+
+<div class="header">
+    <div th:replace="~{fragments/header :: header}"></div>
+</div>
 
 <div class="container">
-
     <div class="home">
-
         <a href="/"><h1>DRESS SHOP</h1></a>
-
-        <div class="container">
-            <div class="menu">
-                <div th:replace="~{fragments/menu :: menu}"></div>
-            </div>
-
-        </div>
-
-        <div th:replace="~{fragments/footer :: footer}"></div>
     </div>
 </div>
+
+<div class="menu">
+    <div th:replace="~{fragments/menu :: menu}"></div>
+</div>
+
+<br /> <br />
+<div class="footer">
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+
 </body>
 </html>

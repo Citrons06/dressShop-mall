@@ -1,13 +1,22 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Item List</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fragments.css}" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
+
 <body>
+<div class="header">
+    <div th:replace="~{fragments/header :: header}"></div>
+</div>
+
 <div class="container">
-    <a href="/"><h2>DRESS SHOP</h2></a>
-    <br />
+    <a href="/"><h1>DRESS SHOP</h1></a>
+    <br /> <br />
+
     <h3>상품 목록</h3>
+    <hr />
+
     <table class="table">
         <thead>
         <tr>
@@ -21,6 +30,7 @@
             <th>삭제</th>
         </tr>
         </thead>
+
         <tbody>
         <tr th:each="item : ${items}">
             <td th:text="${item.id}"></td>
@@ -28,6 +38,7 @@
             <td th:text="${item.price}"></td>
             <td th:text="${item.quantity}"></td>
             <td th:text="${item.categoryName}"></td>
+
             <td>
                 <span th:if="${item.itemSellStatus == 'SELL'}">판매중</span>
                 <span th:if="${item.itemSellStatus == 'SOLD_OUT'}">품절</span>
@@ -35,15 +46,23 @@
             </td>
 
             <td>
-                <a th:href="@{/admin/items/edit/{itemId} (itemId=${item.id})}" class="btn btn-info">수정</a>
+                <a th:href="@{/admin/items/edit/{itemId} (itemId=${item.id})}"
+                   class="btn btn-info" style="color: white;">수정</a>
             </td>
+
             <td>
-                <a th:href="@{/admin/items/delete/{itemId} (itemId=${item.id})}" class="btn btn-danger">삭제</a>
+                <a th:href="@{/admin/items/delete/{itemId} (itemId=${item.id})}"
+                   class="btn btn-danger" style="color: white;">삭제</a>
             </td>
         </tr>
         </tbody>
     </table>
-    <a href="/admin/items/save" class="btn btn-primary">상품 등록</a>
+
+    <a href="/admin/items/save" class="btn btn-primary" style="color: white;">상품 등록</a>
+</div>
+
+<div class="footer">
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </div>
 </body>
 </html>

@@ -1,37 +1,55 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Category List</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fragments.css}" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
-<body>
-<div class="container">
-    <a href="/"><h2>DRESS SHOP</h2></a>
-    <br />
 
-    <h3>카테고리 목록</h3>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>번호</th>
-            <th>카테고리 이름</th>
-            <th>수정</th>
-            <th>삭제</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="category : ${categories}">
-            <td th:text="${category.id}"></td>
-            <td th:text="${category.categoryName}"></td>
-            <td>
-                <a th:href="@{/admin/category/edit/{categoryId} (categoryId=${category.id})}">수정</a>
-            </td>
-            <td>
-                <a th:href="@{/admin/category/delete/{categoryId} (categoryId=${category.id})}">삭제</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <a href="/admin/category/save" class="btn btn-primary">카테고리 추가</a>
+<body>
+<div class="header">
+    <div th:replace="~{fragments/header :: header}"></div>
+</div>
+
+    <div class="container">
+        <a href="/"><h1>DRESS SHOP</h1></a>
+        <br /> <br />
+
+        <h3>카테고리 목록</h3>
+        <hr />
+
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>카테고리 이름</th>
+                <th>수정</th>
+                <th>삭제</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="category : ${categories}">
+                <td th:text="${category.id}"></td>
+                <td th:text="${category.categoryName}"></td>
+                <td>
+                    <a th:href="@{/admin/category/edit/{categoryId} (categoryId=${category.id})}"
+                    style="color: cornflowerblue;">수정</a>
+                </td>
+
+                <td>
+                    <a th:href="@{/admin/category/delete/{categoryId} (categoryId=${category.id})}"
+                    style="color: darkred;">삭제</a>
+                </td>
+            </tr>
+            </tbody>
+
+        </table>
+        <a href="/admin/category/save" class="btn btn-primary" style="color: white">카테고리 추가</a>
+    </div>
+
+<div class="footer">
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </div>
 </body>
+
 </html>

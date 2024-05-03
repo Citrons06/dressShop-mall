@@ -1,14 +1,22 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Item Delete Form</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fragments.css}" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
+
 <body>
+<div class="header">
+    <div th:replace="~{fragments/header :: header}"></div>
+</div>
+
 <div class="container">
     <a href="/"><h2>DRESS SHOP</h2></a>
-    <br />
+    <br /> <br />
 
     <h3>상품 삭제</h3>
+    <hr />
+
     <form th:action="@{/admin/items/delete/{itemId} (itemId=${deleteForm.id})}"
           th:object="${deleteForm}" method="post">
 
@@ -31,6 +39,10 @@
 
         <button type="submit" class="btn btn-danger">삭제</button>
     </form>
+</div>
+
+<div class="footer">
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </div>
 </body>
 </html>

@@ -2,58 +2,55 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Login</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fragments.css}" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
         .login-container {
-            width: 50%;
+            width: 100%;
+            text-align: center;
+        }
+
+        .login-container a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .login-container a:hover {
+            color: black;
+            text-decoration: none;
         }
 
         .fieldError {
             border-color: crimson;
         }
-        h2 {
-            text-align: center;
-        }
-        h3 {
-            text-align: center;
-        }
-        form {
-            text-align: center;
-            width: 100%;
-        }
-        .form-group input {
-            text-align: center;
-        }
-        button {
-            text-align: center;
-            display: block;
-            margin: 0 auto;
-        }
-        .btn btn-secondary {
-            text-align: center;
-            display: block;
-            margin: 0 auto;
-        }
-        .btn btn-danger {
-            text-align: center;
-            display: block;
+
+        .login-button-group {
+            align-content: center;
+            width: 500px;
             margin: 0 auto;
         }
 
+        .other-button-group {
+            display: inline-flex;
+            justify-content: center;
+        }
+
+        .form-group input {
+            align-content: center;
+            width: 400px;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
-<div class="login-container">
-    <a href="/"><h2>DRESS SHOP</h2></a>
-    <br />
 
+<div class="header">
+    <div th:replace="~{fragments/header :: header}"></div>
+</div>
+
+<div class="login-container">
+    <a href="/"><h1>DRESS SHOP</h1></a>
+    <br /> <br />
     <h3>로그인</h3>
     <hr />
 
@@ -77,11 +74,20 @@
             </label>
         </div>
 
-        <button type="submit" class="btn btn-primary">로그인</button>
-        <br />
+        <div class="login-button-group">
+            <button type="submit" class="btn btn-primary">LOGIN</button>
+            <a href="/oauth2/authorization/google" class="btn btn-danger" style="color: white">Google</a>
+        </div>
     </form>
-    <a href="/join" class="btn btn-secondary">회원 가입</a>
-    <a href="/oauth2/authorization/google" class="btn btn-danger">Google</a>
+
+    <div class="other-button-group">
+        <a href="/join" class="btn btn-secondary" style="color: white">아직 회원이 아니신가요?</a>
+    </div>
 </div>
+
+<div class="footer">
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+
 </body>
 </html>

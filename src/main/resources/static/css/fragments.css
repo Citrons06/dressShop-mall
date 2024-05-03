@@ -1,0 +1,99 @@
+h2, h3 {
+    text-align: center;
+}
+
+form {
+    text-align: center;
+    width: 100%;
+}
+
+.form-group {
+    text-align: center;
+}
+
+.form-group input {
+    align-content: center;
+    width: 400px;
+    margin: 0 auto;
+}
+
+.form-group select {
+    align-content: center;
+    width: 400px;
+    margin: 0 auto;
+}
+
+.btn {
+    display: block;
+    margin: 10px auto;
+}
+
+.header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    background-color: #f8f9fa;
+}
+
+.header-items {
+    display: flex;
+    align-items: center;
+}
+
+.menu {
+    text-align: left;
+    background-color: #f8f9fa;
+    float: left;
+    width: 100%;
+    margin-top: 20px;
+    margin-right: 20px;
+    color: black;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    text-align: center;
+    margin-top: 100px;
+}
+
+.container a {
+    color: black;
+    text-decoration: none;
+}
+
+.container a:hover {
+    color: black;
+    text-decoration: none;
+}
+
+.footer {
+    width: 100%;
+    padding: 10px;
+    background-color: #f8f9fa;
+    text-align: center;
+}
+
+a:hover,
+a:focus {
+    color: black;
+    text-decoration: none;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+table {
+    text-align: center;
+}

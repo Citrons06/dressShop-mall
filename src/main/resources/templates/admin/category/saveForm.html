@@ -1,6 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Category Save Form</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fragments.css}" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .fieldError {
@@ -8,12 +9,19 @@
         }
     </style>
 </head>
+
 <body>
+<div class="header">
+    <div th:replace="~{fragments/header :: header}"></div>
+</div>
+
 <div class="container">
-    <a href="/"><h2>DRESS SHOP</h2></a>
-    <br />
+    <a href="/"><h1>DRESS SHOP</h1></a>
+    <br /> <br />
 
     <h3>카테고리 등록</h3>
+    <hr />
+
     <form role="form" action="/admin/category/save" th:object="${categoryForm}" method="post">
 
         <div class="form-group">
@@ -25,6 +33,10 @@
 
         <button type="submit" class="btn btn-primary">등록</button>
     </form>
+</div>
+
+<div class="footer">
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </div>
 </body>
 </html>
