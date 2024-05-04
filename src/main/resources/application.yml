@@ -27,7 +27,7 @@ spring:
     multipart:
       max-file-size: 20MB  #파일 한 개당 최대 용량
       max-request-size: 100MB  #요청당 최대 파일 크기
-      location: C:\Project\image_file
+      location: C:/Project/image_file/
 
   thymeleaf:
     prefix: classpath:/templates/
@@ -61,4 +61,4 @@ server:
       enabled: true
       force: true
 
-uploadPath: C:\Project\resource
+uploadPath: C:/Project/image_file/

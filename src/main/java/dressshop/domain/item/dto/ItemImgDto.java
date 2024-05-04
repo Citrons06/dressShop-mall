@@ -33,6 +33,11 @@ public class ItemImgDto {
         this.item = item;
     }
 
+    public ItemImgDto(String oriImgName, String imgName) {
+        this.oriImgName = oriImgName;
+        this.imgName = imgName;
+    }
+
     public ItemImg toEntity() {
         return ItemImg.builder()
                 .id(id)

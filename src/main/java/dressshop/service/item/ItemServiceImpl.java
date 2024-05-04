@@ -15,9 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Service
@@ -45,20 +44,26 @@ public class ItemServiceImpl implements ItemService {
                 item.getItemName(), item.getPrice(), item.getQuantity(), item.getCategoryName(), item.getItemSellStatus());
 
         //이미지 등록
+        List<ItemImgDto> itemImgDtoList = new ArrayList<>();
+
         for (int i = 0; i < itemImgList.size(); i++) {
-            ItemImgDto itemImgDto = new ItemImgDto();
-            itemImgDto.setOriImgName(itemImgList.get(i).getOriginalFilename());
-            itemImgDto.setItem(item);
+            MultipartFile itemImgFile = itemImgList.get(i);
+            if (!itemImgFile.isEmpty()) {
+                ItemImgDto itemImgDto = new ItemImgDto();
+                itemImgDto.setOriImgName(itemImgFile.getOriginalFilename());
+                itemImgDto.setItem(item);
 
-            if (i == 0) {
-                itemImgDto.setRepImgYn("Y");
-            } else {
-                itemImgDto.setRepImgYn("N");
+                if (i == 0) {
+                    itemImgDto.setRepImgYn("Y");
+                } else {
+                    itemImgDto.setRepImgYn("N");
+                }
+
+                itemImgDtoList.add(itemImgDto);
             }
-
-            itemImgService.save(itemImgDto, itemImgList.get(i));
         }
 
+        itemImgService.save(itemImgDtoList, itemImgList);
         return item.getId();
     }
 
@@ -78,7 +83,7 @@ public class ItemServiceImpl implements ItemService {
         return itemRepository.findList()
                 .stream()
                 .map(Item::toDto)
-                .collect(toList());
+                .toList();
     }
 
     //상품 수정

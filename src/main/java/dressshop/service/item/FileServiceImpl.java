@@ -16,7 +16,7 @@ public class FileServiceImpl implements FileService {
     public String upload(String uploadPath, String oriImgName, byte[] fileData) throws IOException {
         UUID uuid = UUID.randomUUID();
         String ext = oriImgName.substring(oriImgName.lastIndexOf("."));
-        String saveFileName = uuid.toString() + "." + ext;  //fwe324-oji4jo-frklti.png
+        String saveFileName = uuid.toString() + "." + ext;
         String fileUploadUrl = uploadPath + "/" + saveFileName;
 
         FileOutputStream fileOutputStream = new FileOutputStream(fileUploadUrl);
@@ -38,4 +38,3 @@ public class FileServiceImpl implements FileService {
         }
     }
 }
-

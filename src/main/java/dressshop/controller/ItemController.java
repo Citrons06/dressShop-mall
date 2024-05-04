@@ -60,7 +60,7 @@ public class ItemController {
     @PostMapping("/admin/items/save")
     public String save(@Valid @ModelAttribute("itemForm") ItemDto itemDto,
                        BindingResult bindingResult,
-                       @RequestParam("itemImg") List<MultipartFile> itemImgList,
+                       @RequestParam("itemImg") List<MultipartFile> itemImg,
                        Model model) {
 
         try {
@@ -69,13 +69,13 @@ public class ItemController {
                 return "admin/items/saveForm";
             }
 
-            if (itemImgList.isEmpty()) {
+            if (itemImg.isEmpty()) {
                 model.addAttribute("errors", "이미지를 등록해 주세요.");
                 return "admin/items/saveForm";
             }
 
             CategoryDto categoryDto = categoryService.findById(itemDto.getCategoryId());
-            itemService.save(itemDto, categoryDto, itemImgList);
+            itemService.save(itemDto, categoryDto, itemImg);
 
             return "redirect:/";
         } catch (Exception e) {

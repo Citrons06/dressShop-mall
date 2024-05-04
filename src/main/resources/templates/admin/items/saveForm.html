@@ -66,10 +66,9 @@
             <div class="field-error" th:errors="*{categoryId}"></div>
         </div>
 
-        <!-- 이미지 파일 업로드 -->
-        <div class="form-group">
+        <div class="form-group" th:classappend="${#fields.hasErrors('itemImg')} ? 'field-error' : ''">
             <label th:for="itemImg">이미지</label>
-            <input type="file" th:field="*{itemImg}" class="form-control" th:errorclass="field-error"
+            <input type="file" name="itemImg" multiple="multiple" class="form-control"
                    placeholder="이미지를 선택하세요." />
             <div class="field-error" th:errors="*{itemImg}"></div>
         </div>
@@ -94,7 +93,7 @@
     document.getElementById('addImgBtn').addEventListener('click', function() {
         var fileInput = document.createElement('input');
         fileInput.type = 'file';
-        fileInput.name = 'itemImgs';
+        fileInput.name = 'itemImg';
         fileInput.classList.add('form-control');
         fileInput.classList.add('mb-2');
         fileInput.classList.add('custom-input-style');
