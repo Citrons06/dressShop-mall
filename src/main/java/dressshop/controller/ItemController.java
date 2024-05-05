@@ -4,6 +4,7 @@ import dressshop.domain.item.Category;
 import dressshop.domain.item.ItemSellStatus;
 import dressshop.domain.item.dto.CategoryDto;
 import dressshop.domain.item.dto.ItemDto;
+import dressshop.domain.item.dto.ItemImgDto;
 import dressshop.exception.customException.SaveException;
 import dressshop.repository.category.CategoryRepository;
 import dressshop.service.category.CategoryService;
@@ -11,6 +12,8 @@ import dressshop.service.item.ItemService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,6 +31,9 @@ public class ItemController {
     private final ItemService itemService;
     private final CategoryService categoryService;
     private final CategoryRepository categoryRepository;
+
+    @Value("${itemImgLocation}")
+    private String itemImgLocation;
 
     //카테고리
     @ModelAttribute
@@ -116,7 +122,10 @@ public class ItemController {
     @GetMapping("/admin/items/edit/{itemId}")
     public String editForm(@PathVariable Long itemId, Model model) {
         ItemDto item = itemService.findOne(itemId);
+        List<ItemImgDto> itemImgs = itemService.getItemImages(itemId);
+
         model.addAttribute("editForm", item);
+        model.addAttribute("itemImgs", itemImgs);
 
         return "admin/items/editForm";
     }
@@ -124,9 +133,10 @@ public class ItemController {
     //상품 수정
     @PutMapping("/admin/items/edit/{itemId}")
     public String edit(@PathVariable Long itemId,
-                       @Valid ItemDto itemDto,
+                       @Valid @ModelAttribute("editForm") ItemDto itemDto,
                        @RequestParam("categoryId") Long categoryId,
                        BindingResult bindingResult,
+                       @RequestParam("itemImg") List<MultipartFile> itemImg,
                        Model model) {
         if (bindingResult.hasErrors()) {
             return "redirect:/admin/items/edit/{itemId}";
@@ -134,7 +144,9 @@ public class ItemController {
 
         try {
             itemService.editItem(itemId, itemDto, categoryId);
-        } catch (SaveException e) {
+            itemService.updateImages(itemId, itemImg);
+
+        } catch (Exception e) {
             model.addAttribute("errors", e.getMessage());
         }
 
@@ -154,5 +166,16 @@ public class ItemController {
     public String delete(@PathVariable Long itemId) {
         itemService.delete(itemId);
         return "redirect:/admin/items";
+    }
+
+    //상품 이미지 삭제
+    @DeleteMapping("/admin/items/deleteImg/{itemId}/{itemImgId}")
+    public ResponseEntity<?> deleteImg(@PathVariable Long itemId, @PathVariable Long itemImgId) {
+        try {
+            itemService.deleteImg(itemImgId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

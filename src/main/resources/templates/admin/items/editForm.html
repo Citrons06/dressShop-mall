@@ -7,6 +7,15 @@
         .fieldError {
             border-color: crimson;
         }
+        .custom-input-style {
+            align-content: center;
+            width: 400px;
+            margin: 0 auto;
+        }
+        .image-preview img {
+            max-width: 100%;
+            height: auto;
+        }
 
     </style>
 </head>
@@ -23,7 +32,7 @@
     <h3>상품 수정</h3>
     <hr />
 
-    <form th:action="@{/admin/items/edit/{itemId} (itemId=${editForm.id})}"
+    <form enctype="multipart/form-data" th:action="@{/admin/items/edit/{itemId} (itemId=${editForm.id})}"
           th:object="${editForm}" th:method="put">
 
         <div class="form-group">
@@ -71,6 +80,26 @@
                 </select>
         </div>
 
+        <div class="form-group">
+            <label th:for="itemImg">
+                <button type="button" id="addImgBtn" class="btn btn-secondary mb-2">이미지 추가</button></label>
+            <input type="file" name="itemImg" multiple="multiple" class="form-control" th:errorclass="field-error"
+                   placeholder="이미지를 선택하세요." />
+
+            <div class="field-error" th:errors="*{itemImg}"></div>
+            <div id="imgContainer"></div>
+
+
+            <!-- 이미지 제거 버튼-->
+            <div th:each="img : ${itemImgs}" th:id="'imageDiv_' + ${img.id}" class="image-preview">
+                <img th:src="@{/images/} + ${img.imgName}" alt="Image Preview" />
+                <button type="button" class="btn btn-danger"
+                        th:onclick="'removeImage(\'' + ${itemId} + '\', \'' + ${img.id} + '\')'">삭제</button>
+            </div>
+        </div>
+
+        <br /> <br />
+
         <button type="submit" class="btn btn-primary">수정</button>
     </form>
 </div>
@@ -78,5 +107,78 @@
 <div class="footer">
     <div th:replace="~{fragments/footer :: footer}"></div>
 </div>
+
+<script th:inline="javascript">
+    function removeImage(itemId, itemImgId) {
+        var confirmation = confirm("이미지를 삭제하시겠습니까?");
+
+        if (confirmation) {
+            var url = '/admin/items/deleteImg/' + itemId + '/' + itemImgId;
+            fetch(url, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    // 이미지 삭제 성공 시 화면에서 이미지를 제거
+                    var imageDiv = document.getElementById('imageDiv_' + itemImgId);
+                    if (imageDiv) {
+                        imageDiv.remove();
+                    }
+                } else {
+                    alert('이미지 삭제에 실패했습니다.');
+                }
+            })
+                .catch(error => console.error('Error deleting image:', error));
+        }
+    }
+</script>
+
+<script>
+    document.getElementById('addImgBtn').addEventListener('click', function() {
+        var fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.name = 'itemImg';
+        fileInput.classList.add('form-control');
+        fileInput.classList.add('mb-2');
+        fileInput.classList.add('custom-input-style');
+
+        fileInput.addEventListener('change', function(event) {
+            var file = event.target.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function(event) {
+                var img = document.createElement('img');
+                img.src = event.target.result;
+                img.alt = 'Image Preview';
+
+                var deleteBtn = document.createElement('button');
+                deleteBtn.type = 'button';
+                deleteBtn.classList.add('btn');
+                deleteBtn.classList.add('btn-danger');
+                deleteBtn.textContent = '삭제';
+                deleteBtn.addEventListener('click', function() {
+                    img.parentNode.remove(); //이미지를 감싸는 div 요소를 삭제
+                    fileInput.remove(); //파일 업로드 input 요소도 삭제
+                });
+
+                var imgDiv = document.createElement('div');
+                imgDiv.classList.add('image-preview');
+                imgDiv.appendChild(img);
+                imgDiv.appendChild(deleteBtn); //삭제 버튼 추가
+
+                //이미지들을 감싸는 부모 요소의 맨 끝에 새로운 이미지 컨테이너를 추가
+                var imgContainer = document.getElementById('imgContainer');
+                imgContainer.appendChild(imgDiv);
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        //이미지 추가 input 요소를 가져와서 이전 요소의 바로 밑에 삽입
+        var imgContainer = document.getElementById('imgContainer');
+        imgContainer.appendChild(fileInput);
+    });
+</script>
+
 </body>
 </html>

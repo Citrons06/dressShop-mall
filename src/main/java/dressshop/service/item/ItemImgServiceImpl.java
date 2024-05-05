@@ -20,8 +20,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemImgServiceImpl implements ItemImgService {
 
-    @Value("${uploadPath}")
-    private String imgLocation;
+    @Value("${itemImgLocation}")
+    private String itemImgLocation;
 
     private final ItemImgRepository itemImgRepository;
     private final FileService fileService;
@@ -35,8 +35,8 @@ public class ItemImgServiceImpl implements ItemImgService {
                 MultipartFile itemImgFile = itemImgFiles.get(i);
                 if (!itemImgFile.isEmpty()) {
                     String oriImgName = itemImgFile.getOriginalFilename();
-                    String imgName = fileService.upload(imgLocation, oriImgName, itemImgFile.getBytes());
-                    String imgUrl = imgLocation + imgName;
+                    String imgName = fileService.upload(itemImgLocation, oriImgName, itemImgFile.getBytes());
+                    String imgUrl = itemImgLocation + imgName;
 
                     ItemImgDto itemImgDto = itemImgDtos.get(i);
                     ItemImg itemImg = itemImgDto.toEntity();
@@ -53,6 +53,7 @@ public class ItemImgServiceImpl implements ItemImgService {
             }
             itemImgRepository.saveAll(itemImgList);
             log.info("이미지 파일이 저장되었습니다.");
+            log.info("저장된 이미지 정보 {}, {}, {}, {}", itemImgList.get(0).getOriImgName(), itemImgList.get(0).getImgName(), itemImgList.get(0).getImgUrl(), itemImgList.get(0).getRepImgYn());
         } catch (IOException e) {
             log.error("이미지 파일 저장에 실패했습니다.");
             throw new IOException();

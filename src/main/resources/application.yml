@@ -61,4 +61,5 @@ server:
       enabled: true
       force: true
 
-uploadPath: C:/Project/image_file/
+itemImgLocation: C:/Project/image_file/ # 상품 이미지 업로드 경로
+uploadPath: file:/C:/Project/image_file/ # 리소스 업로드 경로

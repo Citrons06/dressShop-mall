@@ -4,6 +4,5 @@ import java.io.IOException;
 
 public interface FileService {
 
-    String upload(String uploadPath, String oriImgName, byte[] fileData) throws IOException;
-    void delete(String filePath);
+    String upload(String itemImgLocation, String oriImgName, byte[] fileData) throws IOException;
 }

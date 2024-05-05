@@ -39,7 +39,7 @@ public class ItemDto {
     //기본값 = 판매 중으로 설정
     private ItemSellStatus itemSellStatus = ItemSellStatus.SELL;
 
-    private List<MultipartFile> itemImgDtoList = new ArrayList<>();
+    private List<MultipartFile> itemImgs = new ArrayList<>();
 
     @NotNull(message = "이미지 파일을 선택해 주세요.")
     private MultipartFile itemImg;
@@ -68,7 +68,7 @@ public class ItemDto {
         this.categoryName = categoryName;
         this.itemSellStatus = itemSellStatus;
         this.itemImg = itemImgDto;
-        this.itemImgDtoList = itemImgDtoList;
+        this.itemImgs = itemImgDtoList;
         this.itemImgIds = itemImgIds;
     }
 
