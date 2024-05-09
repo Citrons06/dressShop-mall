@@ -3,6 +3,7 @@ package dressshop.domain.item.dto;
 import com.querydsl.core.annotations.QueryProjection;
 import dressshop.domain.item.Item;
 import dressshop.domain.item.ItemSellStatus;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -32,6 +33,9 @@ public class ItemDto {
     @NotNull(message = "재고 수량을 입력하세요.")
     @Min(value = 1, message = "최소 수량은 1개 입니다.")
     private int quantity;
+
+    @Max(value = 100, message = "최대 100개까지 주문할 수 있습니다.")
+    private int count;
 
     private CategoryDto categoryDto;
     private String categoryName;

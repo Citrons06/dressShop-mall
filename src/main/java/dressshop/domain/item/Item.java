@@ -55,6 +55,9 @@ public class Item extends BaseEntity {
     @OneToMany(mappedBy = "item", fetch = LAZY, cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    @OneToMany(mappedBy = "item", fetch = LAZY, cascade = CascadeType.ALL)
+    private List<ItemImg> itemImgs = new ArrayList<>();
+
     @Builder
     public Item(Long id,
                 String itemName,

@@ -5,7 +5,6 @@ import dressshop.domain.item.ItemSellStatus;
 import dressshop.domain.item.dto.CategoryDto;
 import dressshop.domain.item.dto.ItemDto;
 import dressshop.domain.item.dto.ItemImgDto;
-import dressshop.exception.customException.SaveException;
 import dressshop.repository.category.CategoryRepository;
 import dressshop.service.category.CategoryService;
 import dressshop.service.item.ItemService;
@@ -95,7 +94,10 @@ public class ItemController {
     @GetMapping("/items/{itemId}")
     public String findById(@PathVariable Long itemId, Model model) {
         ItemDto item = itemService.findOne(itemId);
+        List<ItemImgDto> itemImgs = itemService.getItemImages(itemId);
+
         model.addAttribute("itemDetail", item);
+        model.addAttribute("itemImgs", itemImgs);
 
         return "items/itemDetail";
     }

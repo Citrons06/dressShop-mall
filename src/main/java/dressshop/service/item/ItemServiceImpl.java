@@ -8,7 +8,7 @@ import dressshop.domain.item.dto.ItemDto;
 import dressshop.domain.item.dto.ItemImgDto;
 import dressshop.exception.customException.NotFoundException;
 import dressshop.repository.category.CategoryRepository;
-import dressshop.repository.item.ItemImgRepository;
+import dressshop.repository.itemImg.ItemImgRepository;
 import dressshop.repository.item.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -157,6 +157,7 @@ public class ItemServiceImpl implements ItemService {
 
     //상품 이미지 리스트 가져오기
     @Override
+    @Transactional(readOnly = true)
     public List<ItemImgDto> getItemImages(Long itemId) {
         return itemImgRepository.findByItemId(itemId)
                 .stream()

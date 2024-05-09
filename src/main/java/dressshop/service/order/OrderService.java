@@ -6,6 +6,7 @@ import dressshop.domain.member.Member;
 import dressshop.domain.order.Order;
 import dressshop.domain.order.OrderItem;
 import dressshop.domain.order.dto.OrderDto;
+import dressshop.exception.customException.ItemNotFoundException;
 import dressshop.exception.customException.NotFoundException;
 import dressshop.repository.item.ItemRepository;
 import dressshop.repository.member.MemberRepository;
@@ -32,7 +33,7 @@ public class OrderService {
         Member member = memberRepository.findById(orderDto.getMember().getId())
                 .orElseThrow(NotFoundException::new);
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(ItemNotFoundException::new);
         Delivery delivery = Delivery.createDelivery(member);
 
         List<OrderItem> orderItems = new ArrayList<>();

@@ -2,7 +2,7 @@ package dressshop.service.item;
 
 import dressshop.domain.item.ItemImg;
 import dressshop.domain.item.dto.ItemImgDto;
-import dressshop.repository.item.ItemImgRepository;
+import dressshop.repository.itemImg.ItemImgRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

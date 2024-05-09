@@ -1,14 +1,105 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Item Detail</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fragments.css}"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .container-fluid input {
+            align-content: center;
+            width: 80px;
+            margin: 0 auto;
+            text-align: right;
+        }
+
+        .card-description {
+            width: 100%;
+            margin-top: 50px;
+        }
+
+        .container {
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+    <script th:inline="javascript">
+        function addToCart() {
+            var result = confirm("장바구니에 등록되었습니다. 장바구니로 이동할까요?");
+
+            if (result) {
+                window.location.href = "/cart";
+            } else {
+                // 현재 페이지에 남음
+            }
+        }
+    </script>
 </head>
 <body>
-<div class="container">
-    <a href="/"><h2>DRESS SHOP</h2></a>
-    <br />
-
-    <h3>상품 상세</h3>
+<div class="header">
+    <div th:replace="~{fragments/header :: header}"></div>
 </div>
+
+<div class="container">
+
+    <a href="/"><h2>DRESS SHOP</h2></a>
+    <br/>
+
+    <h3 th:text="${itemDetail.categoryName} + '  /  ' + ${itemDetail.itemName}"></h3>
+    <hr/>
+    <br/> <br/>
+
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <div class="card" style="width: 20rem;" th:object="${itemDetail}">
+                    <div th:each="img : ${itemImgs}" class="rep-image">
+                        <img th:if="${img.repImgYn} eq 'Y'"
+                             th:src="@{'/images/' + ${img.imgName}}" class="card-img-top" alt="상품 이미지"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${itemDetail.itemName}"></h5>
+                    <hr/>
+
+                    <p class="card-text" th:text="${itemDetail.price} + '원'"></p>
+                    <br />
+                    <form th:action="@{/cart/add}" method="post" th:object="${itemDetail}">
+                        <input type="hidden" name="itemId" th:value="${itemDetail.id}"/>
+                        <div class="form-group">
+                            <label for="count" style="text-align: left;">수량</label>
+                            <input type="number" class="form-control"
+                                   id="count" name="count" value="1" min="1"  required/>
+                            <br /><br />
+                            <button type="submit" class="btn btn-secondary" style="color: white;"
+                                    onclick="addToCart()">장바구니 담기</button>
+                            <a th:href="@{/order}" class="btn btn-primary" style="color: white;">주문하기</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <br/>
+            <br/>
+
+            <div class="card-description">
+                <h5 class="card-title" style="text-align: left;"><b>상품 설명</b></h5>
+                <hr />
+                <div class="card" th:object="${itemDetail}">
+                    <div th:each="img : ${itemImgs}" class="rep-image">
+                        <img th:if="${img.repImgYn} eq 'N'"
+                             th:src="@{'/images/' + ${img.imgName}}" class="card-img-top" alt="상품 이미지"/>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+
+
 </body>
 </html>
