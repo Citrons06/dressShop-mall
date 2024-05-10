@@ -1,0 +1,66 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order List</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fragments.css}"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .container-fluid input {
+            align-content: center;
+            width: 80px;
+            margin: 0 auto;
+            text-align: right;
+        }
+
+        .card-description {
+            width: 100%;
+            margin-top: 50px;
+        }
+
+        .container {
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div th:replace="~{fragments/header :: header}"></div>
+</div>
+
+<div class="container">
+
+    <a href="/"><h2>DRESS SHOP</h2></a>
+    <br/>
+
+    <h3>주문 목록</h3>
+    <hr/>
+    <br/> <br/>
+
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <div class="card">
+                    <div th:each="orderDetail : ${orderDetailList}">
+
+                    <div th:if="${orderDetailList == null}">
+                        <h3>주문 내역이 없습니다.</h3>
+                    </div>
+
+                        <img th:src="@{'/images/' + ${orderDetail.imgName}}" class="card-img-top" alt="상품 이미지"/>
+                        <div class="card-body">
+                            <h5 class="card-title"></h5>
+                            <p class="card-text" th:text="${orderDetail.item.itemName}"></p>
+                            <p class="card-text" th:text="${orderDetail.item.price} + '원'"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+</body>
+</html>

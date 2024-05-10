@@ -2,6 +2,7 @@ package dressshop.service.cart;
 
 import dressshop.domain.cart.Cart;
 import dressshop.domain.cart.CartItem;
+import dressshop.domain.cart.dto.CartDto;
 import dressshop.domain.cart.dto.CartItemDto;
 import dressshop.domain.item.Item;
 import dressshop.domain.member.Member;
@@ -38,14 +39,22 @@ public class CartService {
         List<CartItemDto> cartItemList = new ArrayList<>();
 
         Member member = memberRepository.findByEmail(email);
-        Cart cart = cartRepository.findById(member.getId())
-                .orElseThrow(NotFoundException::new);
+        Cart cart = cartRepository.findByMember(member);
 
+        //장바구니가 없을 경우 새로 생성
         if (cart == null) {
-            return cartItemList;
+            cart = Cart.builder()
+                    .member(member)
+                    .build();
+
+            cart = cartRepository.save(cart);
+            log.info("새로운 장바구니가 생성되었습니다.");
         }
 
         cartItemList = cartItemRepository.findCartItemList(cart.getId());
+
+        //장바구니에 담긴 상품의 총 가격 계산
+        totalPriceCalculation(cartItemList, cart);
 
         return cartItemList;
     }
@@ -100,6 +109,10 @@ public class CartService {
         //장바구니에 담긴 상품의 총 가격 계산
         List<CartItemDto> cartItemList = cartItemRepository.findCartItemList(cart.getId());
 
+        totalPriceCalculation(cartItemList, cart);
+    }
+
+    private static void totalPriceCalculation(List<CartItemDto> cartItemList, Cart cart) {
         cartItemList.forEach(ci -> {
             ci.setTotalPrice(ci.getItem().getPrice() * ci.getCount());
         });
@@ -118,6 +131,8 @@ public class CartService {
                 .stream().filter(
                         ci -> ci.getItem().getId().equals(item.getId()))
                 .findFirst();
+
+        cart.setTotalPrice();
 
         if (cartItem.isPresent()) {
             cartItem.get().updateCartCount(count);
@@ -138,11 +153,17 @@ public class CartService {
     }
 
     //Cart 상품 삭제
-    public void deleteCartItem(Long cartItemId) {
-        CartItem cartItem = cartItemRepository.findById(cartItemId)
-                .orElseThrow(NotFoundException::new);
+    public void deleteCartItem(Long cartItemId, String email) {
+        Member member = memberRepository.findByEmail(email);
+        Cart cart = cartRepository.findByMember(member);
 
-        cartItemRepository.delete(cartItem);
-        log.info("장바구니에 담긴 상품이 삭제되었습니다. 삭제된 상품={}", cartItem.getItem().getItemName());
+        //CartItem 삭제: Cart, CartItem 모두 업데이트
+        cart.getCartItems().removeIf(cartItem -> cartItem.getId().equals(cartItemId));
+        cartItemRepository.deleteById(cartItemId);
+
+        //총 주문 금액 차감
+        cart.setTotalPrice();
+
+        log.info("장바구니에 담긴 상품이 삭제되었습니다. cartItemId={}", cartItemId);
     }
 }

@@ -18,13 +18,14 @@ import java.util.List;
 
 @Slf4j
 @Controller
+@RequestMapping("/cart")
 @RequiredArgsConstructor
 public class CartController {
 
     private final CartService cartService;
 
     //장바구니에 상품 추가
-    @PostMapping("/cart/add")
+    @PostMapping("/add")
     public String addCart(@RequestParam Long itemId,
                           @RequestParam int count,
                           Principal principal,
@@ -36,16 +37,20 @@ public class CartController {
     }
 
     //장바구니 페이지
-    @GetMapping("/cart")
+    @GetMapping
     public String cartList(Principal principal, Model model) {
-        List<CartItemDto> cartItemList = cartService.getCartList(principal.getName());
-        model.addAttribute("cartItemList", cartItemList);
+        List<CartItemDto> cartList = cartService.getCartList(principal.getName());
+        int totalPrice = cartList.stream()
+                .mapToInt(CartItemDto::getTotalPrice).sum();
+
+        model.addAttribute("totalPrice", totalPrice);
+        model.addAttribute("cartItemList", cartList);
 
         return "cart/cartList";
     }
 
     //장바구니 상품 수량 변경
-    @PatchMapping("/cart/{cartItemId}")
+    @PatchMapping("/{cartItemId}")
     public @ResponseBody ResponseEntity updateCart(@PathVariable Long cartItemId,
                                                    @RequestParam Long itemId,
                                                    @RequestParam int count,
@@ -67,17 +72,9 @@ public class CartController {
     }
 
     //장바구니 상품 삭제
-    @DeleteMapping("/cart/{cartItemId}")
+    @DeleteMapping("/delete/{cartItemId}")
     public ResponseEntity<?> deleteCartItem(@PathVariable Long cartItemId, Principal principal) {
-        if (!cartService.validateCartItem(cartItemId, principal.getName())) {
-            return new ResponseEntity<String>("잘못된 접근입니다.", HttpStatus.BAD_REQUEST);
-        }
-
-        try {
-            cartService.deleteCartItem(cartItemId);
+            cartService.deleteCartItem(cartItemId, principal.getName());
             return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 }

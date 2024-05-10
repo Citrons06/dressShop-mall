@@ -1,6 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Order</title>
+    <title>Order Complete</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/fragments.css}"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
@@ -32,10 +32,11 @@
     <a href="/"><h2>DRESS SHOP</h2></a>
     <br/>
 
-    <h3>주문</h3>
+    <h3>주문 완료되었습니다.</h3>
     <hr/>
     <br/> <br/>
 
+    <!-- 주문 성공한 상품 데이터들을 출력한다.-->
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-6">
@@ -44,27 +45,10 @@
                         <img th:src="@{'/images/' + ${orderDetail.imgName}}" class="card-img-top" alt="상품 이미지"/>
                         <div class="card-body">
                             <h5 class="card-title"></h5>
+                                <p class="card-text" th:text="${orderDetail.item.itemName}"></p>
+                                <p class="card-text" th:text="${orderDetail.item.price} + '원'"></p>
 
-                            <p class="card-text" th:text="${orderDetail.item.itemName}"></p>
-                            <p class="card-text" th:text="${orderDetail.item.price} + '원'"></p>
-                            <form th:action="@{/order}" method="post">
-                                <input type="hidden" name="itemId" th:value="${orderDetail.itemId}"/>
-                                <input type="hidden" name="count" th:value="${orderDetail.count}"/>
-                                <div class="form-group">
-                                    <label for="quantity">수량</label>
-                                    <input type="number" class="form-control"
-                                           id="quantity" name="quantity"
-                                           th:value="${orderDetail.count}"
-                                           min="1" max="100"/>
-                                </div>
-                                <button type="button" class="btn btn-danger"
-                                        th:onclick="'removeImage(\'' + ${orderDetail.itemId} + '\')">삭제</button>
-                            </form>
                         </div>
-                    </div>
-                    <div class="order">
-                        <button type="button" class="btn btn-primary"
-                                onclick="location.href='/order'">주문하기</button>
                     </div>
                 </div>
             </div>

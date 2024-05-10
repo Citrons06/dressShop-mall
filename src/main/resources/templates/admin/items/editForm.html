@@ -112,12 +112,13 @@
 
         if (confirmation) {
             var url = '/admin/items/deleteImg/' + itemId + '/' + itemImgId;
+
             fetch(url, {
                 method: 'DELETE'
             })
             .then(response => {
                 if (response.ok) {
-                    // 이미지 삭제 성공 시 화면에서 이미지를 제거
+                    //이미지 삭제 성공 시 화면에서 이미지를 제거
                     var imageDiv = document.getElementById('imageDiv_' + itemImgId);
                     if (imageDiv) {
                         imageDiv.remove();

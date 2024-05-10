@@ -1,6 +1,5 @@
 package dressshop.domain.cart.dto;
 
-import dressshop.domain.cart.Cart;
 import dressshop.domain.member.Member;
 import lombok.Builder;
 import lombok.Data;

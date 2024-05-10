@@ -1,6 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Order</title>
+    <title>Order Detail</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/fragments.css}"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
@@ -32,7 +32,7 @@
     <a href="/"><h2>DRESS SHOP</h2></a>
     <br/>
 
-    <h3>주문</h3>
+    <h3>주문 상세</h3>
     <hr/>
     <br/> <br/>
 
@@ -40,11 +40,10 @@
         <div class="row justify-content-center">
             <div class="col-6">
                 <div class="card">
-                    <div th:each="orderDetail : ${orderDetailList}">
+                    <div th:each="orderDetail : ${order}">
                         <img th:src="@{'/images/' + ${orderDetail.imgName}}" class="card-img-top" alt="상품 이미지"/>
                         <div class="card-body">
                             <h5 class="card-title"></h5>
-
                             <p class="card-text" th:text="${orderDetail.item.itemName}"></p>
                             <p class="card-text" th:text="${orderDetail.item.price} + '원'"></p>
                             <form th:action="@{/order}" method="post">
@@ -54,17 +53,12 @@
                                     <label for="quantity">수량</label>
                                     <input type="number" class="form-control"
                                            id="quantity" name="quantity"
-                                           th:value="${orderDetail.count}"
-                                           min="1" max="100"/>
+                                           th:value="${orderDetail.count}" readonly/>
                                 </div>
                                 <button type="button" class="btn btn-danger"
-                                        th:onclick="'removeImage(\'' + ${orderDetail.itemId} + '\')">삭제</button>
+                                        th:onclick="'removeImage(\'' + ${orderDetail.itemId} + '\')'">주문 취소</button>
                             </form>
                         </div>
-                    </div>
-                    <div class="order">
-                        <button type="button" class="btn btn-primary"
-                                onclick="location.href='/order'">주문하기</button>
                     </div>
                 </div>
             </div>
@@ -76,4 +70,12 @@
     <div th:replace="~{fragments/footer :: footer}"></div>
 </div>
 </body>
+
+<script>
+    function removeImage(itemId) {
+        if (confirm("주문을 취소하시겠습니까?")) {
+            location.href = "/orderList/cancel/" + itemId;
+        }
+    }
+</script>
 </html>

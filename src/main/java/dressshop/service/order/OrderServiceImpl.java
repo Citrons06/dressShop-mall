@@ -8,6 +8,7 @@ import dressshop.domain.order.OrderItem;
 import dressshop.domain.order.dto.OrderDto;
 import dressshop.exception.customException.ItemNotFoundException;
 import dressshop.exception.customException.NotFoundException;
+import dressshop.repository.cart.CartRepository;
 import dressshop.repository.item.ItemRepository;
 import dressshop.repository.member.MemberRepository;
 import dressshop.repository.order.OrderRepository;
@@ -27,6 +28,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final ItemRepository itemRepository;
     private final MemberRepository memberRepository;
+    private final CartRepository cartRepository;
 
     //상품 주문
     @Override
@@ -38,12 +40,19 @@ public class OrderServiceImpl implements OrderService {
         Delivery delivery = Delivery.createDelivery(member);
 
         List<OrderItem> orderItems = new ArrayList<>();
+
+        //주문 상품 생성
         OrderItem orderItem = OrderItem.createOrderItem(item, count);
         orderItems.add(orderItem);
 
+        //주문 생성
         Order order = Order.createOrder(member, delivery, orderItems, orderDto);
 
         orderRepository.save(order);
+
+        //주문이 완료되면 장바구니에서 해당 상품 삭제(cartId, memberId)
+        Long cartId = cartRepository.findByMember(member).getId();
+        cartRepository.deleteByIdAndMemberId(cartId, member.getId());
     }
 
     //조회: 주문 내역 조회
@@ -55,6 +64,7 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
     }
 
+    //조회: 주문 상세 내역 조회
     @Transactional(readOnly = true)
     @Override
     public OrderDto findOneOrder(Long orderId) {

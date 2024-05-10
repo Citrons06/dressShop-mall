@@ -3,8 +3,6 @@ package dressshop.repository.cartItem;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import dressshop.domain.cart.dto.CartItemDto;
-import jakarta.persistence.EntityGraph;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
