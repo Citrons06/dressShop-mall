@@ -10,6 +10,7 @@ import dressshop.exception.customException.NotFoundException;
 import dressshop.repository.category.CategoryRepository;
 import dressshop.repository.itemImg.ItemImgRepository;
 import dressshop.repository.item.ItemRepository;
+import dressshop.service.itemImg.ItemImgService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

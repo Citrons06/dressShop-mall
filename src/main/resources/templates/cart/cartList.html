@@ -55,10 +55,14 @@
                                            th:value="${cartDetail.count}"
                                            min="1" max="100"/>
                                 </div>
-                                <a th:href="@{/cart/{cartItemId} (cartItemId=${cartDetail.id})}"
-                                   class="btn btn-danger">장바구니에서 제외</a>
+                                <button type="button" class="btn btn-danger"
+                                        th:onclick="'removeImage(\'' + ${cartDetail.itemId} + '\')'">삭제</button>
                             </form>
                         </div>
+                    </div>
+                    <div class="order">
+                        <button type="button" class="btn btn-primary"
+                                onclick="location.href='/order'">주문하기</button>
                     </div>
                 </div>
             </div>

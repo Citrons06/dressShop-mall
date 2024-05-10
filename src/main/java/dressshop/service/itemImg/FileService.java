@@ -1,4 +1,4 @@
-package dressshop.service.item;
+package dressshop.service.itemImg;
 
 import java.io.IOException;
 

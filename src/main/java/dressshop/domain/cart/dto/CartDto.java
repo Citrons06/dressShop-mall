@@ -10,10 +10,12 @@ public class CartDto {
 
     private Long id;
     private Member member;
+    private int totalPrice;
 
     @Builder
-    public CartDto(Long id, Member member) {
+    public CartDto(Long id, Member member, int totalPrice) {
         this.id = id;
         this.member = member;
+        this.totalPrice = totalPrice;
     }
 }

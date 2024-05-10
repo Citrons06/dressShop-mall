@@ -61,7 +61,6 @@ public class CartService {
 
         //상품을 최초로 담을 경우 Cart 생성
         Cart cart = cartRepository.findByMember(member);
-
         if (cart == null) {
             cart = Cart.builder()
                     .member(member)
@@ -77,6 +76,7 @@ public class CartService {
         if (cart.getCartItems() == null) {
             cart.setCartItems(new ArrayList<>());  //장바구니의 상품 리스트 초기화
         }
+
         Optional<CartItem> existingCartItem = cart.getCartItems().stream()
                 .filter(ci -> ci.getItem().getId().equals(item.getId()))
                 .findFirst();
@@ -96,6 +96,14 @@ public class CartService {
             cart.getCartItems().add(newCartItem);
             log.info("장바구니에 상품이 추가되었습니다.");
         }
+
+        //장바구니에 담긴 상품의 총 가격 계산
+        List<CartItemDto> cartItemList = cartItemRepository.findCartItemList(cart.getId());
+
+        cartItemList.forEach(ci -> {
+            ci.setTotalPrice(ci.getItem().getPrice() * ci.getCount());
+        });
+        cart.setTotalPrice();
     }
 
     //Cart 수량 수정

@@ -1,4 +1,4 @@
-package dressshop.service.item;
+package dressshop.service.itemImg;
 
 import dressshop.domain.item.dto.ItemImgDto;
 import org.springframework.web.multipart.MultipartFile;

@@ -10,7 +10,7 @@ import dressshop.exception.customException.NotFoundException;
 import dressshop.repository.item.ItemRepository;
 import dressshop.repository.member.MemberRepository;
 import dressshop.repository.order.OrderRepository;
-import dressshop.service.order.OrderService;
+import dressshop.service.order.OrderServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ class OrderServiceTest {
     @Autowired ItemRepository itemRepository;
     @Autowired OrderRepository orderRepository;
     @Autowired
-    OrderService orderService;
+    OrderServiceImpl orderService;
 
     @Test
     @DisplayName("주문 성공")

@@ -89,8 +89,6 @@
             <div class="field-error" th:errors="*{itemImg}"></div>
             <div id="imgContainer"></div>
 
-
-            <!-- 이미지 제거 버튼-->
             <div th:each="img : ${itemImgs}" th:id="'imageDiv_' + ${img.id}" class="image-preview">
                 <img th:src="@{/images/} + ${img.imgName}" alt="Image Preview" />
                 <button type="button" class="btn btn-danger"

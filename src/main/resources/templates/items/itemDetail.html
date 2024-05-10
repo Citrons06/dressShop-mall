@@ -21,17 +21,6 @@
             text-align: center;
         }
     </style>
-    <script th:inline="javascript">
-        function addToCart() {
-            var result = confirm("장바구니에 등록되었습니다. 장바구니로 이동할까요?");
-
-            if (result) {
-                window.location.href = "/cart";
-            } else {
-                // 현재 페이지에 남음
-            }
-        }
-    </script>
 </head>
 <body>
 <div class="header">
@@ -100,6 +89,17 @@
     <div th:replace="~{fragments/footer :: footer}"></div>
 </div>
 
+<script th:inline="javascript">
+    function addToCart() {
+        console.log("addToCart()");
 
+        if (confirm("장바구니에 추가하시겠습니까?")) {
+            window.location.href= "/cart";
+        } else {
+            //취소 시 현재 페이지 유지
+            event.preventDefault();
+        }
+    }
+</script>
 </body>
 </html>

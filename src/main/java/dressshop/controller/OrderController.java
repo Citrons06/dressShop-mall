@@ -1,7 +1,7 @@
 package dressshop.controller;
 
 import dressshop.domain.order.dto.OrderDto;
-import dressshop.service.order.OrderService;
+import dressshop.service.order.OrderServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderController {
 
-    private final OrderService orderService;
+    private final OrderServiceImpl orderService;
 
     //상품 주문 폼 불러오기
     @GetMapping("/order")

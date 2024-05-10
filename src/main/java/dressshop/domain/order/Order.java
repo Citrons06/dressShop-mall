@@ -51,6 +51,8 @@ public class Order extends BaseEntity {
     @Embedded
     private Address address;
 
+    private int totalPrice;
+
     @Builder
     public Order(Long id,
                  Member member,
@@ -58,7 +60,8 @@ public class Order extends BaseEntity {
                  LocalDateTime orderDate,
                  OrderStatus orderStatus,
                  Delivery delivery,
-                 Address address) {
+                 Address address,
+                 int totalPrice) {
         this.id = id;
         this.member = member;
         this.orderItems = orderItems;
@@ -66,6 +69,7 @@ public class Order extends BaseEntity {
         this.orderStatus = orderStatus;
         this.delivery = delivery;
         this.address = address;
+        this.totalPrice = totalPrice;
     }
 
     public void setMember(Member member) {
@@ -123,5 +127,8 @@ public class Order extends BaseEntity {
                 .zipcode(address.getZipcode())
                 .delivery(delivery)
                 .build();
+    }
+
+    private void setTotalPrice(int price, int count) {
     }
 }

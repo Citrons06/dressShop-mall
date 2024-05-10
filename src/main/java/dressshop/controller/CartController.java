@@ -32,7 +32,7 @@ public class CartController {
         cartService.addCart(itemId, count, principal.getName());
         redirectAttributes.addFlashAttribute("message", "장바구니에 상품이 추가되었습니다.");
 
-        return "redirect:/items/" + itemId;
+        return "redirect:/cart";
     }
 
     //장바구니 페이지
@@ -68,13 +68,16 @@ public class CartController {
 
     //장바구니 상품 삭제
     @DeleteMapping("/cart/{cartItemId}")
-    public @ResponseBody ResponseEntity deleteCartItem(@PathVariable Long cartItemId,
-                                                       Principal principal) {
+    public ResponseEntity<?> deleteCartItem(@PathVariable Long cartItemId, Principal principal) {
         if (!cartService.validateCartItem(cartItemId, principal.getName())) {
             return new ResponseEntity<String>("잘못된 접근입니다.", HttpStatus.BAD_REQUEST);
         }
 
-        cartService.deleteCartItem(cartItemId);
-        return new ResponseEntity<Long>(cartItemId, HttpStatus.OK);
+        try {
+            cartService.deleteCartItem(cartItemId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

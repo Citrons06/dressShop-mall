@@ -32,10 +32,19 @@ public class Cart extends BaseTimeEntity {
     @Setter
     private List<CartItem> cartItems = new ArrayList<>();
 
+    private int totalPrice;
+
     @Builder
-    public Cart(Long id, Member member, List<CartItem> cartItems) {
+    public Cart(Long id, Member member, List<CartItem> cartItems, int totalPrice) {
         this.id = id;
         this.member = member;
         this.cartItems = cartItems;
+        this.totalPrice = totalPrice;
+    }
+
+    public void setTotalPrice() {
+        this.totalPrice = cartItems.stream()
+                .mapToInt(CartItem::getTotalPrice)
+                .sum();
     }
 }
