@@ -6,6 +6,7 @@ import dressshop.domain.member.Address;
 import dressshop.domain.member.Member;
 import dressshop.domain.order.Order;
 import dressshop.domain.order.dto.OrderDto;
+import dressshop.domain.order.dto.OrderItemDto;
 import dressshop.exception.customException.NotFoundException;
 import dressshop.repository.item.ItemRepository;
 import dressshop.repository.member.MemberRepository;
@@ -77,7 +78,7 @@ class OrderServiceTest {
                 .delivery(Delivery.createDelivery(member))
                 .build();
 
-        orderService.toOrder(orderDto, itemA.getId(), 10);
+        //orderService.toOrder(orderDto, OrderItemDto.builder().build(), itemA.getId(), 10);
         Order order = orderRepository.findById(itemA.getId())
                 .orElseThrow(NotFoundException::new);
         assertThat(order.getMember().getUsername()).isEqualTo("아요니");

@@ -2,7 +2,7 @@ package dressshop.controller;
 
 import dressshop.domain.member.dto.MemberDto;
 import dressshop.exception.customException.MemberJoinException;
-import dressshop.service.member.MemberService;
+import dressshop.service.member.MemberServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private final MemberService memberService;
+    private final MemberServiceImpl memberService;
 
     //회원 가입 폼 불러오기
     @GetMapping("/join")
@@ -49,7 +49,7 @@ public class MemberController {
     //회원 단건 조회
     @GetMapping("/members/{memberId}")
     public String findById(@PathVariable Long memberId, Model model) {
-        MemberDto member = memberService.findMember(memberId);
+        MemberDto member = memberService.findById(memberId);
         model.addAttribute("member", member);
         return "members/{memberId}";
     }
@@ -65,7 +65,7 @@ public class MemberController {
     //회원 수정 폼 불러오기
     @GetMapping("/members/edit/{memberId}")
     public String editForm(Long memberId, Model model) {
-        MemberDto member = memberService.findMember(memberId);
+        MemberDto member = memberService.findById(memberId);
         model.addAttribute("editForm", member);
         return "members/editForm";
     }
@@ -95,7 +95,7 @@ public class MemberController {
     //회원 삭제 폼 불러오기
     @GetMapping("/admin/members/{memberId}/delete")
     public String deleteForm(@PathVariable Long memberId, Model model) {
-        MemberDto member = memberService.findMember(memberId);
+        MemberDto member = memberService.findById(memberId);
         model.addAttribute("deleteForm", member);
         return "admin/members/deleteForm";
     }

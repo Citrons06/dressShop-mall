@@ -36,12 +36,11 @@
     <hr/>
     <br/> <br/>
 
-    <!-- 주문 성공한 상품 데이터들을 출력한다.-->
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-6">
                 <div class="card">
-                    <div th:each="orderDetail : ${orderDetailList}">
+                    <div th:each="orderDetail : ${order}">
                         <img th:src="@{'/images/' + ${orderDetail.imgName}}" class="card-img-top" alt="상품 이미지"/>
                         <div class="card-body">
                             <h5 class="card-title"></h5>

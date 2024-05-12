@@ -51,6 +51,7 @@ public class Order extends BaseEntity {
     @Embedded
     private Address address;
 
+    @Setter
     private int totalPrice;
 
     @Builder
@@ -85,24 +86,17 @@ public class Order extends BaseEntity {
 
     public static Order createOrder(Member member, Delivery delivery, List<OrderItem> orderItems, OrderDto orderDto) {
         Order order = Order.builder()
+                .id(orderDto.getId())
                 .member(member)
                 .orderDate(LocalDateTime.now())
                 .orderStatus(ORDER)
-                .address(member.getAddress())
+                .address(delivery.getAddress())
                 .delivery(delivery)
                 .build();
 
         order.setMember(member);
-        order.setId(orderDto.getId());
-        for (OrderItem orderItem : orderItems) {
-            order.addOrderItem(orderItem);
-        }
 
         return order;
-    }
-
-    private void setId(Long id) {
-        this.id = id;
     }
 
     public void cancel() {
@@ -126,9 +120,9 @@ public class Order extends BaseEntity {
                 .street(address.getStreet())
                 .zipcode(address.getZipcode())
                 .delivery(delivery)
+                .orderItems(orderItems.stream()
+                        .map(OrderItem::toDto)
+                        .toList())
                 .build();
-    }
-
-    private void setTotalPrice(int price, int count) {
     }
 }

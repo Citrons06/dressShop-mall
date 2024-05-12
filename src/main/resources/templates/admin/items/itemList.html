@@ -38,7 +38,11 @@
             <td th:text="${item.price}"></td>
             <td th:text="${item.quantity}"></td>
             <td th:text="${item.categoryName}"></td>
-            <td th:text="${item.itemSellStatus}"></td>
+            <td th:text="${item.itemSellStatus}">
+                <span th:if="${item.itemSellStatus.name() == 'SELL'}">판매 중</span>
+                <span th:if="${item.itemSellStatus.name() == 'SOLD_OUT'}">품절</span>
+                <span th:if="${item.itemSellStatus.name() == 'STOP_SELL'}">판매중지</span>
+            </td>
 
             <td>
                 <a th:href="@{/admin/items/edit/{itemId} (itemId=${item.id})}"

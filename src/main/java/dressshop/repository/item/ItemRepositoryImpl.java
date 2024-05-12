@@ -17,7 +17,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
     @Override
     public List<Item> findList() {
         return query.selectFrom(item)
-                .join(item.category, category).fetchJoin()
+                .leftJoin(item.category, category).fetchJoin()
                 .fetch();
     }
 

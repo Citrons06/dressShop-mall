@@ -1,5 +1,6 @@
 package dressshop.domain.item;
 
+import com.querydsl.core.annotations.QueryProjection;
 import dressshop.domain.BaseEntity;
 import dressshop.domain.item.dto.ItemDto;
 import dressshop.domain.order.OrderItem;
@@ -59,6 +60,7 @@ public class Item extends BaseEntity {
     private List<ItemImg> itemImgs = new ArrayList<>();
 
     @Builder
+    @QueryProjection
     public Item(Long id,
                 String itemName,
                 int price,
@@ -79,6 +81,7 @@ public class Item extends BaseEntity {
                 .itemName(itemName)
                 .price(price)
                 .quantity(quantity)
+                .itemSellStatus(itemSellStatus)
                 .categoryId(category.getId())
                 .categoryName(category.getCategoryName())
                 .build();

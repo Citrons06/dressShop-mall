@@ -11,11 +11,6 @@
             text-align: right;
         }
 
-        .card-description {
-            width: 100%;
-            margin-top: 50px;
-        }
-
         .container {
             width: 100%;
             text-align: center;
@@ -39,34 +34,75 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-6">
-                <div class="card">
-                    <div th:each="orderDetail : ${orderDetailList}">
-                        <img th:src="@{'/images/' + ${orderDetail.imgName}}" class="card-img-top" alt="상품 이미지"/>
+                <h4 class="card-title">주문 상품</h4>
+                <form th:action="@{/order}" method="post">
+                    <div class="card">
+                    <div th:each="cartItem : ${cartList}">
+                        <img th:src="@{'/images/' + ${cartItem.imgName}}" class="card-img-top" alt="상품 이미지"/>
                         <div class="card-body">
                             <h5 class="card-title"></h5>
 
-                            <p class="card-text" th:text="${orderDetail.item.itemName}"></p>
-                            <p class="card-text" th:text="${orderDetail.item.price} + '원'"></p>
-                            <form th:action="@{/order}" method="post">
-                                <input type="hidden" name="itemId" th:value="${orderDetail.itemId}"/>
-                                <input type="hidden" name="count" th:value="${orderDetail.count}"/>
-                                <div class="form-group">
-                                    <label for="quantity">수량</label>
-                                    <input type="number" class="form-control"
-                                           id="quantity" name="quantity"
-                                           th:value="${orderDetail.count}"
-                                           min="1" max="100"/>
-                                </div>
-                                <button type="button" class="btn btn-danger"
-                                        th:onclick="'removeImage(\'' + ${orderDetail.itemId} + '\')">삭제</button>
-                            </form>
+                            <h5 class="card-text" th:text="${cartItem.item.itemName}"></h5>
+                            <p class="card-text unitPrice" th:text="${cartItem.item.price} + '원'"></p>
+
+                            <input type="hidden" name="item.id" th:value="${cartItem.itemId}"/>
+                            <input type="hidden" name="item.itemName" th:value="${cartItem.item.itemName}"/>
+                            <input type="hidden" name="item.price" th:value="${cartItem.item.price}"/>
+                            <input type="hidden" name="item.quantity" th:value="${cartItem.item.quantity}"/>
+                            <input type="hidden" name="count" th:value="${cartItem.count}"/>
+                            <div class="form-group">
+                                <label for="count">수량</label>
+                                <input type="number" class="form-control count"
+                                       id="count" name="count"
+                                       th:value="${cartItem.count}"
+                                       min="1" max="100"
+                                       onchange="updateTotalPrice()"/>
+                            </div>
+                            <button type="button" class="btn btn-danger"
+                                    th:onclick="'removeCartItem(' + ${cartItem.id} + ')'">삭제</button>
                         </div>
                     </div>
-                    <div class="order">
-                        <button type="button" class="btn btn-primary"
-                                onclick="location.href='/order'">주문하기</button>
                     </div>
-                </div>
+                    <br /> <br />
+                    <h4 class="card-title">배송 정보 입력</h4>
+                    <div class="form-group">
+                        <label for="username">주문자</label>
+                        <input type="text" class="form-control" th:field="${deliveryForm.username}"
+                               style="text-align: center;" id="username" name="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="tel">전화번호</label>
+                        <input type="number" class="form-control" th:field="${deliveryForm.tel}"
+                               style="text-align: center; width: 40%; margin: 0 auto;"
+                               id="tel" name="tel">
+                    </div>
+                    <div class="form-group">
+                        <label for="address">주소</label>
+                        <input type="text" class="form-control" th:field="${deliveryForm.city}"
+                               style="text-align: center; width: 80%; margin: 0 auto;"
+                               id="city" name="address" placeholder="도시를 입력하세요">
+                        <input type="text" class="form-control" th:field="${deliveryForm.street}"
+                               style="text-align: center; width: 80%; margin: 0 auto;"
+                               id="street" name="address" placeholder="거리를 입력하세요">
+                        <input type="text" class="form-control" th:field="${deliveryForm.zipcode}"
+                               style="text-align: center; width: 80%; margin: 0 auto;"
+                               id="zipcode" name="address" placeholder="우편번호를 입력하세요">
+                    </div>
+                    <div class="form-group">
+                        <label for="deliveryMessage">배송 메세지</label>
+                        <input type="text" class="form-control" th:field="${deliveryForm.deliveryMessage}"
+                               style="text-align: center; width: 80%; margin: 0 auto;"
+                               placeholder="배송 메세지를 입력하세요.">
+                    </div>
+
+                    <br /> <br />
+                    <div class="order">
+                        <h3>총 주문 금액</h3>
+                        <h4><span class="totalPrice" th:text="${totalPrice}"></span> 원</h4>
+
+                        <button type="submit" class="btn btn-primary">주문하기</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -75,5 +111,43 @@
 <div class="footer">
     <div th:replace="~{fragments/footer :: footer}"></div>
 </div>
+
+<script>
+    function removeCartItem(cartItemId) {
+        if (confirm("정말로 삭제하시겠습니까?")) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        //성공적으로 장바구니에서 상품을 제거한 경우 페이지 새로고침이나 장바구니 목록 다시 로드를 수행
+                        location.reload();
+                    } else {
+                        console.error('상품을 제거하는 데 문제가 발생했습니다.');
+                    }
+                }
+            };
+            xhr.open("DELETE", "/cart/delete/" + cartItemId, true);
+            xhr.send();
+        }
+    }
+
+    function updateTotalPrice() {
+        var totalPrice = 0;
+
+        var cardBodies = document.querySelectorAll(".card-body");
+
+        cardBodies.forEach(function(cardBody) {
+            var unitPrice = parseInt(cardBody.querySelector(".unitPrice").innerText.replace("원", ""));
+            var count = parseInt(cardBody.querySelector(".count").value);
+
+            totalPrice += unitPrice * count;
+        });
+
+        var totalPriceElements = document.querySelectorAll(".totalPrice");
+        totalPriceElements.forEach(function(totalPriceElement) {
+            totalPriceElement.innerText = totalPrice;
+        });
+    }
+</script>
 </body>
 </html>

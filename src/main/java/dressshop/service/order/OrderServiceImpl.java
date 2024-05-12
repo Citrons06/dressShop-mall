@@ -1,56 +1,69 @@
 package dressshop.service.order;
 
 import dressshop.domain.delivery.Delivery;
-import dressshop.domain.item.Item;
+import dressshop.domain.delivery.dto.DeliveryDto;
+import dressshop.domain.member.Address;
 import dressshop.domain.member.Member;
 import dressshop.domain.order.Order;
 import dressshop.domain.order.OrderItem;
 import dressshop.domain.order.dto.OrderDto;
-import dressshop.exception.customException.ItemNotFoundException;
+import dressshop.domain.order.dto.OrderItemDto;
 import dressshop.exception.customException.NotFoundException;
 import dressshop.repository.cart.CartRepository;
-import dressshop.repository.item.ItemRepository;
 import dressshop.repository.member.MemberRepository;
 import dressshop.repository.order.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
-    private final ItemRepository itemRepository;
     private final MemberRepository memberRepository;
     private final CartRepository cartRepository;
 
     //상품 주문
     @Override
-    public void toOrder(OrderDto orderDto, Long itemId, int count) {
-        Member member = memberRepository.findById(orderDto.getMember().getId())
-                .orElseThrow(NotFoundException::new);
-        Item item = itemRepository.findById(itemId)
-                .orElseThrow(ItemNotFoundException::new);
-        Delivery delivery = Delivery.createDelivery(member);
+    public void toOrder(OrderDto orderDto, OrderItemDto orderItemDto, DeliveryDto deliveryDto, Principal principal) {
+        Member member = memberRepository.findByEmail(principal.getName());
+
+        // 주문 상품 생성
+        OrderItem orderItem = OrderItem.createOrderItem(orderItemDto.getItem(), orderItemDto.getCount());
+
+        // 대표 이미지 설정
+        if (orderItemDto.getItem().getItemImgs() != null) {
+            orderItemDto.getItem().getItemImgs().stream()
+                    .filter(itemImg -> itemImg.getRepImgYn().equals("Y"))
+                    .findFirst()
+                    .ifPresent(itemImg -> orderItem.setImgName(itemImg.getImgName()));
+        }
 
         List<OrderItem> orderItems = new ArrayList<>();
-
-        //주문 상품 생성
-        OrderItem orderItem = OrderItem.createOrderItem(item, count);
         orderItems.add(orderItem);
 
-        //주문 생성
+        // 배송 생성
+        Delivery delivery = Delivery.createDelivery(deliveryDto, member);
+        delivery.setAddress(new Address(deliveryDto.getCity(), deliveryDto.getStreet(), deliveryDto.getZipcode()));
+        delivery.setDeliveryMessage(deliveryDto.getDeliveryMessage());
+
+        // 주문 생성
         Order order = Order.createOrder(member, delivery, orderItems, orderDto);
+        order.setTotalPrice(orderDto.getTotalPrice());
+        delivery.setMember(member);
 
         orderRepository.save(order);
 
-        //주문이 완료되면 장바구니에서 해당 상품 삭제(cartId, memberId)
+        // 주문 완료 후 장바구니 제거
         Long cartId = cartRepository.findByMember(member).getId();
         cartRepository.deleteByIdAndMemberId(cartId, member.getId());
     }
