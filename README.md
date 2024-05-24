@@ -59,4 +59,4 @@ Version Control | ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for
 `QueryDSL` | JPQL을 자바 코드로 작성할 수 있어 가독성이 좋음. 컴파일 시점에 오류를 잡을 수 있고 동적 쿼리를 작성할 수 있어 사용함.
 
 ### 📚ERD
-![ERD](https://github.com/Citrons06/dressShop-mall/blob/main/ERD.png?raw=true)
+![ERD](https://github.com/Citrons06/dressShop-mall/assets/125535240/8fbf6d8b-cf43-4c03-813e-1044a9fcb293)
