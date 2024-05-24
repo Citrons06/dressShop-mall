@@ -1,15 +1,13 @@
 package dressshop.controller;
 
 import dressshop.domain.cart.dto.CartItemDto;
-import dressshop.service.cart.CartService;
+import dressshop.service.cart.CartServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -22,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CartController {
 
-    private final CartService cartService;
+    private final CartServiceImpl cartService;
 
     //장바구니에 상품 추가
     @PostMapping("/add")
@@ -44,31 +42,16 @@ public class CartController {
                 .mapToInt(CartItemDto::getTotalPrice).sum();
 
         model.addAttribute("totalPrice", totalPrice);
-        model.addAttribute("cartItemList", cartList);
+        model.addAttribute("cartList", cartList);
 
         return "cart/cartList";
     }
 
     //장바구니 상품 수량 변경
-    @PatchMapping("/{cartItemId}")
-    public @ResponseBody ResponseEntity updateCart(@PathVariable Long cartItemId,
-                                                   @RequestParam Long itemId,
-                                                   @RequestParam int count,
-                                                   @RequestBody @Valid CartItemDto cartItemDto,
-                                                   BindingResult bindingResult,
-                                                   Principal principal) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        if (cartItemDto.getCount() <= 0) {
-            return new ResponseEntity<String>("수량은 1개 이상이어야 합니다.", HttpStatus.BAD_REQUEST);
-        } else if (!cartService.validateCartItem(cartItemId, principal.getName())) {
-            return new ResponseEntity<String>("잘못된 접근입니다.", HttpStatus.BAD_REQUEST);
-        }
-
-        cartService.updateCart(itemId, count, principal.getName());
-        return new ResponseEntity<Long>(cartItemId, HttpStatus.OK);
+    @PutMapping("/update")
+    public ResponseEntity<?> updateCart(@RequestBody @Valid CartItemDto cartItemDto, Principal principal) {
+        cartService.updateCart(cartItemDto, principal.getName());
+        return ResponseEntity.ok().build();
     }
 
     //장바구니 상품 삭제

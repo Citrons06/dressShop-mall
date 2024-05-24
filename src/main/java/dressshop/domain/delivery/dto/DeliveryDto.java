@@ -1,11 +1,15 @@
 package dressshop.domain.delivery.dto;
 
+import dressshop.domain.delivery.Delivery;
 import dressshop.domain.delivery.DeliveryStatus;
+import dressshop.domain.member.Address;
 import dressshop.domain.member.Member;
 import dressshop.domain.order.Order;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
+import static dressshop.domain.delivery.DeliveryStatus.READY;
 
 @Data
 @NoArgsConstructor
@@ -50,5 +54,16 @@ public class DeliveryDto {
         this.deliveryStatus = deliveryStatus;
         this.tel = tel;
         this.deliveryMessage = deliveryMessage;
+    }
+
+    public Delivery toEntity(DeliveryDto deliveryDto, Member member) {
+        return Delivery.builder()
+                .member(member)
+                .username(deliveryDto.getUsername())
+                .address(new Address(deliveryDto.getCity(), deliveryDto.getStreet(), deliveryDto.getZipcode()))
+                .tel(deliveryDto.getTel())
+                .deliveryMessage(deliveryDto.getDeliveryMessage())
+                .deliveryStatus(READY)
+                .build();
     }
 }

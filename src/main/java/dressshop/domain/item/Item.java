@@ -75,6 +75,15 @@ public class Item extends BaseEntity {
         this.itemSellStatus = itemSellStatus;
     }
 
+    public Item(Item other) {
+        this.id = other.id;
+        this.itemName = other.itemName;
+        this.price = other.price;
+        this.quantity = other.quantity;
+        this.itemSellCount = other.itemSellCount;
+        this.category = other.category;
+    }
+
     public ItemDto toDto() {
         return ItemDto.builder()
                 .id(id)
@@ -111,5 +120,9 @@ public class Item extends BaseEntity {
 
     public void increaseStock(int orderCount) {
         this.quantity += orderCount;
+    }
+
+    public void removeStock(int count) {
+        this.quantity -= count;
     }
 }

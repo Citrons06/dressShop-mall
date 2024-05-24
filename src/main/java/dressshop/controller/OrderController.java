@@ -1,18 +1,9 @@
 package dressshop.controller;
 
 import dressshop.domain.cart.dto.CartItemDto;
-import dressshop.domain.delivery.Delivery;
 import dressshop.domain.delivery.dto.DeliveryDto;
-import dressshop.domain.item.Item;
-import dressshop.domain.item.dto.ItemDto;
-import dressshop.domain.member.Address;
-import dressshop.domain.member.dto.MemberDto;
-import dressshop.domain.order.OrderItem;
 import dressshop.domain.order.dto.OrderDto;
-import dressshop.domain.order.dto.OrderItemDto;
-import dressshop.service.cart.CartService;
-import dressshop.service.item.ItemService;
-import dressshop.service.member.MemberService;
+import dressshop.service.cart.CartServiceImpl;
 import dressshop.service.order.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -34,66 +23,38 @@ import java.util.stream.Collectors;
 public class OrderController {
 
     private final OrderService orderService;
-    private final MemberService memberService;
-    private final CartService cartService;
+    private final CartServiceImpl cartService;
 
     //상품 주문 폼 불러오기
     @GetMapping
     public String orderForm(@ModelAttribute("orderForm") OrderDto orderDto,
                             @ModelAttribute("deliveryForm") DeliveryDto deliveryDto,
                             Principal principal, Model model) {
-        List<CartItemDto> cartList = cartService.getCartList(principal.getName());
-        MemberDto member = memberService.findByEmail(principal.getName());
+        List<CartItemDto> cartList = cartService.getCartItemList(principal.getName());
         int totalPrice = cartList.stream()
-                .mapToInt(cartItem -> cartItem.getItem().getPrice() * cartItem.getCount())
-                .sum();
+                .mapToInt(CartItemDto::getTotalPrice).sum();
 
         log.info("totalPrice: {}", totalPrice);
 
         model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("cartList", cartList);
-        model.addAttribute("member", member);
-
 
         return "orders/order";
     }
 
     //상품 주문
     @PostMapping
-    public String order(@ModelAttribute("orderForm") OrderDto orderDto,
-                        @Valid @ModelAttribute("orderItem") OrderItemDto orderItemDto,
+    public String order(@Valid @ModelAttribute("orderForm") OrderDto orderDto,
                         @Valid @ModelAttribute("deliveryForm") DeliveryDto deliveryDto,
-                        BindingResult bindingResult,
-                        Principal principal, Model model) {
+                        BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             return "orders/order";
         }
 
-        try {
-            List<CartItemDto> cartList = cartService.getCartList(principal.getName());
-            MemberDto member = memberService.findByEmail(principal.getName());
-            int totalPrice = cartList.stream()
-                    .mapToInt(cartItem -> cartItem.getItem().getPrice() * cartItem.getCount())
-                    .sum();
+        List<CartItemDto> cartItemList = cartService.getCartItemList(principal.getName());
+        Long orderId = orderService.order(cartItemList, deliveryDto, principal);
 
-            List<OrderItem> orderItems = cartList.stream()
-                    .map(cartItem -> OrderItem.createOrderItem(cartItem.getItem(), cartItem.getCount()))
-                    .toList();
-
-            orderItemDto.setItems(orderItems);
-
-            model.addAttribute("totalPrice", totalPrice);
-            model.addAttribute("cartList", cartList);
-            model.addAttribute("member", member);
-
-            orderService.toOrder(orderDto, orderItemDto, deliveryDto, principal);
-
-        } catch (Exception e) {
-            log.info("주문 처리 중 오류가 발생하였습니다. {}", e.getMessage());
-            return "orders/order";
-        }
-
-        return "redirect:/order/orderComplete/" + orderDto.getId();
+        return "redirect:/order/orderComplete/" + orderId;
     }
 
     //주문 완료 페이지

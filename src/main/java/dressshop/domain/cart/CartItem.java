@@ -1,6 +1,5 @@
 package dressshop.domain.cart;
 
-import dressshop.domain.cart.dto.CartItemDto;
 import dressshop.domain.item.Item;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -43,11 +42,11 @@ public class CartItem {
         this.count += count;
     }
 
-    public void updateCartCount(int count) {
-        this.count = count;
-    }
-
     public int getTotalPrice() {
         return item.getPrice() * count;
+    }
+
+    public void updateCount(int count) {
+        this.count = count;
     }
 }

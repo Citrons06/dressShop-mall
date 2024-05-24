@@ -10,13 +10,11 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static dressshop.domain.delivery.DeliveryStatus.COMP;
 import static dressshop.domain.order.OrderStatus.CANCEL;
-import static dressshop.domain.order.OrderStatus.ORDER;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -38,8 +36,6 @@ public class Order extends BaseEntity {
     @OneToMany(mappedBy = "order", fetch = LAZY, cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    private LocalDateTime orderDate;
-
     @Setter
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
@@ -58,7 +54,6 @@ public class Order extends BaseEntity {
     public Order(Long id,
                  Member member,
                  List<OrderItem> orderItems,
-                 LocalDateTime orderDate,
                  OrderStatus orderStatus,
                  Delivery delivery,
                  Address address,
@@ -66,7 +61,6 @@ public class Order extends BaseEntity {
         this.id = id;
         this.member = member;
         this.orderItems = orderItems;
-        this.orderDate = orderDate;
         this.orderStatus = orderStatus;
         this.delivery = delivery;
         this.address = address;
@@ -84,21 +78,6 @@ public class Order extends BaseEntity {
         orderItem.setOrder(this);
     }
 
-    public static Order createOrder(Member member, Delivery delivery, List<OrderItem> orderItems, OrderDto orderDto) {
-        Order order = Order.builder()
-                .id(orderDto.getId())
-                .member(member)
-                .orderDate(LocalDateTime.now())
-                .orderStatus(ORDER)
-                .address(delivery.getAddress())
-                .delivery(delivery)
-                .build();
-
-        order.setMember(member);
-
-        return order;
-    }
-
     public void cancel() {
         if (delivery.getDeliveryStatus() == COMP) {
             throw new DeliveryIrrevocableException();
@@ -114,7 +93,6 @@ public class Order extends BaseEntity {
         return OrderDto.builder()
                 .id(id)
                 .member(member)
-                .orderDate(orderDate)
                 .orderStatus(orderStatus)
                 .city(address.getCity())
                 .street(address.getStreet())
@@ -124,5 +102,13 @@ public class Order extends BaseEntity {
                         .map(OrderItem::toDto)
                         .toList())
                 .build();
+    }
+
+    public void addOrderItems(List<OrderItem> orderItemList) {
+        orderItems = new ArrayList<>();
+        for (OrderItem orderItem : orderItemList) {
+            orderItems.add(orderItem);
+            orderItem.setOrder(this);
+        }
     }
 }

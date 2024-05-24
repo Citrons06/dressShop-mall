@@ -23,6 +23,7 @@ public class CartItemDto {
 
     private String itemName;
     private int price;
+    private int quantity;
 
     @Min(value = 1, message = "최소 1개 이상 주문해 주세요.")
     @Max(value = 100, message = "최대 100개까지 주문할 수 있습니다.")
@@ -42,6 +43,7 @@ public class CartItemDto {
                        String itemName,
                        int price,
                        int count,
+                       int quantity,
                        String imgName) {
         this.id = id;
         this.cartId = cartId;
@@ -50,6 +52,7 @@ public class CartItemDto {
         this.itemName = itemName;
         this.price = price;
         this.count = count;
+        this.quantity = quantity;
         this.imgName = imgName;
     }
 }

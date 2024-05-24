@@ -1,5 +1,6 @@
 package dressshop.service.order;
 
+import dressshop.domain.cart.dto.CartItemDto;
 import dressshop.domain.delivery.Delivery;
 import dressshop.domain.delivery.dto.DeliveryDto;
 import dressshop.domain.member.Address;
@@ -7,7 +8,6 @@ import dressshop.domain.member.Member;
 import dressshop.domain.order.Order;
 import dressshop.domain.order.OrderItem;
 import dressshop.domain.order.dto.OrderDto;
-import dressshop.domain.order.dto.OrderItemDto;
 import dressshop.exception.customException.NotFoundException;
 import dressshop.repository.cart.CartRepository;
 import dressshop.repository.member.MemberRepository;
@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static dressshop.domain.order.OrderStatus.ORDER;
+
 @Slf4j
 @Service
 @Transactional
@@ -30,43 +32,43 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
-    private final CartRepository cartRepository;
 
     //상품 주문
     @Override
-    public void toOrder(OrderDto orderDto, OrderItemDto orderItemDto, DeliveryDto deliveryDto, Principal principal) {
+    public Long order(List<CartItemDto> cartItemList, DeliveryDto deliveryDto, Principal principal) {
         Member member = memberRepository.findByEmail(principal.getName());
+        Delivery delivery = deliveryDto.toEntity(deliveryDto, member);
 
-        // 주문 상품 생성
-        OrderItem orderItem = OrderItem.createOrderItem(orderItemDto.getItem(), orderItemDto.getCount());
-
-        // 대표 이미지 설정
-        if (orderItemDto.getItem().getItemImgs() != null) {
-            orderItemDto.getItem().getItemImgs().stream()
-                    .filter(itemImg -> itemImg.getRepImgYn().equals("Y"))
-                    .findFirst()
-                    .ifPresent(itemImg -> orderItem.setImgName(itemImg.getImgName()));
-        }
-
-        List<OrderItem> orderItems = new ArrayList<>();
-        orderItems.add(orderItem);
-
-        // 배송 생성
-        Delivery delivery = Delivery.createDelivery(deliveryDto, member);
-        delivery.setAddress(new Address(deliveryDto.getCity(), deliveryDto.getStreet(), deliveryDto.getZipcode()));
-        delivery.setDeliveryMessage(deliveryDto.getDeliveryMessage());
-
-        // 주문 생성
-        Order order = Order.createOrder(member, delivery, orderItems, orderDto);
-        order.setTotalPrice(orderDto.getTotalPrice());
-        delivery.setMember(member);
+        Order order = Order.builder()
+                .member(member)
+                .delivery(delivery)
+                .address(new Address(deliveryDto.getCity(), deliveryDto.getStreet(), deliveryDto.getZipcode()))
+                .orderStatus(ORDER)
+                .totalPrice(cartItemList.stream()
+                        .mapToInt(CartItemDto::getTotalPrice)
+                        .sum())
+                .build();
 
         orderRepository.save(order);
 
-        // 주문 완료 후 장바구니 제거
-        Long cartId = cartRepository.findByMember(member).getId();
-        cartRepository.deleteByIdAndMemberId(cartId, member.getId());
+        //주문 상품 저장
+        List<OrderItem> orderItemList = new ArrayList<>();
+        for (CartItemDto cartItemDto : cartItemList) {
+            OrderItem orderItem = OrderItem.builder()
+                    .order(order)
+                    .item(cartItemDto.getItem())
+                    .orderPrice(cartItemDto.getItem().getPrice())
+                    .count(cartItemDto.getCount())
+                    .build();
+
+            orderItemList.add(orderItem);
+            orderItem.getItem().removeStock(cartItemDto.getCount());
+        }
+
+        order.addOrderItems(orderItemList);
+        return order.getId();
     }
+
 
     //조회: 주문 내역 조회
     @Override

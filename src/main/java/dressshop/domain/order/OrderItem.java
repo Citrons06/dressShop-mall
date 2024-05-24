@@ -6,6 +6,7 @@ import dressshop.domain.order.dto.OrderItemDto;
 import dressshop.exception.customException.ItemNotStockException;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import static jakarta.persistence.FetchType.LAZY;
@@ -13,6 +14,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
+@Slf4j
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItem extends BaseEntity {
@@ -46,22 +48,6 @@ public class OrderItem extends BaseEntity {
         this.orderPrice = orderPrice;
         this.count = count;
         this.imgName = imgName;
-    }
-
-    public static OrderItem createOrderItem(Item item, int count) {
-        if (item.getQuantity() < count) {
-            throw new ItemNotStockException();
-        }
-
-        OrderItem orderItem = OrderItem.builder()
-                .item(item)
-                .orderPrice(item.getPrice() * count)
-                .count(count)
-                .build();
-
-        item.decreaseStock(count);
-
-        return orderItem;
     }
 
     public void cancel() {

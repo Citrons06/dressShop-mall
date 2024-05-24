@@ -43,8 +43,12 @@ public class Cart extends BaseTimeEntity {
     }
 
     public void setTotalPrice() {
-        this.totalPrice = cartItems.stream()
-                .mapToInt(CartItem::getTotalPrice)
-                .sum();
+        if (cartItems != null) {
+            this.totalPrice = cartItems.stream()
+                    .mapToInt(CartItem::getTotalPrice)
+                    .sum();
+        } else {
+            this.totalPrice = 0;
+        }
     }
 }

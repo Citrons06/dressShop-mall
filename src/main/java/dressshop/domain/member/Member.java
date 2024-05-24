@@ -3,8 +3,6 @@ package dressshop.domain.member;
 import dressshop.domain.BaseEntity;
 import dressshop.domain.member.dto.MemberDto;
 import dressshop.domain.order.Order;
-import dressshop.domain.qna.BoardQna;
-import dressshop.domain.qna.CmntQna;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,12 +48,6 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member", fetch = LAZY)
     public List<Order> orderList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member", fetch = LAZY, cascade = CascadeType.ALL)
-    private final List<BoardQna> boardQnaList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "qCWriterId", fetch = LAZY, cascade = CascadeType.ALL)
-    private final List<CmntQna> cmntQnaList = new ArrayList<>();
 
     private String provider;
     private String providerId;

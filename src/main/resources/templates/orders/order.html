@@ -37,29 +37,27 @@
                 <h4 class="card-title">주문 상품</h4>
                 <form th:action="@{/order}" method="post">
                     <div class="card">
-                    <div th:each="cartItem : ${cartList}">
-                        <img th:src="@{'/images/' + ${cartItem.imgName}}" class="card-img-top" alt="상품 이미지"/>
+                    <div th:each="cartDetail : ${cartList}">
                         <div class="card-body">
                             <h5 class="card-title"></h5>
 
-                            <h5 class="card-text" th:text="${cartItem.item.itemName}"></h5>
-                            <p class="card-text unitPrice" th:text="${cartItem.item.price} + '원'"></p>
+                            <h5 class="card-text" th:text="${cartDetail.item.itemName}"></h5>
+                            <p class="card-text unitPrice" th:text="${cartDetail.item.price} + '원'"></p>
 
-                            <input type="hidden" name="item.id" th:value="${cartItem.itemId}"/>
-                            <input type="hidden" name="item.itemName" th:value="${cartItem.item.itemName}"/>
-                            <input type="hidden" name="item.price" th:value="${cartItem.item.price}"/>
-                            <input type="hidden" name="item.quantity" th:value="${cartItem.item.quantity}"/>
-                            <input type="hidden" name="count" th:value="${cartItem.count}"/>
+                            <input type="hidden" name="item.id" th:value="${cartDetail.itemId}"/>
+                            <input type="hidden" name="item.itemName" th:value="${cartDetail.item.itemName}"/>
+                            <input type="hidden" name="item.price" th:value="${cartDetail.item.price}"/>
+                            <input type="hidden" name="item.quantity" th:value="${cartDetail.item.quantity}"/>
                             <div class="form-group">
                                 <label for="count">수량</label>
                                 <input type="number" class="form-control count"
                                        id="count" name="count"
-                                       th:value="${cartItem.count}"
+                                       th:value="${cartDetail.count}"
                                        min="1" max="100"
                                        onchange="updateTotalPrice()"/>
                             </div>
                             <button type="button" class="btn btn-danger"
-                                    th:onclick="'removeCartItem(' + ${cartItem.id} + ')'">삭제</button>
+                                    th:onclick="'removeCartItem(' + ${cartDetail.id} + ')'">삭제</button>
                         </div>
                     </div>
                     </div>
@@ -100,7 +98,7 @@
                         <h3>총 주문 금액</h3>
                         <h4><span class="totalPrice" th:text="${totalPrice}"></span> 원</h4>
 
-                        <button type="submit" class="btn btn-primary">주문하기</button>
+                        <button type="submit" class="btn btn-primary" onclick="submitOrder()">주문하기</button>
                     </div>
                 </form>
             </div>
@@ -147,6 +145,26 @@
         totalPriceElements.forEach(function(totalPriceElement) {
             totalPriceElement.innerText = totalPrice;
         });
+    }
+
+    function submitOrder() {
+        var cartItems = document.querySelectorAll(".card-body");
+        var orderItems = [];
+
+        cartItems.forEach(function(cartItem) {
+            var itemId = cartItem.querySelector("input[name='item.id']").value;
+            var count = cartItem.querySelector(".count").value;
+
+            orderItems.push({
+                itemId: itemId,
+                count: count
+            });
+        });
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/order", true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(JSON.stringify(orderItems));
     }
 </script>
 </body>

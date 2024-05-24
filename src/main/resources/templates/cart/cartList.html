@@ -33,48 +33,43 @@
     <hr/>
     <br/> <br/>
 
-    <div th:if="${#lists.isEmpty(cartItemList)}">
-        <h3>장바구니에 담긴 상품이 없습니다.</h3>
-    </div>
-
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-6">
-                <div class="card">
-                    <div th:each="cartDetail : ${cartItemList}" th:id="'cartItem_' + ${cartDetail.id}">
-                        <div th:unless="${#lists.isEmpty(cartItemList)}">
-                            <img th:src="@{'/images/' + ${cartDetail.imgName}}" class="card-img-top" alt="상품 이미지"/>
-                            <div class="card-body">
+                <form th:action="@{/order}" method="post">
+                    <div class="card">
+                        <div th:each="cartDetail : ${cartList}" th:id="'cartItem_' + ${cartDetail.id}"
+                             th:if="${cartList.size() > 0}">
+                            <div class="card-body" id="cartItem_[[${cartItem.id}]]">
+                                <img th:src="@{'/images/' + ${cartDetail.imgName}}" class="card-img-top" alt="상품 이미지"/>
                                 <h5 class="card-title" th:text="${cartDetail.item.itemName}"></h5>
                                 <p class="card-text unitPrice" th:text="${cartDetail.item.price} + '원'"></p>
-
-                                <form th:action="@{'/cart/delete/' + ${cartDetail.id}}" method="post" class="removeForm">
-                                    <input type="hidden" name="_method" value="delete"/>
-                                    <div class="form-group">
-                                        <label th:for="count">수량</label>
-                                        <input type="number" class="form-control count" name="count"
-                                            th:value="${cartDetail.count}" min="1" max="100"/>
-                                    </div>
-                                    <div th:id="'cartItem_' + ${cartDetail.id}">
-                                        <button type="button" class="btn btn-danger removeButton"
-                                                th:onclick="'removeCartItem(' + ${cartDetail.id} + ')'">장바구니에서 제외</button>
-                                    </div>
-                                </form>
-
+                                <div class="form-group" style="text-align: center;">
+                                    <label for="count">수량</label>
+                                    <input type="number" class="form-control count" id="count" name="count" th:value="${cartDetail.count}" min="1" max="100" onchange="updateTotalPrice()"/>
+                                </div>
+                                <button type="button" class="btn btn-danger removeButton"
+                                        th:onclick="'removeCartItem(' + ${cartDetail.id} + ')'">장바구니에서 제외</button>
                             </div>
+                            <div th:if="${cartList.size() == 0 or cartList == null}">
+                                <p>장바구니에 담긴 상품이 없습니다.</p>
                             </div>
                         </div>
-                        <div class="order" th:unless="${#lists.isEmpty(cartItemList)}">
-                            <h3>총 주문 금액</h3>
-                            <h4><span class="totalPrice" th:text="${totalPrice}"></span> 원</h4>
-                            <button type="button" class="btn btn-primary"
-                                    onclick="location.href='/order'">주문하기</button>
-                        </div>
+                    </div>
+                </form>
+                <br />
+
+                <div class="order" th:unless="${#lists.isEmpty(cartList)}">
+                    <h4>총 주문 금액</h4>
+                    <h4><span class="totalPrice" th:text="${totalPrice}"></span> 원</h4>
+                    <button type="button" class="btn btn-primary"
+                            onclick="location.href='/order'">주문하기</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 
 <script>
     function removeCartItem(cartItemId) {

@@ -33,6 +33,11 @@ public class Category extends BaseEntity {
         this.items = items;
     }
 
+    public Category(Long id, String categoryName) {
+        this.id = id;
+        this.categoryName = categoryName;
+    }
+
     public CategoryDto.CategoryDtoBuilder toEditor() {
         return CategoryDto.builder()
                 .id(id)

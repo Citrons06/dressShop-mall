@@ -2,6 +2,7 @@ package dressshop.domain.order.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import dressshop.domain.delivery.Delivery;
+import dressshop.domain.item.Item;
 import dressshop.domain.member.Member;
 import dressshop.domain.order.OrderStatus;
 import lombok.Builder;
@@ -17,8 +18,10 @@ import java.util.List;
 public class OrderDto {
     private Long id;
     private Member member;
-    private LocalDateTime orderDate;
     private OrderStatus orderStatus;
+
+    private Item item;
+    private String itemName;
 
     private String city;
     private String street;
@@ -32,23 +35,17 @@ public class OrderDto {
 
     @Builder
     @QueryProjection
-    public OrderDto(Long id,
-                    Member member,
-                    LocalDateTime orderDate,
-                    OrderStatus orderStatus,
-                    String city,
-                    String street,
-                    String zipcode,
-                    Delivery delivery,
-                    List<OrderItemDto> orderItems) {
+    public OrderDto(Long id, Member member, OrderStatus orderStatus, Item item, String itemName, String city, String street, String zipcode, Delivery delivery, List<OrderItemDto> orderItems, int totalPrice) {
         this.id = id;
         this.member = member;
-        this.orderDate = orderDate;
         this.orderStatus = orderStatus;
+        this.item = item;
+        this.itemName = itemName;
         this.city = city;
         this.street = street;
         this.zipcode = zipcode;
         this.delivery = delivery;
         this.orderItems = orderItems;
+        this.totalPrice = totalPrice;
     }
 }

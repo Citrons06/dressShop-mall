@@ -56,7 +56,7 @@
                                            th:value="${orderDetail.count}" readonly/>
                                 </div>
                                 <button type="button" class="btn btn-danger"
-                                        th:onclick="'removeImage(\'' + ${orderDetail.itemId} + '\')'">주문 취소</button>
+                                        th:onclick="'removeImage(' + ${orderDetail.itemId} + ')'">주문 취소</button>
                             </form>
                         </div>
                     </div>

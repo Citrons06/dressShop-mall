@@ -40,12 +40,11 @@
         <div class="row justify-content-center">
             <div class="col-6">
                 <div class="card">
-                    <div th:each="orderDetail : ${order}">
-                        <img th:src="@{'/images/' + ${orderDetail.imgName}}" class="card-img-top" alt="상품 이미지"/>
+                    <div th:object="${order}">
                         <div class="card-body">
                             <h5 class="card-title"></h5>
-                                <p class="card-text" th:text="${orderDetail.item.itemName}"></p>
-                                <p class="card-text" th:text="${orderDetail.item.price} + '원'"></p>
+                                <p class="card-text" th:text="${order.item.itemName}"></p>
+                                <p class="card-text" th:text="${order.totalPrice} + '원'"></p>
 
                         </div>
                     </div>
