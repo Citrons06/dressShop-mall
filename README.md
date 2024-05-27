@@ -16,9 +16,6 @@ Author: yeolee1212@gmail.com
 이 프로젝트를 통해 사용자와 관리자의 입장에서 웹 애플리케이션을 설계하고 개발하는 경험을 쌓고자 쇼핑몰을 선택했습니다.
 
 ***
-## 🌈 시스템 아키텍처
-![아키텍처](https://github.com/Citrons06/dressShop-mall/assets/125535240/2c00921f-917e-4ab6-ad82-9e0a83815b30)
-
 ## ⭐주요 기능
 ### 👨‍👨‍👧 사용자
 - 회원가입 | 로그인 | 소셜 로그인(구글) | 주문 조회 및 취소
@@ -33,6 +30,8 @@ Author: yeolee1212@gmail.com
 |-------------------------|
 | <small>추후 추가 예정</small> |
 
+## 🌈 시스템 아키텍처
+![아키텍처](https://github.com/Citrons06/dressShop-mall/assets/125535240/2c00921f-917e-4ab6-ad82-9e0a83815b30)
 
 ### ⚙ 기술 스택
 OS | Windows 10
