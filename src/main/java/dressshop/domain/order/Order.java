@@ -5,6 +5,7 @@ import dressshop.domain.delivery.Delivery;
 import dressshop.domain.member.Address;
 import dressshop.domain.member.Member;
 import dressshop.domain.order.dto.OrderDto;
+import dressshop.domain.order.dto.OrderItemDto;
 import dressshop.exception.customException.DeliveryIrrevocableException;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,7 +26,8 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = IDENTITY)
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "order_id")
     private Long id;
 
@@ -72,12 +74,6 @@ public class Order extends BaseEntity {
         member.getOrderList().add(this);
     }
 
-    public void addOrderItem(OrderItem orderItem) {
-        orderItems = new ArrayList<>();
-        orderItems.add(orderItem);
-        orderItem.setOrder(this);
-    }
-
     public void cancel() {
         if (delivery.getDeliveryStatus() == COMP) {
             throw new DeliveryIrrevocableException();
@@ -97,6 +93,18 @@ public class Order extends BaseEntity {
                 .city(address.getCity())
                 .street(address.getStreet())
                 .zipcode(address.getZipcode())
+                .delivery(delivery)
+                .orderItems(orderItems.stream()
+                        .map(OrderItem::toDto)
+                        .toList())
+                .build();
+    }
+
+    public OrderDto toDto2() {
+        return OrderDto.builder()
+                .id(id)
+                .member(member)
+                .orderStatus(orderStatus)
                 .delivery(delivery)
                 .orderItems(orderItems.stream()
                         .map(OrderItem::toDto)

@@ -3,6 +3,7 @@ package dressshop.controller;
 import dressshop.domain.cart.dto.CartItemDto;
 import dressshop.domain.delivery.dto.DeliveryDto;
 import dressshop.domain.order.dto.OrderDto;
+import dressshop.domain.order.dto.OrderItemDto;
 import dressshop.service.cart.CartServiceImpl;
 import dressshop.service.order.OrderService;
 import jakarta.validation.Valid;
@@ -60,8 +61,15 @@ public class OrderController {
     //주문 완료 페이지
     @GetMapping("/orderComplete/{orderId}")
     public String orderComplete(@PathVariable Long orderId, Model model) {
+        List<OrderItemDto> orderItems = orderService.findOneOrderItems(orderId);
         OrderDto order = orderService.findOneOrder(orderId);
+        int totalPrice = orderItems.stream()
+                .mapToInt(OrderItemDto::getOrderPrice).sum();
+
         model.addAttribute("order", order);
+        model.addAttribute("orderItems", orderItems);
+        model.addAttribute("totalPrice", totalPrice);
+
         return "orders/orderComplete";
     }
 
@@ -69,15 +77,22 @@ public class OrderController {
     @GetMapping("/orderList")
     public String findOrders(Model model) {
         List<OrderDto> orders =  orderService.findOrders();
+        orders.forEach(order -> {
+            int totalPrice = order.getOrderItems().stream()
+                    .mapToInt(OrderItemDto::getOrderPrice).sum();
+            order.setTotalPrice(totalPrice);
+        });
+
         model.addAttribute("orders", orders);
+
         return "orders/orderList";
     }
 
     //주문 내역 단건 조회
     @GetMapping("/orderList/{orderId}")
     public String findOneOrder(Long orderId, Model model) {
-        OrderDto order = orderService.findOneOrder(orderId);
-        model.addAttribute("order", order);
+        orderService.findOneOrderItems(orderId);
+        orderService.findOneOrder(orderId);
         return "orders/orderDetail";
     }
 

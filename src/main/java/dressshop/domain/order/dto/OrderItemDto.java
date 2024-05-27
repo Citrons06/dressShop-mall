@@ -1,7 +1,7 @@
 package dressshop.domain.order.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-import dressshop.domain.item.Item;
+import dressshop.domain.item.dto.ItemDto;
 import dressshop.domain.order.Order;
 import dressshop.domain.order.OrderItem;
 import jakarta.validation.constraints.NotNull;
@@ -19,9 +19,7 @@ public class OrderItemDto {
     private Long id;
     private Long itemId;
 
-    private Item item;
-
-    private List<OrderItem> items;
+    private ItemDto itemDto;
 
     private String itemName;
 
@@ -39,25 +37,15 @@ public class OrderItemDto {
 
     @Builder
     @QueryProjection
-    public OrderItemDto(int orderPrice,
-                        Long id,
-                        Long itemId,
-                        Item item,
-                        String itemName,
-                        Order order,
-                        int price,
-                        int count,
-                        String imgName,
-                        List<OrderItem> items) {
-        this.orderPrice = orderPrice;
+    public OrderItemDto(Long id, Long itemId, ItemDto itemDto, String itemName, Order order, int orderPrice, int price, int count, String imgName) {
         this.id = id;
         this.itemId = itemId;
-        this.item = item;
+        this.itemDto = itemDto;
         this.itemName = itemName;
         this.order = order;
+        this.orderPrice = orderPrice;
         this.price = price;
         this.count = count;
         this.imgName = imgName;
-        this.items = items;
     }
 }

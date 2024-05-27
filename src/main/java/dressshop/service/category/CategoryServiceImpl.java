@@ -32,10 +32,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional(readOnly = true)
     public CategoryDto findById(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(NotFoundException::new);
-
-        return category.toDto();
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(NotFoundException::new)
+                .toDto();
     }
 
     @Override

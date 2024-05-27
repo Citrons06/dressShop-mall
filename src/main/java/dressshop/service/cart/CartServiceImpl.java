@@ -57,8 +57,6 @@ public class CartServiceImpl implements CartService {
         return cartItemList;
     }
 
-
-
     //Cart에 상품 추가
     @Override
     public void addCart(Long itemId, int count, String email) {

@@ -3,6 +3,7 @@ package dressshop.domain.item.dto;
 import com.querydsl.core.annotations.QueryProjection;
 import dressshop.domain.item.Item;
 import dressshop.domain.item.ItemSellStatus;
+import dressshop.domain.order.OrderItem;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -40,6 +41,9 @@ public class ItemDto {
     private CategoryDto categoryDto;
     private String categoryName;
 
+    private List<OrderItem> orderItems;
+    private String imgName;
+
     //기본값 = 판매 중으로 설정
     private ItemSellStatus itemSellStatus = ItemSellStatus.SELL;
 
@@ -74,6 +78,14 @@ public class ItemDto {
         this.itemImg = itemImgDto;
         this.itemImgs = itemImgDtoList;
         this.itemImgIds = itemImgIds;
+    }
+
+    public ItemDto(Long id, String itemName, List<OrderItem> orderItems, int price, String imgName) {
+        this.id = id;
+        this.itemName = itemName;
+        this.orderItems = orderItems;
+        this.price = price;
+        this.imgName = imgName;
     }
 
     public Item toEntity() {

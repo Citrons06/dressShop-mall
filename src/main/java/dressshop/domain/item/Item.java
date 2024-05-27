@@ -121,8 +121,4 @@ public class Item extends BaseEntity {
     public void increaseStock(int orderCount) {
         this.quantity += orderCount;
     }
-
-    public void removeStock(int count) {
-        this.quantity -= count;
-    }
 }

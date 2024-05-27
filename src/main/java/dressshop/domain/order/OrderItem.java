@@ -29,10 +29,14 @@ public class OrderItem extends BaseEntity {
     @JoinColumn(name = "item_id")
     private Item item;
 
+    private String itemName;
+
     @Setter
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
+
+    private int price;
 
     private int orderPrice;
 
@@ -42,9 +46,11 @@ public class OrderItem extends BaseEntity {
     private String imgName;
 
     @Builder
-    public OrderItem(Item item, Order order, int orderPrice, int count, String imgName) {
+    public OrderItem(Item item, String itemName, Order order, int price, int orderPrice, int count, String imgName) {
         this.item = item;
+        this.itemName = itemName;
         this.order = order;
+        this.price = price;
         this.orderPrice = orderPrice;
         this.count = count;
         this.imgName = imgName;
@@ -60,6 +66,7 @@ public class OrderItem extends BaseEntity {
                 .itemId(item.getId())
                 .itemName(item.getItemName())
                 .order(order)
+                .price(price)
                 .orderPrice(orderPrice)
                 .count(count)
                 .imgName(imgName)

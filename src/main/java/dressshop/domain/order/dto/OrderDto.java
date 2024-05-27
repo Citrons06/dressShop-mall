@@ -4,12 +4,12 @@ import com.querydsl.core.annotations.QueryProjection;
 import dressshop.domain.delivery.Delivery;
 import dressshop.domain.item.Item;
 import dressshop.domain.member.Member;
+import dressshop.domain.order.Order;
 import dressshop.domain.order.OrderStatus;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +35,17 @@ public class OrderDto {
 
     @Builder
     @QueryProjection
-    public OrderDto(Long id, Member member, OrderStatus orderStatus, Item item, String itemName, String city, String street, String zipcode, Delivery delivery, List<OrderItemDto> orderItems, int totalPrice) {
+    public OrderDto(Long id,
+                    Member member,
+                    OrderStatus orderStatus,
+                    Item item,
+                    String itemName,
+                    String city,
+                    String street,
+                    String zipcode,
+                    Delivery delivery,
+                    List<OrderItemDto> orderItems,
+                    int totalPrice) {
         this.id = id;
         this.member = member;
         this.orderStatus = orderStatus;
@@ -47,5 +57,19 @@ public class OrderDto {
         this.delivery = delivery;
         this.orderItems = orderItems;
         this.totalPrice = totalPrice;
+    }
+
+    public static OrderDto toDto(Order order, List<OrderItemDto> orderItems) {
+        return OrderDto.builder()
+                .id(order.getId())
+                .member(order.getMember())
+                .orderStatus(order.getOrderStatus())
+                .city(order.getAddress().getCity())
+                .street(order.getAddress().getStreet())
+                .zipcode(order.getAddress().getZipcode())
+                .delivery(order.getDelivery())
+                .orderItems(orderItems)
+                .totalPrice(order.getTotalPrice())
+                .build();
     }
 }
