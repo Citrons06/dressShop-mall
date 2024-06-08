@@ -31,7 +31,7 @@ Author: yeolee1212@gmail.com
 | <small>추후 추가 예정</small> |
 
 ## 🌈 시스템 아키텍처
-![아키텍처](https://github.com/Citrons06/dressShop-mall/assets/125535240/2c00921f-917e-4ab6-ad82-9e0a83815b30)
+![아키텍처](https://github.com/Citrons06/dressShop-mall/assets/125535240/490c1aca-42e4-4da3-97c4-8ba61f1dde14)
 
 ### ⚙ 기술 스택
 OS | Windows 10
